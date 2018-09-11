@@ -58,8 +58,9 @@ typedef int8_t		Bit8s;
 
 #define FL05	((fltype)0.5)
 #define FL2		((fltype)2.0)
-#define PI		((fltype)3.1415926535897932384626433832795)
-
+#ifndef PI
+	#define PI		((fltype)3.1415926535897932384626433832795)
+#endif
 
 #define FIXEDPT			0x10000		// fixed-point calculations using 16+16
 #define FIXEDPT_LFO		0x1000000	// fixed-point calculations using 8+24
@@ -195,8 +196,9 @@ void adlib_getsample(Bit16s* sndptr, Bits numsamples);
 Bitu adlib_reg_read(Bitu port);
 void adlib_write_index(Bitu port, Bit8u val);
 
-#endif /* OPL_H */
 
 #define opl_init() adlib_init(OUTPUT_QUALITY * 11025)
 #define opl_write(reg, val) adlib_write(reg, val)
 #define opl_update(buf, num) adlib_getsample(buf, num)
+
+#endif /* OPL_H */

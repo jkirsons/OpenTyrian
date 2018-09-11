@@ -280,7 +280,7 @@ bool save_opentyrian_config( void )
 	config_write(config, file);
 	
 #ifndef TARGET_WIN32
-	fsync(fileno(file));
+//	fsync(fileno(file));
 #endif
 	fclose(file);
 	
@@ -967,7 +967,7 @@ void JE_saveConfiguration( void )
 		efwrite(saveTemp, 1, sizeof(saveTemp), f);
 
 #ifndef TARGET_WIN32
-		fsync(fileno(f));
+//		fsync(fileno(f));
 #endif
 		fclose(f);
 	}
@@ -999,7 +999,7 @@ void JE_saveConfiguration( void )
 		efwrite(keySettings, sizeof(*keySettings), COUNTOF(keySettings), f);
 		
 #ifndef TARGET_WIN32
-		fsync(fileno(f));
+//		fsync(fileno(f));
 #endif
 		fclose(f);
 	}

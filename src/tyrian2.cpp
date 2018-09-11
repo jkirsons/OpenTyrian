@@ -82,9 +82,9 @@ void JE_starShowVGA( void )
 	if (!playerEndLevel && !skipStarShowVGA)
 	{
 
-		s = VGAScreenSeg->pixels;
+		s = (Uint8 *)VGAScreenSeg->pixels;
 
-		src = game_screen->pixels;
+		src = (JE_byte *)game_screen->pixels;
 		src += 24;
 
 		if (smoothScroll != 0 /*&& thisPlayerNum != 2*/)
@@ -2779,9 +2779,9 @@ new_game:
 							{
 								if (!newkey)
 								{
-									vga = VGAScreen->pixels;
-									vga2 = VGAScreen2->pixels;
-									pic = pic_buffer + (199 - z) * 320;
+									vga = (Uint8 *)VGAScreen->pixels;
+									vga2 = (Uint8 *)VGAScreen2->pixels;
+									pic = (Uint8 *)pic_buffer + (199 - z) * 320;
 
 									setjasondelay(1); /* attempting to emulate JE_waitRetrace();*/
 
@@ -2830,8 +2830,8 @@ new_game:
 							{
 								if (!newkey)
 								{
-									vga = VGAScreen->pixels;
-									vga2 = VGAScreen2->pixels;
+									vga = (Uint8 *)VGAScreen->pixels;
+									vga2 = (Uint8 *)VGAScreen2->pixels;
 									pic = pic_buffer;
 
 									setjasondelay(1); /* attempting to emulate JE_waitRetrace();*/
@@ -2882,8 +2882,8 @@ new_game:
 							{
 								if (!newkey)
 								{
-									vga = VGAScreen->pixels;
-									vga2 = VGAScreen2->pixels;
+									vga = (Uint8 *)VGAScreen->pixels;
+									vga2 = (Uint8 *)VGAScreen2->pixels;
 									pic = pic_buffer;
 
 									setjasondelay(1); /* attempting to emulate JE_waitRetrace();*/
@@ -4619,6 +4619,7 @@ void JE_eventSystem( void )
 		break;
 
 	case 38:
+	{
 		curLoc = eventRec[eventLoc-1].eventdat;
 		int new_event_loc = 1;
 		for (tempW = 0; tempW < maxEvent; tempW++)
@@ -4630,20 +4631,23 @@ void JE_eventSystem( void )
 		}
 		eventLoc = new_event_loc;
 		break;
-
+	}
 	case 39: /* Enemy Global Linknum Change */
+	{
 		for (temp = 0; temp < 100; temp++)
 		{
 			if (enemy[temp].linknum == eventRec[eventLoc-1].eventdat)
 				enemy[temp].linknum = eventRec[eventLoc-1].eventdat2;
 		}
 		break;
-
+	}
 	case 40: /* Enemy Continual Damage */
+	{
 		enemyContinualDamage = true;
 		break;
-
+	}
 	case 41:
+	{
 		if (eventRec[eventLoc-1].eventdat == 0)
 		{
 			memset(enemyAvail, 1, sizeof(enemyAvail));
@@ -4654,11 +4658,12 @@ void JE_eventSystem( void )
 				enemyAvail[x] = 1;
 		}
 		break;
-
+	}
 	case 42:
+	{
 		background3over = 2;
 		break;
-
+	}
 	case 43:
 		background2over = eventRec[eventLoc-1].eventdat;
 		break;
@@ -4901,7 +4906,8 @@ void JE_eventSystem( void )
 		}
 		break;
 
-	case 75:;
+	case 75:
+	{
 		bool temp_no_clue = false; // TODO: figure out what this is doing
 
 		for (temp = 0; temp < 100; temp++)
@@ -4937,12 +4943,14 @@ void JE_eventSystem( void )
 		}
 
 		break;
-
+	}
 	case 76:
+	{
 		returnActive = true;
 		break;
-
+	}
 	case 77:
+	{
 		mapYPos = &megaData1.mainmap[0][0];
 		mapYPos += eventRec[eventLoc-1].eventdat / 2;
 		if (eventRec[eventLoc-1].eventdat2 > 0)
@@ -4956,7 +4964,7 @@ void JE_eventSystem( void )
 			mapY2Pos += eventRec[eventLoc-1].eventdat / 2;
 		}
 		break;
-
+	}
 	case 78:
 		if (galagaShotFreq < 10)
 			galagaShotFreq++;
@@ -5008,8 +5016,8 @@ void JE_whoa( void )
 	 * way to get vgascreen as one of the temp buffers), but it's only called
 	 * once so don't worry about it. */
 
-	TempScreen1  = game_screen->pixels;
-	TempScreen2  = VGAScreen2->pixels;
+	TempScreen1  = (Uint8 *)game_screen->pixels;
+	TempScreen2  = (Uint8 *)VGAScreen2->pixels;
 
 	screenSize   = VGAScreenSeg->h * VGAScreenSeg->pitch;
 	topBorder    = VGAScreenSeg->pitch * 4; /* Seems an arbitrary number of lines */

@@ -386,7 +386,7 @@ JE_word JE_SGr( JE_word ship, Sprite2_array **ptr )
 
 	JE_word tempW = extraShips[(ship - 1) * 15];
 	if (tempW > 7)
-		*ptr = extraShapes;
+		*ptr = (Sprite2_array *)extraShapes;
 
 	return GR[tempW-1];
 }

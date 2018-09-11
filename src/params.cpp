@@ -80,11 +80,13 @@ void JE_paramCheck( int argc, char *argv[] )
 		case INVALID_OPTION:
 		case AMBIGUOUS_OPTION:
 		case OPTION_MISSING_ARG:
+		{
 			fprintf(stderr, "Try `%s --help' for more information.\n", argv[0]);
 			exit(EXIT_FAILURE);
 			break;
-			
+		}
 		case 'h':
+		{
 			printf("Usage: %s [OPTION...]\n\n"
 			       "Options:\n"
 			       "  -h, --help                   Show help about options\n\n"
@@ -100,27 +102,32 @@ void JE_paramCheck( int argc, char *argv[] )
 			       "  -d, --net-delay=FRAMES       Set lag-compensation delay (default is 1)\n", argv[0]);
 			exit(0);
 			break;
-			
+		}
 		case 's':
+		{
 			// Disables sound/music usage
 			audio_disabled = true;
 			break;
-			
+		}
 		case 'j':
+		{
 			// Disables joystick detection
 			ignore_joystick = true;
 			break;
-			
+		}
 		case 'x':
+		{
 			xmas = false;
 			break;
-			
+		}
 		// set custom Tyrian data directory
 		case 't':
+		{
 			custom_data_dir = option.arg;
 			break;
-			
+		}
 		case 'n':
+		{
 			isNetworkGame = true;
 			
 			intptr_t temp = (intptr_t)strchr(option.arg, ':');
@@ -137,21 +144,22 @@ void JE_paramCheck( int argc, char *argv[] )
 					exit(EXIT_FAILURE);
 				}
 				
-				network_opponent_host = malloc(temp + 1);
+				network_opponent_host = (char *)malloc(temp + 1);
 				SDL_strlcpy(network_opponent_host, option.arg, temp + 1);
 			}
 			else
 			{
-				network_opponent_host = malloc(strlen(option.arg) + 1);
+				network_opponent_host = (char *)malloc(strlen(option.arg) + 1);
 				strcpy(network_opponent_host, option.arg);
 			}
 			break;
-			
+		}
 		case 256: // --net-player-name
-			network_player_name = malloc(strlen(option.arg) + 1);
+		{
+			network_player_name = (char *)malloc(strlen(option.arg) + 1);
 			strcpy(network_player_name, option.arg);
 			break;
-			
+		}
 		case 257: // --net-player-number
 		{
 			int temp = atoi(option.arg);

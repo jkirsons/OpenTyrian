@@ -123,3 +123,33 @@ Uint32 SDL_MapRGB(SDL_PixelFormat *fmt, Uint8 r, Uint8 g, Uint8 b)
     }
     return (Uint32)0;
 }
+
+int SDL_SetColors(SDL_Surface *surface, SDL_Color *colors, int firstcolor, int ncolors)
+{
+
+}
+
+SDL_Surface *SDL_SetVideoMode(int width, int height, int bpp, Uint32 flags)
+{
+
+}
+
+void SDL_FreeSurface(SDL_Surface *surface)
+{
+
+}
+
+void SDL_QuitSubSystem(Uint32 flags)
+{
+
+}
+
+int SDL_Flip(SDL_Surface *screen)
+{
+
+}
+
+int SDL_VideoModeOK(int width, int height, int bpp, Uint32 flags)
+{
+    
+}

@@ -9,7 +9,7 @@ void tyrianTask(void *pvParameters)
 
 void setup() {
     // put your setup code here, to run once:
-    xTaskCreatePinnedToCore(&tyrianTask, "tyrianTask", 22480, NULL, 5, NULL, 0);
+    xTaskCreatePinnedToCore(&tyrianTask, "tyrianTask", 8096, NULL, 5, NULL, 0);
 }
 
 void loop() {

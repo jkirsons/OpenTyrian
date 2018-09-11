@@ -8,6 +8,10 @@
 #define SDL_SWSURFACE 1
 #define SDL_HWSURFACE 2
 
+#define SDL_HWPALETTE 1
+#define SDL_FULLSCREEN 1
+
+
 typedef struct{
   Uint8 r;
   Uint8 g;
@@ -69,5 +73,11 @@ SDL_Keymod SDL_GetModState(void);
 void SDL_Quit(void);
 SDL_Surface *SDL_GetVideoSurface(void);
 Uint32 SDL_MapRGB(SDL_PixelFormat *fmt, Uint8 r, Uint8 g, Uint8 b);
+int SDL_SetColors(SDL_Surface *surface, SDL_Color *colors, int firstcolor, int ncolors);
+SDL_Surface *SDL_SetVideoMode(int width, int height, int bpp, Uint32 flags);
+void SDL_FreeSurface(SDL_Surface *surface);
+void SDL_QuitSubSystem(Uint32 flags);
+int SDL_Flip(SDL_Surface *screen);
+int SDL_VideoModeOK(int width, int height, int bpp, Uint32 flags);
 
 #endif

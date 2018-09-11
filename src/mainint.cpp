@@ -585,19 +585,19 @@ void JE_loadScreen( void )
 					{
 						free(tempstr);
 					}
-					tempstr = malloc(7);
+					tempstr = (char *)malloc(7);
 					mal_str = true;
 					strcpy(tempstr, "-----"); /* Unused save slot */
 				} else {
 					tempstr = saveFiles[x - 1].levelName;
-					tempstr2 = malloc(5 + strlen(miscTextB[2-1]));
+					tempstr2 = (char *)malloc(5 + strlen(miscTextB[2-1]));
 					sprintf(tempstr2, "%s %d", miscTextB[2-1], saveFiles[x - 1].episode);
 					JE_textShade(VGAScreen, 250, tempY, tempstr2, 5, (temp2 % 16) - 8, FULL_SHADE);
 					free(tempstr2);
 				}
 
 				len = strlen(miscTextB[3-1]) + 2 + strlen(tempstr);
-				tempstr2 = malloc(len);
+				tempstr2 = (char *)malloc(len);
 				sprintf(tempstr2, "%s %s", miscTextB[3 - 1], tempstr);
 				JE_textShade(VGAScreen, 120, tempY, tempstr2, 5, (temp2 % 16) - 8, FULL_SHADE);
 				free(tempstr2);

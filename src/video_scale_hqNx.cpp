@@ -39,7 +39,7 @@ void hq2x_32( SDL_Surface *src_surface, SDL_Surface *dst_surface );
 void hq3x_32( SDL_Surface *src_surface, SDL_Surface *dst_surface );
 void hq4x_32( SDL_Surface *src_surface, SDL_Surface *dst_surface );
 
-static int   YUV1, YUV2;
+//static int   YUV1, YUV2;
 const  int   Ymask = 0x00FF0000;
 const  int   Umask = 0x0000FF00;
 const  int   Vmask = 0x000000FF;
@@ -179,8 +179,9 @@ inline bool diff(unsigned int w1, unsigned int w2)
 
 void hq2x_32( SDL_Surface *src_surface, SDL_Surface *dst_surface )
 {
-	Uint8 *src = src_surface->pixels, *src_temp,
-	      *dst = dst_surface->pixels, *dst_temp;
+	/*
+	Uint8 *src = (Uint8 *)src_surface->pixels, *src_temp,
+	      *dst = (Uint8 *)dst_surface->pixels, *dst_temp;
 	int src_pitch = src_surface->pitch,
 	    dst_pitch = dst_surface->pitch;
 	const int dst_Bpp = 4;         // dst_surface->format->BytesPerPixel
@@ -2913,6 +2914,7 @@ void hq2x_32( SDL_Surface *src_surface, SDL_Surface *dst_surface )
 		src = src_temp + src_pitch;
 		dst = dst_temp + 2 * dst_pitch;
 	}
+	*/
 }
 
 
@@ -2972,6 +2974,7 @@ void hq2x_32( SDL_Surface *src_surface, SDL_Surface *dst_surface )
 
 void hq3x_32( SDL_Surface *src_surface, SDL_Surface *dst_surface )
 {
+	/*
 	Uint8 *src = src_surface->pixels, *src_temp,
 	      *dst = dst_surface->pixels, *dst_temp;
 	int src_pitch = src_surface->pitch,
@@ -6679,6 +6682,7 @@ void hq3x_32( SDL_Surface *src_surface, SDL_Surface *dst_surface )
 		src = src_temp + src_pitch;
 		dst = dst_temp + 3 * dst_pitch;
 	}
+	*/
 }
 
 
@@ -6825,6 +6829,7 @@ void hq3x_32( SDL_Surface *src_surface, SDL_Surface *dst_surface )
 
 void hq4x_32( SDL_Surface *src_surface, SDL_Surface *dst_surface )
 {
+	/*
 	Uint8 *src = src_surface->pixels, *src_temp,
 	      *dst = dst_surface->pixels, *dst_temp;
 	int src_pitch = src_surface->pitch,
@@ -11891,6 +11896,7 @@ void hq4x_32( SDL_Surface *src_surface, SDL_Surface *dst_surface )
 		src = src_temp + src_pitch;
 		dst = dst_temp + 4 * dst_pitch;
 	}
+	*/
 }
 
 // kate: tab-width 4; vim: set noet:
