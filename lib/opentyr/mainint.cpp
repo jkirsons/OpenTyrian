@@ -19,7 +19,9 @@
 #include "backgrnd.h"
 #include "config.h"
 #include "editship.h"
+extern "C" {
 #include "episodes.h"
+}
 #include "file.h"
 #include "fonthand.h"
 #include "helptext.h"
@@ -455,6 +457,7 @@ ulong JE_getCost( JE_byte itemType, JE_word itemNum )
 		break;
 	case 3:
 	case 4:
+	{
 		cost = weaponPort[itemNum].cost;
 
 		const uint port = itemType - 3,
@@ -463,16 +466,23 @@ ulong JE_getCost( JE_byte itemType, JE_word itemNum )
 		downgradeCost = weapon_upgrade_cost(cost, item_power);
 		upgradeCost = weapon_upgrade_cost(cost, item_power + 1);
 		break;
+	}
 	case 5:
+	{
 		cost = shields[itemNum].cost;
 		break;
+	}
 	case 6:
+	{
 		cost = powerSys[itemNum].cost;
 		break;
+	}
 	case 7:
 	case 8:
+	{
 		cost = options[itemNum].cost;
 		break;
+	}
 	}
 
 	return cost;
@@ -708,7 +718,8 @@ JE_longint JE_getValue( JE_byte itemType, JE_word itemNum )
 		value = ships[itemNum].cost;
 		break;
 	case 3:
-	case 4:;
+	case 4:
+	{
 		const long base_value = weaponPort[itemNum].cost;
 
 		// if two-player, use first player's front and second player's rear weapon
@@ -719,16 +730,23 @@ JE_longint JE_getValue( JE_byte itemType, JE_word itemNum )
 		for (unsigned int i = 1; i <= item_power; ++i)
 			value += weapon_upgrade_cost(base_value, i);
 		break;
+	}
 	case 5:
+	{
 		value = shields[itemNum].cost;
 		break;
+	}
 	case 6:
+	{
 		value = powerSys[itemNum].cost;
 		break;
+	}
 	case 7:
 	case 8:
+	{
 		value = options[itemNum].cost;
 		break;
+	}
 	}
 
 	return value;

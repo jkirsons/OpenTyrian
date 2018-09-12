@@ -52,7 +52,7 @@ typedef struct anim_LargePageHeader_s
 
 
 /*** Globals ***/
-Uint8 CurrentPageBuffer[65536];
+Uint8 *CurrentPageBuffer;//[65536];
 anim_LargePageHeader_t PageHeader[256];
 unsigned int CurrentPageRecordSizes[256];
 
@@ -107,6 +107,7 @@ int JE_loadPage( unsigned int pagenumber )
 	}
 
 	/* What remains is the 'compressed' data */
+	CurrentPageBuffer = (Uint8*)calloc(1, 65536);
 	efread(CurrentPageBuffer, 1, CurrentPageHeader.nBytes, InFile);
 
 	/* Okay, we've succeeded in all our IO checks.  Now, make sure the

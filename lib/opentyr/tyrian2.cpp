@@ -18,7 +18,9 @@
  */
 #include "animlib.h"
 #include "backgrnd.h"
+extern "C" {
 #include "episodes.h"
+}
 #include "file.h"
 #include "font.h"
 #include "fonthand.h"
@@ -386,10 +388,13 @@ enemy_still_exists:
 							}
 							break;
 						case 251:; /* Suck-O-Magnet */
+						{
 							const int attractivity = 4 - (abs(player[0].x - tempX) + abs(player[0].y - tempY)) / 100;
 							player[0].x_velocity += (player[0].x > tempX) ? -attractivity : attractivity;
 							break;
+						}
 						case 253: /* Left ShortRange Magnet */
+						{
 							if (abs(player[0].x + 25 - 14 - tempX) < 24 && abs(player[0].y - tempY) < 28)
 							{
 								player[0].x_velocity += 2;
@@ -400,7 +405,9 @@ enemy_still_exists:
 								player[1].x_velocity += 2;
 							}
 							break;
+						}
 						case 254: /* Left ShortRange Magnet */
+						{
 							if (abs(player[0].x + 25 - 14 - tempX) < 24 && abs(player[0].y - tempY) < 28)
 							{
 								player[0].x_velocity -= 2;
@@ -411,7 +418,9 @@ enemy_still_exists:
 								player[1].x_velocity -= 2;
 							}
 							break;
+						}
 						case 255: /* Magneto RePulse!! */
+						{
 							if (difficultyLevel != 1) /*DIF*/
 							{
 								if (j == 3)
@@ -426,6 +435,7 @@ enemy_still_exists:
 								}
 							}
 							break;
+						}
 						default:
 						/*Rot*/
 							for (int tempCount = weapons[temp3].multi; tempCount > 0; tempCount--)
@@ -3150,6 +3160,7 @@ new_game:
 
 	fclose(shpFile);
 
+	megaData1.mainmap = malloc(14*300*sizeof(JE_byte));
 	efread(mapBuf, sizeof(JE_byte), 14 * 300, level_f);
 	bufLoc = 0;              /* MAP NUMBER 1 */
 	for (y = 0; y < 300; y++)
@@ -3161,6 +3172,7 @@ new_game:
 		}
 	}
 
+	megaData2.mainmap = malloc(14*600*sizeof(JE_byte));
 	efread(mapBuf, sizeof(JE_byte), 14 * 600, level_f);
 	bufLoc = 0;              /* MAP NUMBER 2 */
 	for (y = 0; y < 600; y++)
@@ -3172,6 +3184,7 @@ new_game:
 		}
 	}
 
+	megaData3.mainmap = malloc(15*600*sizeof(JE_byte));
 	efread(mapBuf, sizeof(JE_byte), 15 * 600, level_f);
 	bufLoc = 0;              /* MAP NUMBER 3 */
 	for (y = 0; y < 600; y++)

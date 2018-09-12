@@ -19,7 +19,9 @@
 #ifndef VARZ_H
 #define VARZ_H
 
+extern "C" {
 #include "episodes.h"
+}
 #include "opentyr.h"
 #include "player.h"
 #include "sprite.h"
@@ -117,11 +119,11 @@ typedef JE_word JE_DanCShape[(24 * 28) / 2]; /* [1..(24*28) div 2] */
 
 typedef JE_char JE_CharString[256]; /* [1..256] */
 
-typedef JE_byte JE_Map1Buffer[24 * 28 * 13 * 4]; /* [1..24*28*13*4] */
+//typedef JE_byte JE_Map1Buffer[24 * 28 * 13 * 4]; /* [1..24*28*13*4] */
 
-typedef JE_byte *JE_MapType[300][14]; /* [1..300, 1..14] */
-typedef JE_byte *JE_MapType2[600][14]; /* [1..600, 1..14] */
-typedef JE_byte *JE_MapType3[600][15]; /* [1..600, 1..15] */
+typedef JE_byte *JE_MapType[][14];//[300][14]; /* [1..300, 1..14] */
+typedef JE_byte *JE_MapType2[][14];//[600][14]; /* [1..600, 1..14] */
+typedef JE_byte *JE_MapType3[][15];//[600][15]; /* [1..600, 1..15] */
 
 struct JE_EventRecType
 {

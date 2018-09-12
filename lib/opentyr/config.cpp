@@ -17,7 +17,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include "config.h"
+extern "C" {
 #include "episodes.h"
+}
 #include "file.h"
 #include "joystick.h"
 #include "loudness.h"
@@ -450,7 +452,7 @@ void JE_loadGame( JE_byte slot )
 		/* Increment episode.  Episode EPISODE_AVAILABLE goes to 1. */
 	}
 
-	JE_initEpisode(episode);
+	JE_initEpisode((JE_byte)episode);
 	saveLevel = mainLevel;
 	memcpy(&lastLevelName, &levelName, sizeof(levelName));
 }

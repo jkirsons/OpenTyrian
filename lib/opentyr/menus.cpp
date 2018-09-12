@@ -17,7 +17,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include "config.h"
+extern "C" {
 #include "episodes.h"
+}
 #include "fonthand.h"
 #include "keyboard.h"
 #include "menus.h"
@@ -156,7 +158,7 @@ bool select_episode( void )
 				JE_playSampleNum(S_SELECT);
 				fade_black(10);
 
-				JE_initEpisode(episode);
+				JE_initEpisode((JE_byte)episode);
 				initial_episode_num = episodeNum;
 				return true;
 

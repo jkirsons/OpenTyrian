@@ -1,6 +1,14 @@
 #include <Arduino.h>
 #include "opentyr.h"
 
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+
+
+
 void tyrianTask(void *pvParameters)
 {
     char *argv[]={"opentyrian", NULL};

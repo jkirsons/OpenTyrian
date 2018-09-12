@@ -18,7 +18,9 @@
  */
 #include "config.h"
 #include "editship.h"
+extern "C" {
 #include "episodes.h"
+}
 #include "joystick.h"
 #include "lds_play.h"
 #include "loudness.h"

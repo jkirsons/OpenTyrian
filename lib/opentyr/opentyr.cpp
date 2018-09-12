@@ -19,7 +19,9 @@
 #include "config.h"
 #include "destruct.h"
 #include "editship.h"
-#include "episodes.h"
+extern "C" {
+	#include "episodes.h"
+}
 #include "file.h"
 #include "font.h"
 #include "helptext.h"
