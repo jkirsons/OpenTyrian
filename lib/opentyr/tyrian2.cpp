@@ -63,7 +63,7 @@ boss_bar_t boss_bar[2];
 /* Level Event Data */
 JE_boolean quit, loadLevelOk;
 
-struct JE_EventRecType eventRec[EVENT_MAXIMUM]; /* [1..eventMaximum] */
+struct JE_EventRecType *eventRec;//[EVENT_MAXIMUM]; /* [1..eventMaximum] */
 JE_word levelEnemyMax;
 JE_word levelEnemyFrequency;
 JE_word levelEnemy[40]; /* [1..40] */
@@ -3058,6 +3058,7 @@ new_game:
 	}
 
 	efread(&maxEvent, sizeof(JE_word), 1, level_f);
+	eventRec = (JE_EventRecType*)malloc(EVENT_MAXIMUM * sizeof(JE_EventRecType));
 	for (x = 0; x < maxEvent; x++)
 	{
 		efread(&eventRec[x].eventtime, sizeof(JE_word), 1, level_f);
@@ -3160,7 +3161,8 @@ new_game:
 
 	fclose(shpFile);
 
-	megaData1.mainmap = malloc(14*300*sizeof(JE_byte));
+	megaData1.mainmap = (JE_byte***)allocateTwoDimenArrayOnHeapUsingMalloc(14, 300);
+	megaData1.shapes = (JE_MegaDataShapesType1*)malloc(sizeof(JE_MegaDataShapesType1)*72);
 	efread(mapBuf, sizeof(JE_byte), 14 * 300, level_f);
 	bufLoc = 0;              /* MAP NUMBER 1 */
 	for (y = 0; y < 300; y++)
@@ -3172,19 +3174,21 @@ new_game:
 		}
 	}
 
-	megaData2.mainmap = malloc(14*600*sizeof(JE_byte));
+	megaData2.mainmap = (JE_byte***)allocateTwoDimenArrayOnHeapUsingMalloc(14, 600);
+	megaData2.shapes = (JE_MegaDataShapesType2_3*)malloc(sizeof(JE_MegaDataShapesType2_3)*71);
 	efread(mapBuf, sizeof(JE_byte), 14 * 600, level_f);
 	bufLoc = 0;              /* MAP NUMBER 2 */
 	for (y = 0; y < 600; y++)
 	{
 		for (x = 0; x < 14; x++)
 		{
-			megaData2.mainmap[y][x] = ref[1][mapBuf[bufLoc]];
+			megaData2.mainmap[y][x] = ref[1][mapBuf[bufLoc]]; 
 			bufLoc++;
 		}
 	}
 
-	megaData3.mainmap = malloc(15*600*sizeof(JE_byte));
+	megaData3.mainmap = (JE_byte***)allocateTwoDimenArrayOnHeapUsingMalloc(15, 600);
+	megaData3.shapes = (JE_MegaDataShapesType2_3*)malloc(sizeof(JE_MegaDataShapesType2_3)*70);
 	efread(mapBuf, sizeof(JE_byte), 15 * 600, level_f);
 	bufLoc = 0;              /* MAP NUMBER 3 */
 	for (y = 0; y < 600; y++)

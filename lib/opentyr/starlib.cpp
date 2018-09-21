@@ -36,7 +36,7 @@ struct JE_StarType
 
 static int tempX, tempY;
 static JE_boolean run;
-static struct JE_StarType star[starlib_MAX_STARS];
+static struct JE_StarType *star;//[starlib_MAX_STARS];
 
 static JE_byte setupByte;
 static JE_word stepCounter;
@@ -279,6 +279,7 @@ void JE_starlib_init( void )
 		doChange = true;
 
 		/* RANDOMIZE; */
+		star = (JE_StarType*)malloc(sizeof(JE_StarType)*starlib_MAX_STARS);
 		for (int x = 0; x < starlib_MAX_STARS; x++)
 		{
 			star[x].spX = (mt_rand() % 64000) - 32000;
