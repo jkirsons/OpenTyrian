@@ -56,7 +56,7 @@ typedef struct
 }
 Sprite_array;
 
-extern Sprite_array sprite_table[SPRITE_TABLES_MAX];
+extern Sprite_array *sprite_table;//[SPRITE_TABLES_MAX];
 
 static inline Sprite *sprite( unsigned int table, unsigned int index )
 {

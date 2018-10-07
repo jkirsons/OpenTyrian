@@ -4,6 +4,16 @@
 
 TFT_eSPI *tft;
 
+JE_byte *** allocateTwoDimenArrayOnHeapUsingMalloc(int row, int col)
+{
+	JE_byte *** ptr = (JE_byte ***) malloc(sizeof(JE_byte *)*row);
+	for(int i = 0; i < row; i++)
+	{
+		ptr[i] = (JE_byte **) malloc(sizeof(JE_byte*)*col);
+	}
+	return ptr;
+}
+
 void SDL_WM_SetCaption(const char *title, const char *icon)
 {
 
@@ -32,7 +42,7 @@ SDL_Keymod SDL_GetModState(void)
 
 Uint32 SDL_GetTicks(void)
 {
-    
+    return esp_timer_get_time() / 1000;    
 }
 
 int SDL_Init(Uint32 flags)
@@ -136,7 +146,7 @@ SDL_Surface *SDL_SetVideoMode(int width, int height, int bpp, Uint32 flags)
 
 void SDL_FreeSurface(SDL_Surface *surface)
 {
-
+    
 }
 
 void SDL_QuitSubSystem(Uint32 flags)

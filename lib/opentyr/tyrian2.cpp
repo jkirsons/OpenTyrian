@@ -56,6 +56,8 @@ extern "C" {
 #include <string.h>
 #include <stdint.h>
 
+#include "esp_heap_caps.h"
+
 inline static void blit_enemy( SDL_Surface *surface, unsigned int i, signed int x_offset, signed int y_offset, signed int sprite_offset );
 
 boss_bar_t boss_bar[2];
@@ -1041,7 +1043,7 @@ start_level_first:
 	soundQueue[3] = V_GOOD_LUCK;
 
 	memset(enemyShapeTables, 0, sizeof(enemyShapeTables));
-	memset(enemy,            0, sizeof(enemy));
+	memset(enemy,            0, sizeof(&enemy));
 
 	memset(SFCurrentCode,    0, sizeof(SFCurrentCode));
 	memset(SFExecuted,       0, sizeof(SFExecuted));
@@ -3763,7 +3765,10 @@ Sint16 JE_newEnemy( int enemyOffset, Uint16 eDatI, Sint16 uniqueShapeTableI )
 uint JE_makeEnemy( struct JE_SingleEnemyType *enemy, Uint16 eDatI, Sint16 uniqueShapeTableI )
 {
 	uint avail;
-
+	if(::enemy == NULL)
+	{
+		::enemy = (JE_MultiEnemyType*)heap_caps_malloc(100*sizeof(JE_MultiEnemyType), MALLOC_CAP_SPIRAM);
+	}
 	JE_byte shapeTableI;
 
 	if (superArcadeMode != SA_NONE && eDatI == 534)

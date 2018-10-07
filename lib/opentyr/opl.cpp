@@ -29,6 +29,7 @@
 #include <stdlib.h> // rand()
 #include <string.h> // memset()
 #include "opl.h"
+#include "esp_heap_caps.h"
 
 // per-chip variables
 Bitu chip_num;
@@ -56,14 +57,14 @@ Bit32u tremtab_add;
 static Bit32u generator_add;	// should be a chip parameter
 
 static fltype recipsamp;	// inverse of sampling rate
-static Bit16s wavtable[WAVEPREC*3];	// wave form table
+static Bit16s *wavtable;//[WAVEPREC*3];	// wave form table
 
 // vibrato/tremolo tables
 static Bit32s vib_table[VIBTAB_SIZE];
 static Bit32s trem_table[TREMTAB_SIZE*2];
 
-static Bit32s vibval_const[BLOCKBUF_SIZE];
-static Bit32s tremval_const[BLOCKBUF_SIZE];
+static Bit32s *vibval_const;//[BLOCKBUF_SIZE];
+static Bit32s *tremval_const;//[BLOCKBUF_SIZE];
 
 // vibrato value tables (used per-operator)
 static Bit32s vibval_var1[BLOCKBUF_SIZE];
@@ -559,6 +560,7 @@ void adlib_init(Bit32u samplerate) {
 	vibtab_add = (Bit32u)(VIBTAB_SIZE*FIXEDPT_LFO/8192*INTFREQU/int_samplerate);
 	vibtab_pos = 0;
 
+	vibval_const = (Bit32s*)heap_caps_malloc(BLOCKBUF_SIZE*sizeof(Bit32s), MALLOC_CAP_SPIRAM);
 	for (i=0; i<BLOCKBUF_SIZE; i++) vibval_const[i] = 0;
 
 
@@ -581,13 +583,14 @@ void adlib_init(Bit32u samplerate) {
 	tremtab_add = (Bit32u)((fltype)TREMTAB_SIZE * TREM_FREQ * FIXEDPT_LFO / (fltype)int_samplerate);
 	tremtab_pos = 0;
 
+	tremval_const = (Bit32s*)heap_caps_malloc(BLOCKBUF_SIZE*sizeof(Bit32s), MALLOC_CAP_SPIRAM);
 	for (i=0; i<BLOCKBUF_SIZE; i++) tremval_const[i] = FIXEDPT;
 
 
 	static Bitu initfirstime = 0;
 	if (!initfirstime) {
 		initfirstime = 1;
-
+		wavtable = (Bit16s*)heap_caps_malloc(WAVEPREC*3*sizeof(Bit16s), MALLOC_CAP_SPIRAM);
 		// create waveform tables
 		for (i=0;i<(WAVEPREC>>1);i++) {
 			wavtable[(i<<1)  +WAVEPREC]	= (Bit16s)(16384*sin((fltype)((i<<1)  )*PI*2/WAVEPREC));

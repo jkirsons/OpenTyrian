@@ -113,7 +113,7 @@ struct JE_SingleEnemyType
 	JE_byte     fill[3]; /* [1..3] */
 };
 
-typedef struct JE_SingleEnemyType JE_MultiEnemyType[100]; /* [1..100] */
+typedef struct JE_SingleEnemyType JE_MultiEnemyType; /* [1..100] */
 
 typedef JE_word JE_DanCShape[(24 * 28) / 2]; /* [1..(24*28) div 2] */
 
@@ -279,7 +279,7 @@ extern JE_word mapOrigin, mapPNum;
 extern JE_byte mapPlanet[5], mapSection[5];
 extern JE_boolean moveTyrianLogoUp;
 extern JE_boolean skipStarShowVGA;
-extern JE_MultiEnemyType enemy;
+extern JE_MultiEnemyType *enemy;
 extern JE_EnemyAvailType enemyAvail;
 extern JE_word enemyOffset;
 extern JE_word enemyOnScreen;

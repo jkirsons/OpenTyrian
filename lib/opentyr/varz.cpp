@@ -255,7 +255,7 @@ JE_boolean moveTyrianLogoUp;
 JE_boolean skipStarShowVGA;
 
 /*EnemyData*/
-JE_MultiEnemyType enemyX; // 24kb ram
+JE_MultiEnemyType *enemy; // 24kb ram
 JE_EnemyAvailType enemyAvail;  /* values: 0: used, 1: free, 2: secret pick-up */
 JE_word enemyOffset;
 JE_word enemyOnScreen;
