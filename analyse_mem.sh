@@ -1,0 +1,1 @@
+~/.platformio/packages/framework-espidf/tools/idf_size.py output.map --files

@@ -23,8 +23,9 @@
 
 #include <assert.h>
 #include <ctype.h>
+#include "esp_heap_caps.h"
 
-Sprite_array sprite_table[SPRITE_TABLES_MAX];
+Sprite_array *sprite_table;//[SPRITE_TABLES_MAX];
 
 Sprite2_array eShapes[6];
 Sprite2_array shapesC1, shapes6, shapes9, shapesW2;
@@ -47,6 +48,8 @@ void load_sprites( unsigned int table, FILE *f )
 	Uint16 temp;
 	efread(&temp, sizeof(Uint16), 1, f);
 	
+	if(sprite_table == NULL)
+		sprite_table = (Sprite_array*)heap_caps_malloc(SPRITE_TABLES_MAX*sizeof(Sprite_array), MALLOC_CAP_SPIRAM);
 	sprite_table[table].count = temp;
 	
 	assert(sprite_table[table].count <= SPRITES_PER_TABLE_MAX);
