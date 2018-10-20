@@ -28,6 +28,14 @@
 #ifndef SDL_stdinc_h_
 #define SDL_stdinc_h_
 
+#define HAVE_STDIO_H
+#define HAVE_SYS_TYPES_H
+#define HAVE_STDLIB_H
+#define HAVE_STDDEF_H
+#define HAVE_STDINT_H
+#define HAVE_INTTYPES_H
+#define HAVE_CTYPE_H
+#define HAVE_STRING_H
 //#include "SDL_config.h"
 
 #ifdef HAVE_SYS_TYPES_H

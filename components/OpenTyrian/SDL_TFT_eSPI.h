@@ -1,7 +1,19 @@
 #ifndef SDL_TFT_eSPI_H
 #define SDL_TFT_eSPI_H
-#include <TFT_eSPI.h>
+
 #include "SDL.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "esp_system.h"
+#include <errno.h>
+//#include "tft.h"
+//#include "tftspi.h"
+//#include "spi_master_lobo.h"
+
+#include "driver/gpio.h"
+#include "esp_heap_caps.h"
+//#include "TFT_eSPI/TFT_eSPI.h"
+#include "spi_lcd.h"
 
 #define SDL_INIT_VIDEO 1
 
@@ -52,7 +64,7 @@ typedef struct SDL_Surface {
 
         /* Reference count -- used when freeing surface */
         int refcount;                           /* Read-mostly */
-        TFT_eSprite* sprite;
+//        TFT_eSprite* sprite;
 
 	/* This structure also contains private fields not shown here */
 } SDL_Surface;

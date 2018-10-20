@@ -56,12 +56,12 @@ typedef struct
 }
 Sprite_array;
 
-extern Sprite_array *sprite_table;//[SPRITE_TABLES_MAX];
+extern Sprite_array sprite_table[SPRITE_TABLES_MAX];
 
 static inline Sprite *sprite( unsigned int table, unsigned int index )
 {
-	assert(table < COUNTOF(sprite_table));
-	assert(index < COUNTOF(sprite_table->sprite));
+	//assert(table < COUNTOF(sprite_table));
+	//assert(index < COUNTOF(sprite_table[table]->sprite));
 	return &sprite_table[table].sprite[index];
 }
 

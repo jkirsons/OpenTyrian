@@ -19,9 +19,9 @@
 #ifndef VARZ_H
 #define VARZ_H
 
-extern "C" {
+//extern "C" {
 #include "episodes.h"
-}
+//}
 #include "opentyr.h"
 #include "player.h"
 #include "sprite.h"
@@ -149,7 +149,7 @@ struct JE_MegaDataShapesType1
 struct JE_MegaDataType1
 {
 	JE_MapType mainmap;
-	JE_MegaDataShapesType1 *shapes;//[72]; /* [0..71] */
+	struct JE_MegaDataShapesType1 *shapes;//[72]; /* [0..71] */
 	JE_byte tempdat1;
 	/*JE_DanCShape filler;*/
 };
@@ -157,14 +157,14 @@ struct JE_MegaDataType1
 struct JE_MegaDataType2
 {
 	JE_MapType2 mainmap;
-	JE_MegaDataShapesType2_3 *shapes;//[71]; /* [0..70] */
+	struct JE_MegaDataShapesType2_3 *shapes;//[71]; /* [0..70] */
 	JE_byte tempdat2;
 };
 
 struct JE_MegaDataType3
 {
 	JE_MapType3 mainmap;
-	JE_MegaDataShapesType2_3 *shapes;//[70]; /* [0..69] */
+	struct JE_MegaDataShapesType2_3 *shapes;//[70]; /* [0..69] */
 	JE_byte tempdat3;
 };
 

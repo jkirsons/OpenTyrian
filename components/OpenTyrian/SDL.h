@@ -13,7 +13,7 @@ typedef int SDLMod;
 typedef int SDL_Joystick;
 
 #define SDLK_FIRST 0
-#define SDLK_LAST 99
+#define SDLK_LAST 1024
 
 #define SDLK_KP4 SDLK_LEFT
 #define SDLK_KP6 SDLK_RIGHT
@@ -35,7 +35,7 @@ typedef int SDL_Joystick;
 
 #define SDL_strlcpy strlcpy
 
-typedef unsigned short  JE_byte;
+typedef unsigned char  JE_byte;
 extern JE_byte *** allocateTwoDimenArrayOnHeapUsingMalloc(int row, int col);
 
 
