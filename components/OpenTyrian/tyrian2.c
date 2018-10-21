@@ -2410,7 +2410,8 @@ void JE_loadMap( void )
 	printf("Loading Map\n");
 	if(megaData1.mainmap == NULL)
 	{
-		megaData1.mainmap = allocateTwoDimenArrayOnHeapUsingMalloc(300, 14);
+		JE_MapType *map1 = allocateTwoDimenArrayOnHeapUsingMalloc(300, 14);
+		megaData1.mainmap = map1;
 		megaData1.shapes = malloc(sizeof(struct JE_MegaDataShapesType1)*72);
 		megaData2.mainmap = allocateTwoDimenArrayOnHeapUsingMalloc(600, 14);
 		megaData2.shapes = malloc(sizeof(struct JE_MegaDataShapesType2_3)*71);

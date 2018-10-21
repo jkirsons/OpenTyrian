@@ -8,9 +8,11 @@ SDL_Surface* primary_surface;
 
 JE_byte *** allocateTwoDimenArrayOnHeapUsingMalloc(int row, int col)
 {
-	JE_byte ***ptr = malloc(sizeof(JE_byte**)*row);
-    for (int i = 0; i <  row; i++)
-      ptr[i] = malloc(sizeof(JE_byte*)*col);
+	JE_byte ***ptr = malloc(row * sizeof(*ptr) + row * (col * sizeof **ptr) );
+
+	int * const data = ptr + row;
+	for(int i = 0; i < row; i++)
+		ptr[i] = data + i * col;
 
 	return ptr;
 }
@@ -110,8 +112,13 @@ int SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, Uint32 color)
     	//else
     		//TFT_fillRect(dstrect->x, dstrect->y, dstrect->w, dstrect->h, TFT_BLACK);
     } else {
-        //for(int y = dstrect->y; y < dstrect->y + dstrect->h;y++)
-        //	memset((unsigned char *)dst->pixels + y*320 + dstrect->x, (unsigned char)color, dstrect->w);
+    	if(dstrect != NULL)
+    	{
+			for(int y = dstrect->y; y < dstrect->y + dstrect->h;y++)
+				memset((unsigned char *)dst->pixels + y*320 + dstrect->x, (unsigned char)color, dstrect->w);
+    	} else {
+    		memset(dst->pixels, (unsigned char)color, dst->pitch*dst->h);
+    	}
     }
     return 0;
 }
