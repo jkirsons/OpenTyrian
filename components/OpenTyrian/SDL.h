@@ -5,9 +5,9 @@
 #include "SDL_keycode.h"
 #include "SDL_stdinc.h"
 #include "SDL_endian.h"
-#include "SDL_TFT_eSPI.h"
 #include "SDL_audio.h"
 #include "opentyr.h"
+#include "SDL_TFT.h"
 
 typedef int SDLMod;
 typedef int SDL_Joystick;
@@ -34,9 +34,6 @@ typedef int SDL_Joystick;
 #define SDLK_SCROLLOCK 1000
 
 #define SDL_strlcpy strlcpy
-
-typedef unsigned char  JE_byte;
-extern JE_byte *** allocateTwoDimenArrayOnHeapUsingMalloc(int row, int col);
 
 
 #endif

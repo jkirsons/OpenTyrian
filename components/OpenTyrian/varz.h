@@ -121,9 +121,7 @@ typedef JE_char JE_CharString[256]; /* [1..256] */
 
 //typedef JE_byte JE_Map1Buffer[24 * 28 * 13 * 4]; /* [1..24*28*13*4] */
 
-typedef JE_byte ***JE_MapType;//[300][14]; /* [1..300, 1..14] */
-typedef JE_byte ***JE_MapType2;//[600][14]; /* [1..600, 1..14] */
-typedef JE_byte ***JE_MapType3;//[600][15]; /* [1..600, 1..15] */
+typedef JE_byte **JE_MapType;
 
 struct JE_EventRecType
 {
@@ -148,7 +146,7 @@ struct JE_MegaDataShapesType1
 
 struct JE_MegaDataType1
 {
-	JE_MapType mainmap;
+	JE_MapType mainmap;  //[300][14];
 	struct JE_MegaDataShapesType1 *shapes;//[72]; /* [0..71] */
 	JE_byte tempdat1;
 	/*JE_DanCShape filler;*/
@@ -156,14 +154,14 @@ struct JE_MegaDataType1
 
 struct JE_MegaDataType2
 {
-	JE_MapType2 mainmap;
+	JE_MapType mainmap; //[600][14];
 	struct JE_MegaDataShapesType2_3 *shapes;//[71]; /* [0..70] */
 	JE_byte tempdat2;
 };
 
 struct JE_MegaDataType3
 {
-	JE_MapType3 mainmap;
+	JE_MapType mainmap; //[600][15];
 	struct JE_MegaDataShapesType2_3 *shapes;//[70]; /* [0..69] */
 	JE_byte tempdat3;
 };
