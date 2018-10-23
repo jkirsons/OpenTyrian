@@ -67,8 +67,8 @@ static Bit32s *vibval_const;//[BLOCKBUF_SIZE];
 static Bit32s *tremval_const;//[BLOCKBUF_SIZE];
 
 // vibrato value tables (used per-operator)
-static Bit32s vibval_var1[BLOCKBUF_SIZE];
-static Bit32s vibval_var2[BLOCKBUF_SIZE];
+static Bit32s *vibval_var1;//[BLOCKBUF_SIZE];
+static Bit32s *vibval_var2;//[BLOCKBUF_SIZE];
 //static Bit32s vibval_var3[BLOCKBUF_SIZE];
 //static Bit32s vibval_var4[BLOCKBUF_SIZE];
 
@@ -505,7 +505,12 @@ void adlib_init(Bit32u samplerate) {
 	int_samplerate = samplerate;
 
 	generator_add = (Bit32u)(INTFREQU*FIXEDPT/int_samplerate);
-
+	wavtable = (Bit16s*)heap_caps_malloc(WAVEPREC*3*sizeof(Bit16s), MALLOC_CAP_SPIRAM);
+	vibval_var1 = heap_caps_malloc(BLOCKBUF_SIZE*sizeof(Bit32s), MALLOC_CAP_SPIRAM);
+	vibval_var2 = heap_caps_malloc(BLOCKBUF_SIZE*sizeof(Bit32s), MALLOC_CAP_SPIRAM);
+	memset(vibval_var1,0,BLOCKBUF_SIZE*sizeof(Bit32s));
+	memset(vibval_var2,0,BLOCKBUF_SIZE*sizeof(Bit32s));
+	memset(wavtable,0,WAVEPREC*3*sizeof(Bit16s));
 
 	memset((void *)adlibreg,0,sizeof(adlibreg));
 	memset((void *)op,0,sizeof(op_type)*MAXOPERATORS);
@@ -590,7 +595,7 @@ void adlib_init(Bit32u samplerate) {
 	static Bitu initfirstime = 0;
 	if (!initfirstime) {
 		initfirstime = 1;
-		wavtable = (Bit16s*)heap_caps_malloc(WAVEPREC*3*sizeof(Bit16s), MALLOC_CAP_SPIRAM);
+
 		// create waveform tables
 		for (i=0;i<(WAVEPREC>>1);i++) {
 			wavtable[(i<<1)  +WAVEPREC]	= (Bit16s)(16384*sin((fltype)((i<<1)  )*PI*2/WAVEPREC));
@@ -982,15 +987,18 @@ void adlib_getsample(Bit16s* sndptr, Bits numsamples) {
 	Bits i, endsamples;
 	op_type* cptr;
 
-	Bit32s outbufl[BLOCKBUF_SIZE];
+	Bit32s *outbufl = malloc(BLOCKBUF_SIZE * sizeof(Bit32s));//[BLOCKBUF_SIZE];
+	memset(outbufl, 0, BLOCKBUF_SIZE * sizeof(Bit32s));
 #if defined(OPLTYPE_IS_OPL3)
 	// second output buffer (right channel for opl3 stereo)
 	Bit32s outbufr[BLOCKBUF_SIZE];
 #endif
 
 	// vibrato/tremolo lookup tables (global, to possibly be used by all operators)
-	Bit32s vib_lut[BLOCKBUF_SIZE];
-	Bit32s trem_lut[BLOCKBUF_SIZE];
+	Bit32s *vib_lut = malloc(BLOCKBUF_SIZE * sizeof(Bit32s));//[BLOCKBUF_SIZE];
+	Bit32s *trem_lut = malloc(BLOCKBUF_SIZE * sizeof(Bit32s));//[BLOCKBUF_SIZE];
+	memset(vib_lut, 0, BLOCKBUF_SIZE * sizeof(Bit32s));
+	memset(trem_lut, 0, BLOCKBUF_SIZE * sizeof(Bit32s));
 
 	Bits samples_to_process = numsamples;
 
@@ -998,7 +1006,7 @@ void adlib_getsample(Bit16s* sndptr, Bits numsamples) {
 		endsamples = samples_to_process-cursmp;
 		if (endsamples>BLOCKBUF_SIZE) endsamples = BLOCKBUF_SIZE;
 
-		memset((void*)&outbufl,0,endsamples*sizeof(Bit32s));
+		memset(outbufl,0,endsamples*sizeof(Bit32s));
 #if defined(OPLTYPE_IS_OPL3)
 		// clear second output buffer (opl3 stereo)
 		if (adlibreg[0x105]&1) memset((void*)&outbufr,0,endsamples*sizeof(Bit32s));
@@ -1487,4 +1495,7 @@ void adlib_getsample(Bit16s* sndptr, Bits numsamples) {
 #endif
 
 	}
+	free(outbufl);
+	free(vib_lut);
+	free(trem_lut);
 }

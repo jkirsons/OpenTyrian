@@ -764,10 +764,10 @@ void JE_loadConfiguration( void )
 		soundEffects = 1;
 		memcpy(&keySettings, &defaultKeySettings, sizeof(keySettings));
 		background2 = true;
-		tyrMusicVolume = fxVolume = 128;
+		tyrMusicVolume = fxVolume = 32;
 		gammaCorrection = 0;
-		processorType = 3;
-		gameSpeed = 4;
+		processorType = 4;
+		gameSpeed = 5;
 	}
 	
 	load_opentyrian_config();

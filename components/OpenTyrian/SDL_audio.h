@@ -1,6 +1,15 @@
 #ifndef SDL_audio_h_
 #define SDL_audio_h_
 #include "SDL.h"
+#include "freertos/FreeRTOS.h"
+#include "driver/i2s.h"
+#include "freertos/queue.h"
+#include "freertos/task.h"
+
+// Needed for calling the actual sound output.
+#define SAMPLECOUNT		2048
+#define SAMPLERATE		11025 * 4	// Hz
+#define SAMPLESIZE		2   	// 16bit
 
 typedef struct{
   int needed;

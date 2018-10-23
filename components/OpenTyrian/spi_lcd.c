@@ -114,7 +114,7 @@ static const ili_init_cmd_t ili_init_cmds[]={
 #endif
 
 static spi_device_handle_t spi;
-
+short screen_boarder = 0;
 
 //Send a command to the ILI9341. Uses spi_device_transmit, which waits until the transfer is complete.
 void ili_cmd(spi_device_handle_t spi, const uint8_t cmd)
@@ -321,9 +321,9 @@ void IRAM_ATTR displayTask(void *arg) {
 		uint8_t *myData=(uint8_t*)currFbPtr;
 #endif
 
-		send_header_start(spi, 0, 0, 320, 240);
+		send_header_start(spi, 0, screen_boarder, 320, 240-screen_boarder);
 		send_header_cleanup(spi);
-		for (x=0; x<320*240; x+=MEM_PER_TRANS) {
+		for (x=0; x<320*240-screen_boarder*640; x+=MEM_PER_TRANS) {
 #ifdef DOUBLE_BUFFER
 			for (i=0; i<MEM_PER_TRANS; i+=4) {
 				uint32_t d=currFbPtr[(x+i)/4];
@@ -388,7 +388,9 @@ void spi_lcd_send(uint16_t *scr) {
 
 void spi_lcd_send_boarder(uint16_t *scr, int boarder) {
 #ifdef DOUBLE_BUFFER
-	memcpy(currFbPtr/*+(unsigned char)(boarder*320)*/, scr, 320*(240-boarder*2));
+	//memcpy(currFbPtr+(boarder*320/4), scr, 320*(240-boarder*2));
+	memcpy(currFbPtr, scr, 320*(240-boarder*2));
+	screen_boarder = boarder;
 #else
 	currFbPtr=scr;
 #endif

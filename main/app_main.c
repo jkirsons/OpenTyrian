@@ -20,5 +20,5 @@ void tyrianTask(void *pvParameters)
 //extern "C"
 void app_main(void)
 {
-	xTaskCreatePinnedToCore(&tyrianTask, "tyrianTask", 32000, NULL, 5, NULL, 0);
+	xTaskCreatePinnedToCore(&tyrianTask, "tyrianTask", 24000, NULL, 5, NULL, 0);
 }
