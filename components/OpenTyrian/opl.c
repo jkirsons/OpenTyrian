@@ -503,14 +503,17 @@ void adlib_init(Bit32u samplerate) {
 	Bits i, j, oct;
 
 	int_samplerate = samplerate;
-
 	generator_add = (Bit32u)(INTFREQU*FIXEDPT/int_samplerate);
-	wavtable = (Bit16s*)heap_caps_malloc(WAVEPREC*3*sizeof(Bit16s), MALLOC_CAP_SPIRAM);
-	vibval_var1 = heap_caps_malloc(BLOCKBUF_SIZE*sizeof(Bit32s), MALLOC_CAP_SPIRAM);
-	vibval_var2 = heap_caps_malloc(BLOCKBUF_SIZE*sizeof(Bit32s), MALLOC_CAP_SPIRAM);
-	memset(vibval_var1,0,BLOCKBUF_SIZE*sizeof(Bit32s));
-	memset(vibval_var2,0,BLOCKBUF_SIZE*sizeof(Bit32s));
-	memset(wavtable,0,WAVEPREC*3*sizeof(Bit16s));
+
+	if(wavtable == NULL)
+	{
+		wavtable = heap_caps_malloc(WAVEPREC*3*sizeof(Bit16s), MALLOC_CAP_SPIRAM);
+		vibval_var1 = heap_caps_malloc(BLOCKBUF_SIZE*sizeof(Bit32s), MALLOC_CAP_SPIRAM);
+		vibval_var2 = heap_caps_malloc(BLOCKBUF_SIZE*sizeof(Bit32s), MALLOC_CAP_SPIRAM);
+		memset(vibval_var1,0,BLOCKBUF_SIZE*sizeof(Bit32s));
+		memset(vibval_var2,0,BLOCKBUF_SIZE*sizeof(Bit32s));
+		memset(wavtable,0,WAVEPREC*3*sizeof(Bit16s));
+	}
 
 	memset((void *)adlibreg,0,sizeof(adlibreg));
 	memset((void *)op,0,sizeof(op_type)*MAXOPERATORS);
@@ -565,7 +568,8 @@ void adlib_init(Bit32u samplerate) {
 	vibtab_add = (Bit32u)(VIBTAB_SIZE*FIXEDPT_LFO/8192*INTFREQU/int_samplerate);
 	vibtab_pos = 0;
 
-	vibval_const = (Bit32s*)heap_caps_malloc(BLOCKBUF_SIZE*sizeof(Bit32s), MALLOC_CAP_SPIRAM);
+	if(vibval_const == NULL)
+		vibval_const = (Bit32s*)heap_caps_malloc(BLOCKBUF_SIZE*sizeof(Bit32s), MALLOC_CAP_SPIRAM);
 	for (i=0; i<BLOCKBUF_SIZE; i++) vibval_const[i] = 0;
 
 
@@ -588,7 +592,8 @@ void adlib_init(Bit32u samplerate) {
 	tremtab_add = (Bit32u)((fltype)TREMTAB_SIZE * TREM_FREQ * FIXEDPT_LFO / (fltype)int_samplerate);
 	tremtab_pos = 0;
 
-	tremval_const = (Bit32s*)heap_caps_malloc(BLOCKBUF_SIZE*sizeof(Bit32s), MALLOC_CAP_SPIRAM);
+	if(tremval_const == NULL)
+		tremval_const = (Bit32s*)heap_caps_malloc(BLOCKBUF_SIZE*sizeof(Bit32s), MALLOC_CAP_SPIRAM);
 	for (i=0; i<BLOCKBUF_SIZE; i++) tremval_const[i] = FIXEDPT;
 
 

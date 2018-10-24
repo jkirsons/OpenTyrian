@@ -95,7 +95,7 @@ void audio_cb( void *user_data, unsigned char *sdl_buffer, int howmuch )
 	static long ct = 0;
 	
 	SAMPLE_TYPE *feedme = (SAMPLE_TYPE *)sdl_buffer;
-	//music_disabled = true;
+	music_disabled = true;
 	if (!music_disabled && !music_stopped)
 	{
 		/* SYN: Simulate the fm synth chip */

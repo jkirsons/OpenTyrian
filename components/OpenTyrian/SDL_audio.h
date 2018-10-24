@@ -5,6 +5,7 @@
 #include "driver/i2s.h"
 #include "freertos/queue.h"
 #include "freertos/task.h"
+#include "freertos/queue.h"
 
 // Needed for calling the actual sound output.
 #define SAMPLECOUNT		2048

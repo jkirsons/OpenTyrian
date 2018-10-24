@@ -5,17 +5,21 @@ unsigned char *sdl_buffer;
 void *user_data;
 bool paused = true;
 bool locked = false;
+xSemaphoreHandle xSemaphoreAudio = NULL;
 
-void IRAM_ATTR updateTask(void *arg)
+void updateTask(void *arg)
 {
   size_t bytesWritten;
   while(1)
   {
-	  if(!paused && !locked){
+	  if(!paused && /*xSemaphoreAudio != NULL*/ !locked){
 			// clear buffer
+		  //xSemaphoreTake( xSemaphoreAudio, portMAX_DELAY );
 			memset(sdl_buffer, 0, SAMPLECOUNT*SAMPLESIZE);
-		  (*as.callback)(NULL, sdl_buffer, SAMPLECOUNT );
-		  i2s_write(I2S_NUM_0, sdl_buffer, SAMPLECOUNT/**SAMPLESIZE*/, &bytesWritten, 1000/*portMAX_DELAY*/);
+		  (*as.callback)(NULL, sdl_buffer, SAMPLECOUNT*SAMPLESIZE );
+		  i2s_write(I2S_NUM_0, sdl_buffer, SAMPLECOUNT*SAMPLESIZE, &bytesWritten, 70 / portTICK_PERIOD_MS);
+		  //xSemaphoreGive( xSemaphoreAudio );
+		  //vTaskDelay( 1 );
 	  } else
 		  vTaskDelay( 5 );
   }
@@ -28,24 +32,19 @@ int SDL_OpenAudio(SDL_AudioSpec *desired, SDL_AudioSpec *obtained)
 	.sample_rate = SAMPLERATE,
 	.bits_per_sample = SAMPLESIZE*8, /* the DAC module will only take the 8bits from MSB */
 	.channel_format = I2S_CHANNEL_FMT_RIGHT_LEFT,
-	.communication_format = I2S_COMM_FORMAT_I2S_MSB,
+	.communication_format = I2S_COMM_FORMAT_I2S_LSB,
 	.intr_alloc_flags = 0, // default interrupt priority
-	.dma_buf_count = 2,
+	.dma_buf_count = 4,
 	.dma_buf_len = 1024,
 	.use_apll = false
 	};
 
 	i2s_driver_install(I2S_NUM_0, &i2s_config, 0, NULL);   //install and start i2s driver
-/*
 	i2s_pin_config_t pc =
 	{
-			.bck_io_num = -1,
-			.ws_io_num = 26,
-			.data_out_num = -1,
-			.data_in_num = -1
+		.data_out_num = 25
 	};
-	*/
-	i2s_set_pin(I2S_NUM_0, NULL); //for internal DAC, this will enable both of the internal channels
+	i2s_set_pin(I2S_NUM_0, &pc); //for internal DAC, this will enable both of the internal channels
 	i2s_set_clk(I2S_NUM_0, SAMPLERATE, I2S_BITS_PER_SAMPLE_16BIT, I2S_CHANNEL_MONO);
 	i2s_set_dac_mode(I2S_DAC_CHANNEL_RIGHT_EN);
 
@@ -58,8 +57,8 @@ int SDL_OpenAudio(SDL_AudioSpec *desired, SDL_AudioSpec *obtained)
 	obtained->samples = SAMPLECOUNT;
 	obtained->callback = desired->callback;
 	memcpy(&as,obtained,sizeof(SDL_AudioSpec));
-
-	xTaskCreatePinnedToCore(&updateTask, "updateTask", 8000, NULL, 5, NULL, 1);
+	//xSemaphoreAudio = xSemaphoreCreateBinary();
+	xTaskCreatePinnedToCore(&updateTask, "updateTask", 8000, NULL, 3, NULL, 1);
 	return 0;
 }
 
@@ -95,10 +94,14 @@ int SDL_ConvertAudio(SDL_AudioCVT *cvt)
 void SDL_LockAudio(void)
 {
 	locked = true;
+	//if( xSemaphoreAudio != NULL )
+	//	xSemaphoreTake( xSemaphoreAudio, 100 );
 }
 
 void SDL_UnlockAudio(void)
 {
     locked = false;
+	//if( xSemaphoreAudio != NULL )
+	//	 xSemaphoreGive( xSemaphoreAudio );
 }
 
