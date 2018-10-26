@@ -95,7 +95,7 @@ void audio_cb( void *user_data, unsigned char *sdl_buffer, int howmuch )
 	static long ct = 0;
 	
 	SAMPLE_TYPE *feedme = (SAMPLE_TYPE *)sdl_buffer;
-	music_disabled = true;
+	//music_disabled = true;
 	if (!music_disabled && !music_stopped)
 	{
 		/* SYN: Simulate the fm synth chip */
@@ -118,7 +118,6 @@ void audio_cb( void *user_data, unsigned char *sdl_buffer, int howmuch )
 			
 			/* set i to smaller of data requested by SDL and a value calculated from the refresh rate */
 			long i = (long)((ct / REFRESH) + 4) & ~3;
-			//i = 512;
 			i = (i > remaining) ? remaining : i; /* i should now equal the number of samples we get */
 			opl_update((SAMPLE_TYPE *)music_pos, i);
 			music_pos += i;

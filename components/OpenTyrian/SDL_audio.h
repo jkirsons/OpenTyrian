@@ -8,7 +8,7 @@
 #include "freertos/queue.h"
 
 // Needed for calling the actual sound output.
-#define SAMPLECOUNT		2048
+#define SAMPLECOUNT		1024
 #define SAMPLERATE		11025 * 4	// Hz
 #define SAMPLESIZE		2   	// 16bit
 

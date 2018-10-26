@@ -30,6 +30,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+/*
 typedef uintptr_t	Bitu;
 typedef intptr_t	Bits;
 typedef uint32_t	Bit32u;
@@ -38,7 +39,15 @@ typedef uint16_t	Bit16u;
 typedef int16_t		Bit16s;
 typedef uint8_t		Bit8u;
 typedef int8_t		Bit8s;
-
+*/
+typedef uintptr_t	Bitu;
+typedef intptr_t	Bits;
+typedef unsigned long	Bit32u;
+typedef long		Bit32s;
+typedef unsigned short	Bit16u;
+typedef short		Bit16s;
+typedef unsigned char		Bit8u;
+typedef signed char		Bit8s;
 
 /*
 	define attribution that inlines/forces inlining of a function (optional)

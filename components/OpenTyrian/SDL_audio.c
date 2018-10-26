@@ -15,9 +15,9 @@ void updateTask(void *arg)
 	  if(!paused && /*xSemaphoreAudio != NULL*/ !locked){
 			// clear buffer
 		  //xSemaphoreTake( xSemaphoreAudio, portMAX_DELAY );
-			memset(sdl_buffer, 0, SAMPLECOUNT*SAMPLESIZE);
+		  memset(sdl_buffer, 0, SAMPLECOUNT*SAMPLESIZE);
 		  (*as.callback)(NULL, sdl_buffer, SAMPLECOUNT*SAMPLESIZE );
-		  i2s_write(I2S_NUM_0, sdl_buffer, SAMPLECOUNT*SAMPLESIZE, &bytesWritten, 70 / portTICK_PERIOD_MS);
+		  i2s_write(I2S_NUM_0, sdl_buffer, SAMPLECOUNT*SAMPLESIZE, &bytesWritten, 500 / portTICK_PERIOD_MS);
 		  //xSemaphoreGive( xSemaphoreAudio );
 		  //vTaskDelay( 1 );
 	  } else
@@ -34,8 +34,8 @@ int SDL_OpenAudio(SDL_AudioSpec *desired, SDL_AudioSpec *obtained)
 	.channel_format = I2S_CHANNEL_FMT_RIGHT_LEFT,
 	.communication_format = I2S_COMM_FORMAT_I2S_LSB,
 	.intr_alloc_flags = 0, // default interrupt priority
-	.dma_buf_count = 4,
-	.dma_buf_len = 1024,
+	.dma_buf_count = 6,
+	.dma_buf_len = 512,
 	.use_apll = false
 	};
 
@@ -48,7 +48,7 @@ int SDL_OpenAudio(SDL_AudioSpec *desired, SDL_AudioSpec *obtained)
 	i2s_set_clk(I2S_NUM_0, SAMPLERATE, I2S_BITS_PER_SAMPLE_16BIT, I2S_CHANNEL_MONO);
 	i2s_set_dac_mode(I2S_DAC_CHANNEL_RIGHT_EN);
 
-	sdl_buffer = malloc(SAMPLECOUNT * SAMPLESIZE * 2);
+	sdl_buffer = malloc(SAMPLECOUNT * SAMPLESIZE);
 
 	memset(obtained, 0, sizeof(SDL_AudioSpec)); /* or SDL_zero(want) */
 	obtained->freq = SAMPLERATE;

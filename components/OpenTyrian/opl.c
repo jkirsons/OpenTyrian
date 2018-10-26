@@ -635,10 +635,10 @@ void adlib_init(Bit32u samplerate) {
 
 
 void adlib_write(Bitu idx, Bit8u val) {
-	Bit32u second_set = idx&0x100;
+	Bit32u second_set = idx & 0x100;
 	adlibreg[idx] = val;
 
-	switch (idx&0xf0) {
+	switch (idx & 0xf0) {
 	case ARC_CONTROL:
 		// here we check for the second set registers, too:
 		switch (idx) {
@@ -988,20 +988,28 @@ OPL_INLINE static void clipit16(Bit32s ival, Bit16s* outval) {
 	outbufl[i] += chanval;
 #endif
 
+Bit32s *vib_lut;
+Bit32s *trem_lut;
+Bit32s *outbufl;
+
 void adlib_getsample(Bit16s* sndptr, Bits numsamples) {
 	Bits i, endsamples;
 	op_type* cptr;
 
-	Bit32s *outbufl = malloc(BLOCKBUF_SIZE * sizeof(Bit32s));//[BLOCKBUF_SIZE];
-	memset(outbufl, 0, BLOCKBUF_SIZE * sizeof(Bit32s));
+
 #if defined(OPLTYPE_IS_OPL3)
 	// second output buffer (right channel for opl3 stereo)
 	Bit32s outbufr[BLOCKBUF_SIZE];
 #endif
 
 	// vibrato/tremolo lookup tables (global, to possibly be used by all operators)
-	Bit32s *vib_lut = malloc(BLOCKBUF_SIZE * sizeof(Bit32s));//[BLOCKBUF_SIZE];
-	Bit32s *trem_lut = malloc(BLOCKBUF_SIZE * sizeof(Bit32s));//[BLOCKBUF_SIZE];
+	if(outbufl == NULL)
+	{
+		outbufl = malloc(BLOCKBUF_SIZE * sizeof(Bit32s));//[BLOCKBUF_SIZE];
+		vib_lut = malloc(BLOCKBUF_SIZE * sizeof(Bit32s));//[BLOCKBUF_SIZE];
+		trem_lut = malloc(BLOCKBUF_SIZE * sizeof(Bit32s));//[BLOCKBUF_SIZE];
+	}
+	memset(outbufl, 0, BLOCKBUF_SIZE * sizeof(Bit32s));
 	memset(vib_lut, 0, BLOCKBUF_SIZE * sizeof(Bit32s));
 	memset(trem_lut, 0, BLOCKBUF_SIZE * sizeof(Bit32s));
 
@@ -1500,7 +1508,7 @@ void adlib_getsample(Bit16s* sndptr, Bits numsamples) {
 #endif
 
 	}
-	free(outbufl);
-	free(vib_lut);
-	free(trem_lut);
+	//free(outbufl);
+	//free(vib_lut);
+	//free(trem_lut);
 }
