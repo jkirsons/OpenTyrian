@@ -132,7 +132,7 @@ void audio_cb( void *user_data, unsigned char *sdl_buffer, int howmuch )
 			feedme[smp] *= music_volume;
 		}
 	}
-	
+	samples_disabled = true;
 	if (!samples_disabled)
 	{
 		/* SYN: Mix sound channels and shove into audio buffer */

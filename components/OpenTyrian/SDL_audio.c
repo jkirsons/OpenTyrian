@@ -17,7 +17,7 @@ void updateTask(void *arg)
 		  //xSemaphoreTake( xSemaphoreAudio, portMAX_DELAY );
 		  memset(sdl_buffer, 0, SAMPLECOUNT*SAMPLESIZE);
 		  (*as.callback)(NULL, sdl_buffer, SAMPLECOUNT*SAMPLESIZE );
-		  i2s_write(I2S_NUM_0, sdl_buffer, SAMPLECOUNT*SAMPLESIZE, &bytesWritten, 500 / portTICK_PERIOD_MS);
+		  i2s_write(I2S_NUM_0, sdl_buffer, SAMPLECOUNT*SAMPLESIZE, &bytesWritten, 5000 / portTICK_PERIOD_MS);
 		  //xSemaphoreGive( xSemaphoreAudio );
 		  //vTaskDelay( 1 );
 	  } else

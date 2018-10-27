@@ -1009,9 +1009,9 @@ void adlib_getsample(Bit16s* sndptr, Bits numsamples) {
 		vib_lut = malloc(BLOCKBUF_SIZE * sizeof(Bit32s));//[BLOCKBUF_SIZE];
 		trem_lut = malloc(BLOCKBUF_SIZE * sizeof(Bit32s));//[BLOCKBUF_SIZE];
 	}
-	memset(outbufl, 0, BLOCKBUF_SIZE * sizeof(Bit32s));
-	memset(vib_lut, 0, BLOCKBUF_SIZE * sizeof(Bit32s));
-	memset(trem_lut, 0, BLOCKBUF_SIZE * sizeof(Bit32s));
+	//memset(outbufl, 0, BLOCKBUF_SIZE * sizeof(Bit32s));
+	//memset(vib_lut, 0, BLOCKBUF_SIZE * sizeof(Bit32s));
+	//memset(trem_lut, 0, BLOCKBUF_SIZE * sizeof(Bit32s));
 
 	Bits samples_to_process = numsamples;
 
