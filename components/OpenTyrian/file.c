@@ -30,10 +30,10 @@
 #include "driver/sdspi_host.h"
 
 #define MODE_SPI 1
-#define PIN_NUM_MISO 2 //4
-#define PIN_NUM_MOSI 13
-#define PIN_NUM_CLK  14
-#define PIN_NUM_CS   15
+#define PIN_NUM_MISO CONFIG_HW_SD_PIN_NUM_MISO
+#define PIN_NUM_MOSI CONFIG_HW_SD_PIN_NUM_MOSI
+#define PIN_NUM_CLK  CONFIG_HW_SD_PIN_NUM_CLK
+#define PIN_NUM_CS   CONFIG_HW_SD_PIN_NUM_CS
 
 const char *custom_data_dir = NULL;
 

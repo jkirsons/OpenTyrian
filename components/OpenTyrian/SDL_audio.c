@@ -17,7 +17,7 @@ void updateTask(void *arg)
 		  //xSemaphoreTake( xSemaphoreAudio, portMAX_DELAY );
 		  memset(sdl_buffer, 0, SAMPLECOUNT*SAMPLESIZE);
 		  (*as.callback)(NULL, sdl_buffer, SAMPLECOUNT*SAMPLESIZE );
-		  i2s_write(I2S_NUM_0, sdl_buffer, SAMPLECOUNT*SAMPLESIZE, &bytesWritten, 5000 / portTICK_PERIOD_MS);
+		  i2s_write(I2S_NUM_0, sdl_buffer, SAMPLECOUNT*SAMPLESIZE, &bytesWritten, 50 / portTICK_PERIOD_MS);
 		  //xSemaphoreGive( xSemaphoreAudio );
 		  //vTaskDelay( 1 );
 	  } else
@@ -34,8 +34,8 @@ int SDL_OpenAudio(SDL_AudioSpec *desired, SDL_AudioSpec *obtained)
 	.channel_format = I2S_CHANNEL_FMT_RIGHT_LEFT,
 	.communication_format = I2S_COMM_FORMAT_I2S_LSB,
 	.intr_alloc_flags = 0, // default interrupt priority
-	.dma_buf_count = 6,
-	.dma_buf_len = 512,
+	.dma_buf_count = 4,
+	.dma_buf_len = 1024,
 	.use_apll = false
 	};
 
