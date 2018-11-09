@@ -33,11 +33,11 @@ multiplayer.
 "make menuconfig"
 
 under the section "ESP32-TYRIAN platform-specific configuration:
-![config_image](https://github.com/jkirsons/OpenTyrian/edit/master/documents/config_1.png)
+![config_image](https://github.com/jkirsons/OpenTyrian/raw/master/documents/config_1.png)
 
 ### LCD / SD Card
 Set up the pins used for your LCD and SD Card.  This is the default configuration:
-![config_image](https://github.com/jkirsons/OpenTyrian/edit/master/documents/config_2.png)
+![config_image](https://github.com/jkirsons/OpenTyrian/raw/master/documents/config_2.png)
 
 The LCD is connected to VSPI, and the SD Card to HSPI.
 
