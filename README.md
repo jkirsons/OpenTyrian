@@ -1,17 +1,9 @@
 # OpenTyrian - ESP32 Port
 
-This is a port of Open Tyrian by Gadget Workbench.
+This is a port of OpenTyrian (ported to ESP32 by Gadget Workbench).
+It's based on OpenTyrian (https://bitbucket.org/opentyrian/opentyrian/wiki/Home)
 
-It's based on the OpenTyrian port (https://bitbucket.org/opentyrian/opentyrian/wiki/Home)
-
-It requires:
- - An ESP32 WROVER 
- - An ILI9341 LCD - connected by SPI
- - SD Card with the tyrian files in a "data" folder
- - Amplifier and speaker
- - Some input buttons (Up/Down/Left/Right + two buttons)
-
-================================================================================
+## Storyline
 
 OpenTyrian is an open-source port of the DOS game Tyrian.
 
@@ -19,14 +11,20 @@ Tyrian is an arcade-style vertical scrolling shooter.  The story is set
 in 20,031 where you play as Trent Hawkins, a skilled fighter-pilot employed
 to fight MicroSol and save the galaxy.
 
-Tyrian features a story mode, one- and two-player arcade modes, and networked
-multiplayer.
+## Requirements
+It requires:
+ - An ESP32 WROVER 
+ - An ILI9341 LCD - connected by SPI
+ - SD Card with the tyrian files in a "data" folder
+ - Amplifier and speaker
+ - Some input buttons (Up/Down/Left/Right + two buttons)
 
-================================================================================
+
+
+## Video
 
 [![Alt text](https://img.youtube.com/vi/UL5eTUv7SZE/0.jpg)](https://www.youtube.com/watch?v=UL5eTUv7SZE)
 
-================================================================================
 
 ## Installation
 
