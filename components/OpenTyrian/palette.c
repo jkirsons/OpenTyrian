@@ -66,7 +66,9 @@ void JE_loadPals( void )
 		}
 	}
 	
+	SDL_LockDisplay();
 	fclose(f);
+	SDL_UnlockDisplay();
 }
 
 void set_palette( Palette colors, unsigned int first_color, unsigned int last_color )

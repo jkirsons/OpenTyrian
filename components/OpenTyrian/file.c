@@ -159,6 +159,14 @@ long ftell_eof( FILE *f )
 	return size;
 }
 
+inline int efseek ( FILE * stream, long int offset, int origin )
+{
+	SDL_LockDisplay();
+	int ret = fseek ( stream, offset, origin );
+	SDL_UnlockDisplay();
+	return ret;
+}
+
 // endian-swapping fread that dies if the expected amount cannot be read
 size_t efread( void *buffer, size_t size, size_t num, FILE *stream )
 {

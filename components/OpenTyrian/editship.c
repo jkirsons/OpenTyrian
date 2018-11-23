@@ -85,7 +85,9 @@ void JE_loadExtraShapes( void )
 		efread(extraShapes, extraShapeSize, 1, f);
 		efread(extraShips, sizeof(extraShips), 1, f);
 		JE_decryptShips();
+		SDL_LockDisplay();
 		fclose(f);
+		SDL_UnlockDisplay();
 	}
 }
 

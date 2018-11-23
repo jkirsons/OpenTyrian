@@ -272,7 +272,9 @@ int JE_loadAnim( const char *filename )
 	 || FileHeader.nlps == 0  || FileHeader.nRecords == 0
 	 || FileHeader.nlps > 256 || FileHeader.nRecords > 65535)
 	{
+		SDL_LockDisplay();
 		fclose(InFile);
+		SDL_UnlockDisplay();
 		return(-1);
 	}
 
@@ -321,7 +323,9 @@ int JE_loadAnim( const char *filename )
 
 void JE_closeAnim( void )
 {
+	SDL_LockDisplay();
 	fclose(InFile);
+	SDL_UnlockDisplay();
 }
 
 /* RunSkipDump decompresses the video.  There are three operations, run, skip,

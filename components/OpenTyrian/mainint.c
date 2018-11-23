@@ -2026,7 +2026,9 @@ void JE_playCredits( void )
 	}
 	if (lines == lines_max)
 		--lines;
+	SDL_LockDisplay();	
 	fclose(f);
+	SDL_UnlockDisplay();
 	
 	memcpy(colors, palettes[6-1], sizeof(colors));
 	JE_clr256(VGAScreen);

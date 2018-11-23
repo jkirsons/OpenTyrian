@@ -250,7 +250,9 @@ void JE_loadItemDat( void )
 		efread(&enemyDat[i].eenemydie,     sizeof(JE_word), 1, f);
 	}
 	
+	SDL_LockDisplay();
 	fclose(f);
+	SDL_UnlockDisplay();
 }
 
 void JE_initEpisode( JE_byte newEpisode )

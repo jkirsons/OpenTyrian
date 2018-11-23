@@ -39,7 +39,9 @@ void load_sprites_file( unsigned int table, const char *filename )
 	
 	load_sprites(table, f);
 	
+	SDL_LockDisplay();
 	fclose(f);
+	SDL_UnlockDisplay();
 }
 
 void load_sprites( unsigned int table, FILE *f )
@@ -486,7 +488,9 @@ void JE_loadCompShapes( Sprite2_array *sprite2s, JE_char s )
 	
 	JE_loadCompShapesB(sprite2s, f);
 	
+	SDL_LockDisplay();
 	fclose(f);
+	SDL_UnlockDisplay();
 }
 
 void JE_loadCompShapesB( Sprite2_array *sprite2s, FILE *f )
@@ -730,7 +734,9 @@ void JE_loadMainShapeTables( const char *shpfile )
 	shapesW2.size = shpPos[i + 1] - shpPos[i];
 	JE_loadCompShapesB(&shapesW2, f);
 	
+	SDL_LockDisplay();
 	fclose(f);
+	SDL_UnlockDisplay();
 }
 
 void free_main_shape_tables( void )

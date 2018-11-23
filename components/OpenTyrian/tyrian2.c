@@ -676,7 +676,9 @@ start_level:
 	{
 		if (demo_file)
 		{
+			SDL_LockDisplay();
 			fclose(demo_file);
+			SDL_UnlockDisplay();
 			demo_file = NULL;
 		}
 
@@ -2479,7 +2481,9 @@ new_game:
 			{
 				if (gameLoaded)
 				{
+					SDL_LockDisplay();
 					fclose(ep_f);
+					SDL_UnlockDisplay();
 
 					if (mainLevel == 0)  // if quit itemscreen
 						return;          // back to title screen
@@ -3046,8 +3050,9 @@ new_game:
 
 			} while (!(loadLevelOk || jumpSection));
 
-
+			SDL_LockDisplay();
 			fclose(ep_f);
+			SDL_UnlockDisplay();
 
 		} while (!loadLevelOk);
 	}
@@ -3176,7 +3181,9 @@ new_game:
 		}
 	}
 
+	SDL_LockDisplay();
 	fclose(shpFile);
+	SDL_UnlockDisplay();
 
 
 	efread(mapBuf, sizeof(JE_byte), 14 * 300, level_f);
@@ -3212,7 +3219,9 @@ new_game:
 		}
 	}
 
+	SDL_LockDisplay();
 	fclose(level_f);
+	SDL_UnlockDisplay();
 	free(pic_buffer);
 	free(mapBuf);
 	/* Note: The map data is automatically calculated with the correct mapsh

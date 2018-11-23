@@ -1730,13 +1730,14 @@ bool load_cube( int cube_slot, int cube_index )
 		read_encrypted_pascal_string(buf, sizeof(buf), f);
 		if (buf[0] == '*')
 			--cube_index;
-
+		
+		SDL_LockDisplay();
 		if (feof(f))
 		{
 			fclose(f);
-
+			SDL_UnlockDisplay();
 			return false;
-		}
+		} else SDL_UnlockDisplay();
 	}
 
 	str_pop_int(&buf[4], &cube[cube_slot].face_sprite);
@@ -1821,9 +1822,9 @@ bool load_cube( int cube_slot, int cube_index )
 				break;
 		}
 	}
-
+	SDL_LockDisplay();
 	fclose(f);
-
+	SDL_UnlockDisplay();
 	return true;
 }
 

@@ -36,6 +36,8 @@ void JE_analyzeLevel( void )
 	
 	lvlPos[lvlNum] = ftell_eof(f);
 	
+	SDL_LockDisplay();
 	fclose(f);
+	SDL_UnlockDisplay();
 }
 

@@ -393,6 +393,8 @@ void JE_loadHelpText( void )
 		read_encrypted_pascal_string(menuInt[14][i], sizeof(menuInt[14][i]), f);
 #endif
 	
+	SDL_LockDisplay();
 	fclose(f);
+	SDL_UnlockDisplay();
 }
 

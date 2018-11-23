@@ -233,7 +233,9 @@ bool load_opentyrian_config( void )
 	
 	if (!config_parse(config, file))
 	{
+		SDL_LockDisplay();
 		fclose(file);
+		SDL_UnlockDisplay();
 		
 		return false;
 	}
@@ -250,7 +252,9 @@ bool load_opentyrian_config( void )
 			set_scaler_by_name(scaler);
 	}
 	
+	SDL_LockDisplay();
 	fclose(file);
+	SDL_UnlockDisplay();
 	
 	return true;
 }
@@ -284,7 +288,9 @@ bool save_opentyrian_config( void )
 #ifndef TARGET_WIN32
 //	fsync(fileno(file));
 #endif
+	SDL_LockDisplay();
 	fclose(file);
+	SDL_UnlockDisplay();
 	
 	return true;
 }
@@ -756,7 +762,9 @@ void JE_loadConfiguration( void )
 		
 		efread(keySettings, sizeof(*keySettings), COUNTOF(keySettings), fi);
 		
+		SDL_LockDisplay();
 		fclose(fi);
+		SDL_UnlockDisplay();
 	}
 	else
 	{
@@ -975,7 +983,9 @@ void JE_saveConfiguration( void )
 #ifndef TARGET_WIN32
 //		fsync(fileno(f));
 #endif
+		SDL_LockDisplay();
 		fclose(f);
+		SDL_UnlockDisplay();
 	}
 	
 	JE_decryptSaveTemp();
@@ -1007,7 +1017,9 @@ void JE_saveConfiguration( void )
 #ifndef TARGET_WIN32
 //		fsync(fileno(f));
 #endif
+		SDL_LockDisplay();
 		fclose(f);
+		SDL_UnlockDisplay();
 	}
 	
 	save_opentyrian_config();
