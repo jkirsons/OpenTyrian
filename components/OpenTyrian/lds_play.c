@@ -85,23 +85,22 @@ bool playing, songlooped;
 bool lds_load( FILE *f, unsigned int music_offset, unsigned int music_size )
 {
 	SoundBank *sb;
-	SDL_LockDisplay();
-	fseek(f, music_offset, SEEK_SET);
-	SDL_UnlockDisplay();
+	efseek(f, music_offset, SEEK_SET);
+
 
 	/* load header */
-	mode = fgetc(f);
+	mode = efgetc(f);
 	if (mode > 2)
 	{
 		fprintf(stderr, "error: failed to load music\n");
 		return false;
 	}
 	efread(&speed, 2, 1, f);
-	tempo = fgetc(f);
-	pattlen = fgetc(f);
+	tempo = efgetc(f);
+	pattlen = efgetc(f);
 	for (unsigned int i = 0; i < 9; i++)
-		chandelay[i] = fgetc(f);
-	regbd = fgetc(f);
+		chandelay[i] = efgetc(f);
+	regbd = efgetc(f);
 
 	/* load patches */
 	efread(&numpatch, 2, 1, f);
@@ -112,39 +111,39 @@ bool lds_load( FILE *f, unsigned int music_offset, unsigned int music_size )
 	for (unsigned int i = 0; i < numpatch; i++)
 	{
 		sb = &soundbank[i];
-		sb->mod_misc = fgetc(f);
-		sb->mod_vol = fgetc(f);
-		sb->mod_ad = fgetc(f);
-		sb->mod_sr = fgetc(f);
-		sb->mod_wave = fgetc(f);
-		sb->car_misc = fgetc(f);
-		sb->car_vol = fgetc(f);
-		sb->car_ad = fgetc(f);
-		sb->car_sr = fgetc(f);
-		sb->car_wave = fgetc(f);
-		sb->feedback = fgetc(f);
-		sb->keyoff = fgetc(f);
-		sb->portamento = fgetc(f);
-		sb->glide = fgetc(f);
-		sb->finetune = fgetc(f);
-		sb->vibrato = fgetc(f);
-		sb->vibdelay = fgetc(f);
-		sb->mod_trem = fgetc(f);
-		sb->car_trem = fgetc(f);
-		sb->tremwait = fgetc(f);
-		sb->arpeggio = fgetc(f);
+		sb->mod_misc = efgetc(f);
+		sb->mod_vol = efgetc(f);
+		sb->mod_ad = efgetc(f);
+		sb->mod_sr = efgetc(f);
+		sb->mod_wave = efgetc(f);
+		sb->car_misc = efgetc(f);
+		sb->car_vol = efgetc(f);
+		sb->car_ad = efgetc(f);
+		sb->car_sr = efgetc(f);
+		sb->car_wave = efgetc(f);
+		sb->feedback = efgetc(f);
+		sb->keyoff = efgetc(f);
+		sb->portamento = efgetc(f);
+		sb->glide = efgetc(f);
+		sb->finetune = efgetc(f);
+		sb->vibrato = efgetc(f);
+		sb->vibdelay = efgetc(f);
+		sb->mod_trem = efgetc(f);
+		sb->car_trem = efgetc(f);
+		sb->tremwait = efgetc(f);
+		sb->arpeggio = efgetc(f);
 		for (unsigned int j = 0; j < 12; j++)
-			sb->arp_tab[j] = fgetc(f);
+			sb->arp_tab[j] = efgetc(f);
 		efread(&sb->start, 2, 1, f);
 		efread(&sb->size, 2, 1, f);
-		sb->fms = fgetc(f);
+		sb->fms = efgetc(f);
 		efread(&sb->transp, 2, 1, f);
-		sb->midinst = fgetc(f);
-		sb->midvelo = fgetc(f);
-		sb->midkey = fgetc(f);
-		sb->midtrans = fgetc(f);
-		sb->middum1 = fgetc(f);
-		sb->middum2 = fgetc(f);
+		sb->midinst = efgetc(f);
+		sb->midvelo = efgetc(f);
+		sb->midkey = efgetc(f);
+		sb->midtrans = efgetc(f);
+		sb->middum1 = efgetc(f);
+		sb->middum2 = efgetc(f);
 	}
 	
 	/* load positions */
@@ -165,16 +164,14 @@ bool lds_load( FILE *f, unsigned int music_offset, unsigned int music_size )
 			Uint16 temp;
 			efread(&temp, 2, 1, f);
 			positions[i * 9 + j].patnum = temp / 2;
-			positions[i * 9 + j].transpose = fgetc(f);
+			positions[i * 9 + j].transpose = efgetc(f);
 		}
 	}
 	
 	/* load patterns */
-	SDL_LockDisplay();
-	fseek(f, 2, SEEK_CUR); /* ignore # of digital sounds (dunno what this is for) */
-	SDL_UnlockDisplay();
+	efseek(f, 2, SEEK_CUR); /* ignore # of digital sounds (dunno what this is for) */
 	
-	unsigned int remaining = music_size - (ftell(f) - music_offset);
+	unsigned int remaining = music_size - (eftell(f) - music_offset);
 	
 	free(patterns);
 	patterns = (Uint16 *)malloc(sizeof(Uint16) * (remaining / 2));

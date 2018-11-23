@@ -39,9 +39,7 @@ void load_sprites_file( unsigned int table, const char *filename )
 	
 	load_sprites(table, f);
 	
-	SDL_LockDisplay();
-	fclose(f);
-	SDL_UnlockDisplay();
+	efclose(f);
 }
 
 void load_sprites( unsigned int table, FILE *f )
@@ -64,7 +62,7 @@ void load_sprites( unsigned int table, FILE *f )
 	{
 		Sprite * const cur_sprite = sprite(table, i);
 		
-		if (!getc(f)) // sprite is empty
+		if (!efgetc(f)) // sprite is empty
 			continue;
 		
 		efread(&cur_sprite->width,  sizeof(Uint16), 1, f);
@@ -488,9 +486,7 @@ void JE_loadCompShapes( Sprite2_array *sprite2s, JE_char s )
 	
 	JE_loadCompShapesB(sprite2s, f);
 	
-	SDL_LockDisplay();
-	fclose(f);
-	SDL_UnlockDisplay();
+	efclose(f);
 }
 
 void JE_loadCompShapesB( Sprite2_array *sprite2s, FILE *f )
@@ -698,15 +694,15 @@ void JE_loadMainShapeTables( const char *shpfile )
 	for (unsigned int i = 0; i < shpNumb; ++i)
 		efread(&shpPos[i], sizeof(JE_longint), 1, f);
 	
-	fseek(f, 0, SEEK_END);
+	efseek(f, 0, SEEK_END);
 	for (unsigned int i = shpNumb; i < COUNTOF(shpPos); ++i)
-		shpPos[i] = ftell(f);
+		shpPos[i] = eftell(f);
 	
 	int i;
 	// fonts, interface, option sprites
 	for (i = 0; i < 7; i++)
 	{
-		fseek(f, shpPos[i], SEEK_SET);
+		efseek(f, shpPos[i], SEEK_SET);
 		load_sprites(i, f);
 	}
 	
@@ -734,9 +730,7 @@ void JE_loadMainShapeTables( const char *shpfile )
 	shapesW2.size = shpPos[i + 1] - shpPos[i];
 	JE_loadCompShapesB(&shapesW2, f);
 	
-	SDL_LockDisplay();
-	fclose(f);
-	SDL_UnlockDisplay();
+	efclose(f);
 }
 
 void free_main_shape_tables( void )

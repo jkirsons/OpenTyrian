@@ -1731,13 +1731,12 @@ bool load_cube( int cube_slot, int cube_index )
 		if (buf[0] == '*')
 			--cube_index;
 		
-		SDL_LockDisplay();
-		if (feof(f))
+
+		if (efeof(f))
 		{
-			fclose(f);
-			SDL_UnlockDisplay();
+			efclose(f);
 			return false;
-		} else SDL_UnlockDisplay();
+		}
 	}
 
 	str_pop_int(&buf[4], &cube[cube_slot].face_sprite);
@@ -1822,9 +1821,7 @@ bool load_cube( int cube_slot, int cube_index )
 				break;
 		}
 	}
-	SDL_LockDisplay();
-	fclose(f);
-	SDL_UnlockDisplay();
+	efclose(f);
 	return true;
 }
 

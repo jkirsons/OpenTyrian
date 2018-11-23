@@ -233,9 +233,7 @@ bool load_opentyrian_config( void )
 	
 	if (!config_parse(config, file))
 	{
-		SDL_LockDisplay();
-		fclose(file);
-		SDL_UnlockDisplay();
+		efclose(file);
 		
 		return false;
 	}
@@ -252,9 +250,7 @@ bool load_opentyrian_config( void )
 			set_scaler_by_name(scaler);
 	}
 	
-	SDL_LockDisplay();
-	fclose(file);
-	SDL_UnlockDisplay();
+	efclose(file);
 	
 	return true;
 }
@@ -288,9 +284,7 @@ bool save_opentyrian_config( void )
 #ifndef TARGET_WIN32
 //	fsync(fileno(file));
 #endif
-	SDL_LockDisplay();
-	fclose(file);
-	SDL_UnlockDisplay();
+	efclose(file);
 	
 	return true;
 }
@@ -762,9 +756,7 @@ void JE_loadConfiguration( void )
 		
 		efread(keySettings, sizeof(*keySettings), COUNTOF(keySettings), fi);
 		
-		SDL_LockDisplay();
-		fclose(fi);
-		SDL_UnlockDisplay();
+		efclose(fi);
 	}
 	else
 	{
@@ -794,9 +786,7 @@ void JE_loadConfiguration( void )
 	if (fi)
 	{
 
-		SDL_LockDisplay();
-		fseek(fi, 0, SEEK_SET);
-		SDL_UnlockDisplay();
+		efseek(fi, 0, SEEK_SET);
 		efread(saveTemp, 1, sizeof(saveTemp), fi);
 		JE_decryptSaveTemp();
 
@@ -862,9 +852,7 @@ void JE_loadConfiguration( void )
 		/* SYN: This is truncating to bytes. I have no idea what this is doing or why. */
 		/* TODO: Figure out what this is about and make sure it isn't broked. */
 		editorLevel = (saveTemp[SIZEOF_SAVEGAMETEMP - 5] << 8) | saveTemp[SIZEOF_SAVEGAMETEMP - 6];
-		SDL_LockDisplay();
-		fclose(fi);
-		SDL_UnlockDisplay();
+		efclose(fi);
 	} else {
 		/* We didn't have a save file! Let's make up random stuff! */
 		editorLevel = 800;
@@ -983,9 +971,7 @@ void JE_saveConfiguration( void )
 #ifndef TARGET_WIN32
 //		fsync(fileno(f));
 #endif
-		SDL_LockDisplay();
-		fclose(f);
-		SDL_UnlockDisplay();
+		efclose(f);
 	}
 	
 	JE_decryptSaveTemp();
@@ -1017,9 +1003,7 @@ void JE_saveConfiguration( void )
 #ifndef TARGET_WIN32
 //		fsync(fileno(f));
 #endif
-		SDL_LockDisplay();
-		fclose(f);
-		SDL_UnlockDisplay();
+		efclose(f);
 	}
 	
 	save_opentyrian_config();

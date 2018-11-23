@@ -36,6 +36,13 @@ bool dir_file_exists( const char *dir, const char *file );
 long ftell_eof( FILE *f );
 
 // endian-swapping fread/fwrite that die if the expected amount cannot be read/written
+size_t eefwrite ( const void * ptr, size_t size, size_t count, FILE * stream );
+int efeof ( FILE * stream );
+int efputc ( int character, FILE * stream );
+int efgetc ( FILE * stream );
+int efclose ( FILE * stream );
+long int eftell ( FILE * stream );
+int efseek( FILE * stream, long int offset, int origin );
 size_t efread( void *buffer, size_t size, size_t num, FILE *stream );
 size_t efwrite( const void *buffer, size_t size, size_t num, FILE *stream );
 

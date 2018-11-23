@@ -58,7 +58,7 @@ int SDL_OpenAudio(SDL_AudioSpec *desired, SDL_AudioSpec *obtained)
 	obtained->callback = desired->callback;
 	memcpy(&as,obtained,sizeof(SDL_AudioSpec));
 	//xSemaphoreAudio = xSemaphoreCreateBinary();
-	xTaskCreatePinnedToCore(&updateTask, "updateTask", 8000, NULL, 3, NULL, 1);
+	xTaskCreatePinnedToCore(&updateTask, "updateTask", 3000, NULL, 3, NULL, 1);
 	return 0;
 }
 

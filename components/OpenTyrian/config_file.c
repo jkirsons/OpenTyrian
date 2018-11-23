@@ -948,7 +948,7 @@ static void write_field( const ConfigString *field, FILE *file )
 		
 		if (o + l > COUNTOF(buffer))
 		{
-			fwrite(buffer, sizeof(*buffer), o, file);
+			eefwrite(buffer, sizeof(*buffer), o, file);
 			o = 0;
 		}
 		
@@ -991,7 +991,7 @@ static void write_field( const ConfigString *field, FILE *file )
 	}
 	
 	if (o > 0)
-		fwrite(buffer, sizeof(*buffer), o, file);
+		eefwrite(buffer, sizeof(*buffer), o, file);
 	
 	fputc('\'', file);
 }

@@ -61,13 +61,13 @@ void JE_loadItemDat( void )
 	{
 		f = dir_fopen_die(data_dir(), "tyrian.hdt", "rb");
 		efread(&episode1DataLoc, sizeof(JE_longint), 1, f);
-		fseek(f, episode1DataLoc, SEEK_SET);
+		efseek(f, episode1DataLoc, SEEK_SET);
 	}
 	else
 	{
 		// episode 4 stores item data in the level file
 		f = dir_fopen_die(data_dir(), levelFile, "rb");
-		fseek(f, lvlPos[lvlNum-1], SEEK_SET);
+		efseek(f, lvlPos[lvlNum-1], SEEK_SET);
 	}
 
 	JE_word itemNum[7]; /* [1..7] */
@@ -99,14 +99,14 @@ void JE_loadItemDat( void )
 	}
 
 #ifdef TYRIAN2000
-	if (episodeNum <= 3) fseek(f, 0x252A4, SEEK_SET);
-	if (episodeNum == 4) fseek(f, 0xC1F5E, SEEK_SET);
-	if (episodeNum == 5) fseek(f, 0x5C5B8, SEEK_SET);
+	if (episodeNum <= 3) efseek(f, 0x252A4, SEEK_SET);
+	if (episodeNum == 4) efseek(f, 0xC1F5E, SEEK_SET);
+	if (episodeNum == 5) efseek(f, 0x5C5B8, SEEK_SET);
 #endif
 	weaponPort = (JE_WeaponPortType*)malloc((PORT_NUM + 1)*sizeof(JE_WeaponPortType));
 	for (int i = 0; i < PORT_NUM + 1; ++i)
 	{
-		fseek(f, 1, SEEK_CUR); /* skip string length */
+		efseek(f, 1, SEEK_CUR); /* skip string length */
 		efread(&weaponPort[i].name,        1, 30, f);
 		weaponPort[i].name[30] = '\0';
 		efread(&weaponPort[i].opnum,       sizeof(JE_byte), 1, f);
@@ -121,15 +121,15 @@ void JE_loadItemDat( void )
 
 	int specials_count = SPECIAL_NUM;
 #ifdef TYRIAN2000
-	if (episodeNum <= 3) fseek(f, 0x2662E, SEEK_SET);
-	if (episodeNum == 4) fseek(f, 0xC32E8, SEEK_SET);
-	if (episodeNum == 5) fseek(f, 0x5D942, SEEK_SET);
+	if (episodeNum <= 3) efseek(f, 0x2662E, SEEK_SET);
+	if (episodeNum == 4) efseek(f, 0xC32E8, SEEK_SET);
+	if (episodeNum == 5) efseek(f, 0x5D942, SEEK_SET);
 	if (episodeNum >= 4) specials_count = SPECIAL_NUM + 8; /*this ugly hack will need a fix*/
 #endif
 	
 	for (int i = 0; i < specials_count + 1; ++i)
 	{
-		fseek(f, 1, SEEK_CUR); /* skip string length */
+		efseek(f, 1, SEEK_CUR); /* skip string length */
 		efread(&special[i].name,        1, 30, f);
 		special[i].name[30] = '\0';
 		efread(&special[i].itemgraphic, sizeof(JE_word), 1, f);
@@ -139,14 +139,14 @@ void JE_loadItemDat( void )
 	}
 
 #ifdef TYRIAN2000
-	if (episodeNum <= 3) fseek(f, 0x26E21, SEEK_SET);
-	if (episodeNum == 4) fseek(f, 0xC3ADB, SEEK_SET);
-	if (episodeNum == 5) fseek(f, 0x5E135, SEEK_SET);
+	if (episodeNum <= 3) efseek(f, 0x26E21, SEEK_SET);
+	if (episodeNum == 4) efseek(f, 0xC3ADB, SEEK_SET);
+	if (episodeNum == 5) efseek(f, 0x5E135, SEEK_SET);
 #endif
 		
 	for (int i = 0; i < POWER_NUM + 1; ++i)
 	{
-		fseek(f, 1, SEEK_CUR); /* skip string length */
+		efseek(f, 1, SEEK_CUR); /* skip string length */
 		efread(&powerSys[i].name,        1, 30, f);
 		powerSys[i].name[30] = '\0';
 		efread(&powerSys[i].itemgraphic, sizeof(JE_word), 1, f);
@@ -156,14 +156,14 @@ void JE_loadItemDat( void )
 	}
 
 #ifdef TYRIAN2000
-	if (episodeNum <= 3) fseek(f, 0x26F24, SEEK_SET);
-	if (episodeNum == 4) fseek(f, 0xC3BDE, SEEK_SET);
-	if (episodeNum == 5) fseek(f, 0x5E238, SEEK_SET);
+	if (episodeNum <= 3) efseek(f, 0x26F24, SEEK_SET);
+	if (episodeNum == 4) efseek(f, 0xC3BDE, SEEK_SET);
+	if (episodeNum == 5) efseek(f, 0x5E238, SEEK_SET);
 #endif
 	
 	for (int i = 0; i < SHIP_NUM + 1; ++i)
 	{
-		fseek(f, 1, SEEK_CUR); /* skip string length */
+		efseek(f, 1, SEEK_CUR); /* skip string length */
 		efread(&ships[i].name,           1, 30, f);
 		ships[i].name[30] = '\0';
 		efread(&ships[i].shipgraphic,    sizeof(JE_word), 1, f);
@@ -176,14 +176,14 @@ void JE_loadItemDat( void )
 	}
 
 #ifdef TYRIAN2000
-	if (episodeNum <= 3) fseek(f, 0x2722F, SEEK_SET);
-	if (episodeNum == 4) fseek(f, 0xC3EE9, SEEK_SET);
-	if (episodeNum == 5) fseek(f, 0x5E543, SEEK_SET); 
+	if (episodeNum <= 3) efseek(f, 0x2722F, SEEK_SET);
+	if (episodeNum == 4) efseek(f, 0xC3EE9, SEEK_SET);
+	if (episodeNum == 5) efseek(f, 0x5E543, SEEK_SET); 
 #endif
 	options = (JE_OptionType  *)malloc((OPTION_NUM + 1)*sizeof(JE_OptionType));
 	for (int i = 0; i < OPTION_NUM + 1; ++i)
 	{
-		fseek(f, 1, SEEK_CUR); /* skip string length */
+		efseek(f, 1, SEEK_CUR); /* skip string length */
 		efread(&options[i].name,        1, 30, f);
 		options[i].name[30] = '\0';
 		efread(&options[i].pwr,         sizeof(JE_byte), 1, f);
@@ -202,14 +202,14 @@ void JE_loadItemDat( void )
 	}
 
 #ifdef TYRIAN2000
-	if (episodeNum <= 3) fseek(f, 0x27EF3, SEEK_SET);
-	if (episodeNum == 4) fseek(f, 0xC4BAD, SEEK_SET);
-	if (episodeNum == 5) fseek(f, 0x5F207, SEEK_SET);
+	if (episodeNum <= 3) efseek(f, 0x27EF3, SEEK_SET);
+	if (episodeNum == 4) efseek(f, 0xC4BAD, SEEK_SET);
+	if (episodeNum == 5) efseek(f, 0x5F207, SEEK_SET);
 #endif
 		
 	for (int i = 0; i < SHIELD_NUM + 1; ++i)
 	{
-		fseek(f, 1, SEEK_CUR); /* skip string length */
+		efseek(f, 1, SEEK_CUR); /* skip string length */
 		efread(&shields[i].name,        1, 30, f);
 		shields[i].name[30] = '\0';
 		efread(&shields[i].tpwr,        sizeof(JE_byte), 1, f);
@@ -250,9 +250,7 @@ void JE_loadItemDat( void )
 		efread(&enemyDat[i].eenemydie,     sizeof(JE_word), 1, f);
 	}
 	
-	SDL_LockDisplay();
-	fclose(f);
-	SDL_UnlockDisplay();
+	efclose(f);
 }
 
 void JE_initEpisode( JE_byte newEpisode )
