@@ -19,9 +19,7 @@
 #ifndef VARZ_H
 #define VARZ_H
 
-//extern "C" {
 #include "episodes.h"
-//}
 #include "opentyr.h"
 #include "player.h"
 #include "sprite.h"
@@ -113,7 +111,7 @@ struct JE_SingleEnemyType
 	JE_byte     fill[3]; /* [1..3] */
 };
 
-typedef struct JE_SingleEnemyType JE_MultiEnemyType; /* [1..100] */
+typedef struct JE_SingleEnemyType JE_MultiEnemyType[100]; /* [1..100] */
 
 typedef JE_word JE_DanCShape[(24 * 28) / 2]; /* [1..(24*28) div 2] */
 
@@ -121,10 +119,10 @@ typedef JE_char JE_CharString[256]; /* [1..256] */
 
 //typedef JE_byte JE_Map1Buffer[24 * 28 * 13 * 4]; /* [1..24*28*13*4] */
 
-typedef JE_byte ***JE_MapType;
-//typedef JE_byte *JE_MapType[300][14]; /* [1..300, 1..14] */
-//typedef JE_byte *JE_MapType2[600][14]; /* [1..600, 1..14] */
-//typedef JE_byte *JE_MapType3[600][15]; /* [1..600, 1..15] */
+//typedef JE_byte ***JE_MapType;
+typedef JE_byte *JE_MapType[300][14]; /* [1..300, 1..14] */
+typedef JE_byte *JE_MapType2[600][14]; /* [1..600, 1..14] */
+typedef JE_byte *JE_MapType3[600][15]; /* [1..600, 1..15] */
 
 struct JE_EventRecType
 {
@@ -150,22 +148,35 @@ struct JE_MegaDataShapesType1
 struct JE_MegaDataType1
 {
 	JE_MapType mainmap;  //[300][14];
-	struct JE_MegaDataShapesType1 *shapes;//[72]; /* [0..71] */
+	struct
+	{
+		JE_DanCShape sh;
+	} shapes[72]; /* [0..71] */
 	JE_byte tempdat1;
 	/*JE_DanCShape filler;*/
 };
 
 struct JE_MegaDataType2
 {
-	JE_MapType mainmap; //[600][14];
-	struct JE_MegaDataShapesType2_3 *shapes;//[71]; /* [0..70] */
+	JE_MapType2 mainmap;
+	struct
+	{
+		JE_byte nothing[3]; /* [1..3] */
+		JE_byte fill;
+		JE_DanCShape sh;
+	} shapes[71]; /* [0..70] */
 	JE_byte tempdat2;
 };
 
 struct JE_MegaDataType3
 {
-	JE_MapType mainmap; //[600][15];
-	struct JE_MegaDataShapesType2_3 *shapes;//[70]; /* [0..69] */
+	JE_MapType3 mainmap;
+	struct
+	{
+		JE_byte nothing[3]; /* [1..3] */
+		JE_byte fill;
+		JE_DanCShape sh;
+	} shapes[70]; /* [0..69] */
 	JE_byte tempdat3;
 };
 
@@ -245,9 +256,9 @@ extern JE_word curLoc;
 extern JE_boolean firstGameOver, gameLoaded, enemyStillExploding;
 extern JE_word totalEnemy;
 extern JE_word enemyKilled;
-extern struct JE_MegaDataType1 megaData1;
-extern struct JE_MegaDataType2 megaData2;
-extern struct JE_MegaDataType3 megaData3;
+EXT_RAM_ATTR extern struct JE_MegaDataType1 megaData1;
+EXT_RAM_ATTR extern struct JE_MegaDataType2 megaData2;
+EXT_RAM_ATTR extern struct JE_MegaDataType3 megaData3;
 extern JE_byte flash;
 extern JE_shortint flashChange;
 extern JE_byte displayTime;
@@ -280,7 +291,7 @@ extern JE_word mapOrigin, mapPNum;
 extern JE_byte mapPlanet[5], mapSection[5];
 extern JE_boolean moveTyrianLogoUp;
 extern JE_boolean skipStarShowVGA;
-extern JE_MultiEnemyType *enemy;
+extern JE_MultiEnemyType enemy;
 extern JE_EnemyAvailType enemyAvail;
 extern JE_word enemyOffset;
 extern JE_word enemyOnScreen;

@@ -685,7 +685,7 @@ void JE_decryptSaveTemp( void )
 
 const char *get_user_directory( void )
 {
-	return "/data";
+	return "/sd/tyrian";
 	static char user_dir[500] = "";
 	
 	if (strlen(user_dir) == 0)
@@ -756,7 +756,7 @@ void JE_loadConfiguration( void )
 		
 		efread(keySettings, sizeof(*keySettings), COUNTOF(keySettings), fi);
 		
-		fclose(fi);
+		efclose(fi);
 	}
 	else
 	{

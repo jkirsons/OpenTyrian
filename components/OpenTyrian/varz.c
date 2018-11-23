@@ -18,9 +18,7 @@
  */
 #include "config.h"
 #include "editship.h"
-//extern "C" {
 #include "episodes.h"
-//}
 #include "joystick.h"
 #include "lds_play.h"
 #include "loudness.h"
@@ -203,9 +201,9 @@ JE_word totalEnemy;
 JE_word enemyKilled;
 
 /* Shape/Map Data - All in one Segment! */
-struct JE_MegaDataType1 megaData1;
-struct JE_MegaDataType2 megaData2;
-struct JE_MegaDataType3 megaData3;
+EXT_RAM_ATTR struct JE_MegaDataType1 megaData1;
+EXT_RAM_ATTR struct JE_MegaDataType2 megaData2;
+EXT_RAM_ATTR struct JE_MegaDataType3 megaData3;
 
 /* Secret Level Display */
 JE_byte flash;
@@ -255,8 +253,7 @@ JE_boolean moveTyrianLogoUp;
 JE_boolean skipStarShowVGA;
 
 /*EnemyData*/
-JE_MultiEnemyType *enemy;
-
+JE_MultiEnemyType enemy;
 JE_EnemyAvailType enemyAvail;  /* values: 0: used, 1: free, 2: secret pick-up */
 JE_word enemyOffset;
 JE_word enemyOnScreen;

@@ -58,7 +58,7 @@ extern JE_byte helpBoxColor, helpBoxBrightness, helpBoxShadeType;
 #define HELPTEXT_SHIPINFO_COUNT 13
 #endif
 
-extern char *helpTxt[39];//[231];
+EXT_RAM_ATTR extern char helpTxt[39][231];
 extern char pName[21][16];
 extern char miscText[HELPTEXT_MISCTEXT_COUNT][42];
 extern char miscTextB[HELPTEXT_MISCTEXTB_COUNT][HELPTEXT_MISCTEXTB_SIZE];

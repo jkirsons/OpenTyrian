@@ -694,7 +694,9 @@ void JE_loadMainShapeTables( const char *shpfile )
 	for (unsigned int i = 0; i < shpNumb; ++i)
 		efread(&shpPos[i], sizeof(JE_longint), 1, f);
 	
+	SDL_LockDisplay();
 	fseek(f, 0, SEEK_END);
+	SDL_UnlockDisplay();
 	for (unsigned int i = shpNumb; i < COUNTOF(shpPos); ++i)
 		shpPos[i] = ftell(f);
 	
@@ -702,7 +704,9 @@ void JE_loadMainShapeTables( const char *shpfile )
 	// fonts, interface, option sprites
 	for (i = 0; i < 7; i++)
 	{
+		SDL_LockDisplay();
 		fseek(f, shpPos[i], SEEK_SET);
+		SDL_UnlockDisplay();
 		load_sprites(i, f);
 	}
 	

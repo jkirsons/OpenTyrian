@@ -52,7 +52,7 @@ JE_byte helpBoxColor = 12;
 JE_byte helpBoxBrightness = 1;
 JE_byte helpBoxShadeType = FULL_SHADE;
 
-char *helpTxt[39];//[231];                                                   /* [1..39] of string [230] */
+EXT_RAM_ATTR char helpTxt[39][231];                                                   /* [1..39] of string [230] */
 char pName[21][16];                                                      /* [1..21] of string [15] */
 char miscText[HELPTEXT_MISCTEXT_COUNT][42];                              /* [1..68] of string [41] */
 char miscTextB[HELPTEXT_MISCTEXTB_COUNT][HELPTEXT_MISCTEXTB_SIZE];       /* [1..5] of string [10] */
@@ -188,8 +188,8 @@ void JE_loadHelpText( void )
 	FILE *f = dir_fopen_die(data_dir(), "tyrian.hdt", "rb");
 	efread(&episode1DataLoc, sizeof(JE_longint), 1, f);
 
-	for(int i=0;i<sizeof(helpTxt);i++)
-		helpTxt[i] = heap_caps_malloc(231*sizeof(char), MALLOC_CAP_SPIRAM);
+	//for(int i=0;i<sizeof(helpTxt);i++)
+	//	helpTxt[i] = heap_caps_malloc(231*sizeof(char), MALLOC_CAP_SPIRAM);
 		
 	/*Online Help*/
 	skip_pascal_string(f);

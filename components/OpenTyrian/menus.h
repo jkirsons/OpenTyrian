@@ -26,7 +26,7 @@
 #else
 #define GAMEPLAY_NAME_COUNT 5
 #endif
-extern char episode_name[6][31], difficulty_name[7][21], gameplay_name[GAMEPLAY_NAME_COUNT][26];
+EXT_RAM_ATTR extern char episode_name[6][31], difficulty_name[7][21], gameplay_name[GAMEPLAY_NAME_COUNT][26];
 
 bool select_gameplay( void );
 bool select_episode( void );

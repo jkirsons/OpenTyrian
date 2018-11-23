@@ -22,6 +22,7 @@
 #include "SDL.h"
 #include <math.h>
 #include <stdbool.h>
+#include "esp_attr.h"
 
 #define COUNTOF(x) ((unsigned)(sizeof(x) / sizeof *(x)))  // use only on arrays!
 #define MIN(a, b) ((a) < (b) ? (a) : (b))

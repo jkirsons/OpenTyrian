@@ -17,9 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include "config.h"
-//extern "C" {
 #include "episodes.h"
-//}
 #include "fonthand.h"
 #include "keyboard.h"
 #include "menus.h"
@@ -31,7 +29,7 @@
 #include "sprite.h"
 #include "video.h"
 
-char episode_name[6][31], difficulty_name[7][21], gameplay_name[GAMEPLAY_NAME_COUNT][26];
+EXT_RAM_ATTR char episode_name[6][31], difficulty_name[7][21], gameplay_name[GAMEPLAY_NAME_COUNT][26];
 
 bool select_gameplay( void )
 {

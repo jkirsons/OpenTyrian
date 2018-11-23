@@ -17,9 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 #include "config.h"
-//extern "C" {
 #include "episodes.h"
-//}
 #include "file.h"
 #include "lvllib.h"
 #include "lvlmast.h"
@@ -27,18 +25,18 @@
 
 
 /* MAIN Weapons Data */
-JE_WeaponPortType *weaponPort;
-JE_WeaponType     *weapons;//[WEAP_NUM + 1]; /* [0..weapnum] */
+EXT_RAM_ATTR JE_WeaponPortType weaponPort;
+EXT_RAM_ATTR JE_WeaponType     weapons[WEAP_NUM + 1]; /* [0..weapnum] */
 
 /* Items */
 JE_PowerType   powerSys;
 JE_ShipType    ships;
-JE_OptionType  *options;//[OPTION_NUM + 1]; /* [0..optionnum] */
+JE_OptionType  options[OPTION_NUM + 1]; /* [0..optionnum] */
 JE_ShieldType  shields;
 JE_SpecialType special;
 
 /* Enemy data */
-JE_EnemyDatType *enemyDat;
+JE_EnemyDatType enemyDat;
 
 /* EPISODE variables */
 JE_byte    initial_episode_num, episodeNum = 0;
@@ -72,7 +70,7 @@ void JE_loadItemDat( void )
 
 	JE_word itemNum[7]; /* [1..7] */
 	efread(&itemNum, sizeof(JE_word), 7, f);
-	weapons = (JE_WeaponType *)malloc((WEAP_NUM + 1)*sizeof(JE_WeaponType));
+	//weapons = (JE_WeaponType *)malloc((WEAP_NUM + 1)*sizeof(JE_WeaponType));
 	for (int i = 0; i < WEAP_NUM + 1; ++i)
 	{
 		efread(&weapons[i].drain,           sizeof(JE_word), 1, f);
@@ -103,7 +101,7 @@ void JE_loadItemDat( void )
 	if (episodeNum == 4) fseek(f, 0xC1F5E, SEEK_SET);
 	if (episodeNum == 5) fseek(f, 0x5C5B8, SEEK_SET);
 #endif
-	weaponPort = (JE_WeaponPortType*)malloc((PORT_NUM + 1)*sizeof(JE_WeaponPortType));
+	//weaponPort = (JE_WeaponPortType*)malloc((PORT_NUM + 1)*sizeof(JE_WeaponPortType));
 	for (int i = 0; i < PORT_NUM + 1; ++i)
 	{
 		fseek(f, 1, SEEK_CUR); /* skip string length */
@@ -180,7 +178,7 @@ void JE_loadItemDat( void )
 	if (episodeNum == 4) fseek(f, 0xC3EE9, SEEK_SET);
 	if (episodeNum == 5) fseek(f, 0x5E543, SEEK_SET); 
 #endif
-	options = (JE_OptionType  *)malloc((OPTION_NUM + 1)*sizeof(JE_OptionType));
+	//options = (JE_OptionType  *)malloc((OPTION_NUM + 1)*sizeof(JE_OptionType));
 	for (int i = 0; i < OPTION_NUM + 1; ++i)
 	{
 		fseek(f, 1, SEEK_CUR); /* skip string length */
@@ -217,7 +215,7 @@ void JE_loadItemDat( void )
 		efread(&shields[i].itemgraphic, sizeof(JE_word), 1, f);
 		efread(&shields[i].cost,        sizeof(JE_word), 1, f);
 	}
-	enemyDat = (JE_EnemyDatType*)malloc((ENEMY_NUM + 1)*sizeof(JE_EnemyDatType));
+	//enemyDat = (JE_EnemyDatType*)malloc((ENEMY_NUM + 1)*sizeof(JE_EnemyDatType));
 	for (int i = 0; i < ENEMY_NUM + 1; ++i)
 	{
 		efread(&enemyDat[i].ani,           sizeof(JE_byte), 1, f);

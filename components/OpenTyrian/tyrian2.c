@@ -65,7 +65,7 @@ boss_bar_t boss_bar[2];
 /* Level Event Data */
 JE_boolean quit, loadLevelOk;
 
-struct JE_EventRecType *eventRec;//[EVENT_MAXIMUM]; /* [1..eventMaximum] */
+EXT_RAM_ATTR struct JE_EventRecType eventRec[EVENT_MAXIMUM]; /* [1..eventMaximum] */
 JE_word levelEnemyMax;
 JE_word levelEnemyFrequency;
 JE_word levelEnemy[40]; /* [1..40] */
@@ -632,7 +632,7 @@ draw_enemy_end:
 void JE_main( void )
 {
 	char buffer[256];
-	enemy = (JE_MultiEnemyType*)heap_caps_malloc(100*sizeof(JE_MultiEnemyType), MALLOC_CAP_SPIRAM);
+	//enemy = (JE_MultiEnemyType*)heap_caps_malloc(100*sizeof(JE_MultiEnemyType), MALLOC_CAP_SPIRAM);
 	int lastEnemyOnScreen;
 
 	/* NOTE: BEGIN MAIN PROGRAM HERE AFTER LOADING A GAME OR STARTING A NEW ONE */
@@ -2410,7 +2410,7 @@ void JE_loadMap( void )
 	printf("Loading Map\n");
 	if(megaData1.mainmap == NULL)
 	{
-		JE_MapType *map1 = allocateTwoDimenArrayOnHeapUsingMalloc(300, 14);
+/*		JE_MapType *map1 = allocateTwoDimenArrayOnHeapUsingMalloc(300, 14);
 		megaData1.mainmap = map1;
 		megaData1.shapes = malloc(sizeof(struct JE_MegaDataShapesType1)*72);
 		megaData2.mainmap = allocateTwoDimenArrayOnHeapUsingMalloc(600, 14);
@@ -2418,6 +2418,7 @@ void JE_loadMap( void )
 		megaData3.mainmap = allocateTwoDimenArrayOnHeapUsingMalloc(600, 15);
 		megaData3.shapes = malloc(sizeof(struct JE_MegaDataShapesType2_3)*70);
 		eventRec = malloc(EVENT_MAXIMUM * sizeof(struct JE_EventRecType));
+		*/
 	}
 
 	JE_DanCShape shape;
