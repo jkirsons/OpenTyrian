@@ -676,7 +676,7 @@ start_level:
 	{
 		if (demo_file)
 		{
-			fclose(demo_file);
+			efclose(demo_file);
 			demo_file = NULL;
 		}
 
@@ -768,7 +768,6 @@ start_level_first:
 		player[i].last_x_shot_move = player[i].x;
 		player[i].last_y_shot_move = player[i].y;
 	}
-	
 	JE_loadPic(VGAScreen, twoPlayerMode ? 6 : 3, false);
 
 	JE_drawOptions();
@@ -2480,7 +2479,7 @@ new_game:
 			{
 				if (gameLoaded)
 				{
-					fclose(ep_f);
+					efclose(ep_f);
 
 					if (mainLevel == 0)  // if quit itemscreen
 						return;          // back to title screen
@@ -3047,8 +3046,7 @@ new_game:
 
 			} while (!(loadLevelOk || jumpSection));
 
-
-			fclose(ep_f);
+			efclose(ep_f);
 
 		} while (!loadLevelOk);
 	}
@@ -3060,12 +3058,11 @@ new_game:
 
 	printf("Next Section. /n");
 	FILE *level_f = dir_fopen_die(data_dir(), levelFile, "rb");
-	SDL_LockDisplay();
-	fseek(level_f, lvlPos[(lvlFileNum-1) * 2], SEEK_SET);
 
-	fgetc(level_f); // char_mapFile
-	SDL_UnlockDisplay();
-	JE_char char_shapeFile = fgetc(level_f);
+	efseek(level_f, lvlPos[(lvlFileNum-1) * 2], SEEK_SET);
+
+	efgetc(level_f); // char_mapFile
+	JE_char char_shapeFile = efgetc(level_f);
 	efread(&mapX,  sizeof(JE_word), 1, level_f);
 	efread(&mapX2, sizeof(JE_word), 1, level_f);
 	efread(&mapX3, sizeof(JE_word), 1, level_f);
@@ -3110,7 +3107,7 @@ new_game:
 
 	for (int z = 0; z < 600; z++)
 	{
-		JE_boolean shapeBlank = fgetc(shpFile);
+		JE_boolean shapeBlank = efgetc(shpFile);
 
 		if (shapeBlank)
 			memset(shape, 0, sizeof(shape));
@@ -3177,7 +3174,7 @@ new_game:
 		}
 	}
 
-	fclose(shpFile);
+	efclose(shpFile);
 
 
 	efread(mapBuf, sizeof(JE_byte), 14 * 300, level_f);
@@ -3213,7 +3210,7 @@ new_game:
 		}
 	}
 
-	fclose(level_f);
+	efclose(level_f);
 	free(pic_buffer);
 	free(mapBuf);
 	/* Note: The map data is automatically calculated with the correct mapsh
@@ -3252,7 +3249,7 @@ bool JE_titleScreen( JE_boolean animate )
 
 	gameLoaded = false;
 	jumpSection = false;
-
+heap_caps_check_integrity_all(true);
 #ifdef WITH_NETWORK
 	if (isNetworkGame)
 	{
@@ -3340,7 +3337,7 @@ bool JE_titleScreen( JE_boolean animate )
 			if (redraw)
 			{
 				play_song(SONG_TITLE);
-
+heap_caps_check_integrity_all(true);
 				menu = 0;
 				redraw = false;
 				if (animate)
@@ -3350,19 +3347,21 @@ bool JE_titleScreen( JE_boolean animate )
 						fade_black(10);
 						fadeIn = false;
 					}
-
+heap_caps_check_integrity_all(true);					
+heap_caps_print_heap_info(MALLOC_CAP_SPIRAM);					
+printf("JE_loadPic\n");
 					JE_loadPic(VGAScreen, 4, false);
-
+printf("draw_font_hv_shadow");
 					draw_font_hv_shadow(VGAScreen, 2, 192, opentyrian_version, small_font, left_aligned, 15, 0, false, 1);
-
+printf("memcpy");
 					memcpy(VGAScreen2->pixels, VGAScreen->pixels, VGAScreen2->pitch * VGAScreen2->h);
 
 					temp = moveTyrianLogoUp ? 62 : 4;
-
+printf("blit_sprite");
 					blit_sprite(VGAScreenSeg, 11, temp, PLANET_SHAPES, 146); // tyrian logo
-
+printf("JE_showVGA");
 					JE_showVGA();
-
+printf("fade_palette");
 					fade_palette(colors, 10, 0, 255 - 16);
 
 					if (moveTyrianLogoUp)
@@ -3403,12 +3402,12 @@ bool JE_titleScreen( JE_boolean animate )
 					memcpy(VGAScreen2->pixels, VGAScreen->pixels, VGAScreen2->pitch * VGAScreen2->h);
 				}
 			}
-
+printf("memcpy");
 			memcpy(VGAScreen->pixels, VGAScreen2->pixels, VGAScreen->pitch * VGAScreen->h);
-
+printf("draw_font_hv");
 			// highlight selected menu item
 			draw_font_hv(VGAScreen, VGAScreen->w / 2, 104 + menu * 13, menuText[menu], normal_font, centered, 15, -1);
-
+printf("JE_showVGA");
 			JE_showVGA();
 
 			if (trentWin)

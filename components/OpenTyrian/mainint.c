@@ -1806,35 +1806,35 @@ bool load_next_demo( void )
 	difficultyLevel = 2;
 	bonusLevelCurrent = false;
 
-	Uint8 temp = fgetc(demo_file);
+	Uint8 temp = efgetc(demo_file);
 	JE_initEpisode(temp);
 	efread(levelName, 1, 10, demo_file); levelName[10] = '\0';
-	lvlFileNum = fgetc(demo_file);
+	lvlFileNum = efgetc(demo_file);
 
-	player[0].items.weapon[FRONT_WEAPON].id  = fgetc(demo_file);
-	player[0].items.weapon[REAR_WEAPON].id   = fgetc(demo_file);
-	player[0].items.super_arcade_mode        = fgetc(demo_file);
-	player[0].items.sidekick[LEFT_SIDEKICK]  = fgetc(demo_file);
-	player[0].items.sidekick[RIGHT_SIDEKICK] = fgetc(demo_file);
-	player[0].items.generator                = fgetc(demo_file);
+	player[0].items.weapon[FRONT_WEAPON].id  = efgetc(demo_file);
+	player[0].items.weapon[REAR_WEAPON].id   = efgetc(demo_file);
+	player[0].items.super_arcade_mode        = efgetc(demo_file);
+	player[0].items.sidekick[LEFT_SIDEKICK]  = efgetc(demo_file);
+	player[0].items.sidekick[RIGHT_SIDEKICK] = efgetc(demo_file);
+	player[0].items.generator                = efgetc(demo_file);
 
-	player[0].items.sidekick_level           = fgetc(demo_file); // could probably ignore
-	player[0].items.sidekick_series          = fgetc(demo_file); // could probably ignore
+	player[0].items.sidekick_level           = efgetc(demo_file); // could probably ignore
+	player[0].items.sidekick_series          = efgetc(demo_file); // could probably ignore
 
-	initial_episode_num                      = fgetc(demo_file); // could probably ignore
+	initial_episode_num                      = efgetc(demo_file); // could probably ignore
 
-	player[0].items.shield                   = fgetc(demo_file);
-	player[0].items.special                  = fgetc(demo_file);
-	player[0].items.ship                     = fgetc(demo_file);
+	player[0].items.shield                   = efgetc(demo_file);
+	player[0].items.special                  = efgetc(demo_file);
+	player[0].items.ship                     = efgetc(demo_file);
 
 	for (uint i = 0; i < 2; ++i)
-		player[0].items.weapon[i].power = fgetc(demo_file);
+		player[0].items.weapon[i].power = efgetc(demo_file);
 
-	SDL_LockDisplay();
-	fseek(demo_file, 3, SEEK_CUR);
-	SDL_UnlockDisplay();
 
-	levelSong = fgetc(demo_file);
+	efseek(demo_file, 3, SEEK_CUR);
+
+
+	levelSong = efgetc(demo_file);
 
 	demo_keys_wait = 0;
 	demo_keys = next_demo_keys = 0;
@@ -2026,7 +2026,7 @@ void JE_playCredits( void )
 	}
 	if (lines == lines_max)
 		--lines;
-	fclose(f);
+	efclose(f);
 	
 	memcpy(colors, palettes[6-1], sizeof(colors));
 	JE_clr256(VGAScreen);

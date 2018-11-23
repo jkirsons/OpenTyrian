@@ -71,9 +71,7 @@ const char *data_dir( void )
 		FILE *f = dir_fopen(dirs[i], "tyrian1.lvl", "rb");
 		if (f)
 		{
-			SDL_LockDisplay();
-			fclose(f);
-			SDL_UnlockDisplay();
+			efclose(f);
 			
 			dir = dirs[i];
 			break;
@@ -138,9 +136,7 @@ bool dir_file_exists( const char *dir, const char *file )
 	FILE *f = dir_fopen(dir, file, "rb");
 	if (f != NULL)
 	{
-		SDL_LockDisplay();
-		fclose(f);
-		SDL_UnlockDisplay();
+		efclose(f);
 	}
 	return (f != NULL);
 }
@@ -157,6 +153,62 @@ long ftell_eof( FILE *f )
 	fseek(f, pos, SEEK_SET);
 	SDL_UnlockDisplay();
 	return size;
+}
+
+int efeof ( FILE * stream )
+{
+	SDL_LockDisplay();
+	int ret = feof ( stream );
+	SDL_UnlockDisplay();
+	return ret;	
+}
+
+int efputc ( int character, FILE * stream )
+{
+	SDL_LockDisplay();
+	int ret = fputc ( character, stream );
+	SDL_UnlockDisplay();
+	return ret;	
+}
+
+int efgetc ( FILE * stream )
+{
+	SDL_LockDisplay();
+	int ret = fgetc ( stream );
+	SDL_UnlockDisplay();
+	return ret;	
+}
+
+size_t eefwrite ( const void * ptr, size_t size, size_t count, FILE * stream )
+{
+	SDL_LockDisplay();
+	size_t ret = fwrite ( ptr, size, count, stream );
+	SDL_UnlockDisplay();
+	return ret;		
+}
+
+int efclose ( FILE * stream )
+{
+	SDL_LockDisplay();
+	int ret = fclose ( stream );
+	SDL_UnlockDisplay();
+	return ret;	
+}
+
+long int eftell ( FILE * stream )
+{
+	SDL_LockDisplay();
+	long int ret = ftell ( stream );
+	SDL_UnlockDisplay();
+	return ret;
+}
+
+int efseek( FILE * stream, long int offset, int origin )
+{
+	SDL_LockDisplay();
+	int ret = fseek ( stream, offset, origin );
+	SDL_UnlockDisplay();
+	return ret;
 }
 
 // endian-swapping fread that dies if the expected amount cannot be read

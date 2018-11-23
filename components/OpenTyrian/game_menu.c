@@ -1730,11 +1730,11 @@ bool load_cube( int cube_slot, int cube_index )
 		read_encrypted_pascal_string(buf, sizeof(buf), f);
 		if (buf[0] == '*')
 			--cube_index;
+		
 
-		if (feof(f))
+		if (efeof(f))
 		{
-			fclose(f);
-
+			efclose(f);
 			return false;
 		}
 	}
@@ -1821,9 +1821,7 @@ bool load_cube( int cube_slot, int cube_index )
 				break;
 		}
 	}
-
-	fclose(f);
-
+	efclose(f);
 	return true;
 }
 

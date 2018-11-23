@@ -116,24 +116,18 @@ void JE_loadSndFile( const char *effects_sndfile, const char *voices_sndfile )
 	{
 		efread(&sndPos[0][x], sizeof(sndPos[0][x]), 1, fi);
 	}
-	SDL_LockDisplay();
-	fseek(fi, 0, SEEK_END);
-	sndPos[0][sndNum] = ftell(fi); /* Store file size */
-	SDL_UnlockDisplay();
+	efseek(fi, 0, SEEK_END);
+	sndPos[0][sndNum] = eftell(fi); /* Store file size */
 	for (z = 0; z < sndNum; z++)
 	{
-		SDL_LockDisplay();
-		fseek(fi, sndPos[0][z], SEEK_SET);
-		SDL_UnlockDisplay();
+		efseek(fi, sndPos[0][z], SEEK_SET);
 		fxSize[z] = (sndPos[0][z+1] - sndPos[0][z]); /* Store sample sizes */
 		free(digiFx[z]);
 		digiFx[z] = (JE_byte *)malloc(fxSize[z]);
 		efread(digiFx[z], 1, fxSize[z], fi); /* JE: Load sample to buffer */
 	}
 
-	SDL_LockDisplay();
-	fclose(fi);
-	SDL_UnlockDisplay();
+	efclose(fi);
 
 	/* SYN: Loading offsets into VOICES.SND */
 	fi = dir_fopen_die(data_dir(), voices_sndfile, "rb");
@@ -144,19 +138,15 @@ void JE_loadSndFile( const char *effects_sndfile, const char *voices_sndfile )
 	{
 		efread(&sndPos[1][x], sizeof(sndPos[1][x]), 1, fi);
 	}
-	SDL_LockDisplay();
-	fseek(fi, 0, SEEK_END);
+	efseek(fi, 0, SEEK_END);
 
-	sndPos[1][sndNum] = ftell(fi); /* Store file size */
-	SDL_UnlockDisplay();
+	sndPos[1][sndNum] = eftell(fi); /* Store file size */
 
 	z = SAMPLE_COUNT - 9;
 
 	for (y = 0; y < sndNum; y++)
 	{
-		SDL_LockDisplay();
-		fseek(fi, sndPos[1][y], SEEK_SET);
-		SDL_UnlockDisplay();
+		efseek(fi, sndPos[1][y], SEEK_SET);
 
 		templ = (sndPos[1][y+1] - sndPos[1][y]) - 100; /* SYN: I'm not entirely sure what's going on here. */
 		if (templ < 1) templ = 1;
@@ -164,9 +154,7 @@ void JE_loadSndFile( const char *effects_sndfile, const char *voices_sndfile )
 		digiFx[z + y] = (JE_byte *)malloc(fxSize[z + y]);
 		efread(digiFx[z + y], 1, fxSize[z + y], fi); /* JE: Load sample to buffer */
 	}
-	SDL_LockDisplay();
-	fclose(fi);
-	SDL_UnlockDisplay();
+	efclose(fi);
 
 	notYetLoadedSound = false;
 

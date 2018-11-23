@@ -57,16 +57,16 @@ void JE_loadPals( void )
 			// bits of the original value instead. This ensures that the value goes to 255 as the original goes
 			// to 63.
 
-			int c = getc(f);
+			int c = efgetc(f);
 			palettes[p][i].r = (c << 2) | (c >> 4);
-			c = getc(f);
+			c = efgetc(f);
 			palettes[p][i].g = (c << 2) | (c >> 4);
-			c = getc(f);
+			c = efgetc(f);
 			palettes[p][i].b = (c << 2) | (c >> 4);
 		}
 	}
 	
-	fclose(f);
+	efclose(f);
 }
 
 void set_palette( Palette colors, unsigned int first_color, unsigned int last_color )

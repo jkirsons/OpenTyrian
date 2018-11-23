@@ -47,15 +47,13 @@ void JE_loadPic(SDL_Surface *screen, JE_byte PCXnumber, JE_boolean storepal )
 	}
 
 	unsigned int size = pcxpos[PCXnumber + 1] - pcxpos[PCXnumber];
-	Uint8 *buffer = (Uint8 *)malloc(size);
+	printf("size: %d\n", size);
 
-	SDL_LockDisplay();
-	fseek(f, pcxpos[PCXnumber], SEEK_SET);
-	SDL_UnlockDisplay();
+	Uint8 *buffer = (Uint8 *)malloc(size);
+	printf("malloc done\n");
+	efseek(f, pcxpos[PCXnumber], SEEK_SET);
 	efread(buffer, sizeof(Uint8), size, f);
-	SDL_LockDisplay();
-	fclose(f);
-	SDL_UnlockDisplay();
+	efclose(f);
 
 	Uint8 *p = buffer;
 	Uint8 *s; /* screen pointer, 8-bit specific */

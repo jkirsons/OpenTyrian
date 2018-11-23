@@ -28,34 +28,28 @@ void JE_loadPCX( const char *file ) // this is only meant to load tshp2.pcx
 	
 	FILE *f = dir_fopen_die(data_dir(), file, "rb");
 	
-	SDL_LockDisplay();
-	fseek(f, -769, SEEK_END);
-	SDL_UnlockDisplay();
+	efseek(f, -769, SEEK_END);
 	
-	SDL_LockDisplay();
-	if (fgetc(f) == 12)
+
+	if (efgetc(f) == 12)
 	{
-		SDL_UnlockDisplay();
 		for (int i = 0; i < 256; i++)
 		{
 			efread(&colors[i].r, 1, 1, f);
 			efread(&colors[i].g, 1, 1, f);
 			efread(&colors[i].b, 1, 1, f);
 		}
-	} else
-		SDL_UnlockDisplay();
+	} 
 	
-	SDL_LockDisplay();
-	fseek(f, 128, SEEK_SET);
-	
+	efseek(f, 128, SEEK_SET);
 	
 	for (int i = 0; i < 320 * 200; )
 	{
-		Uint8 p = fgetc(f);
+		Uint8 p = efgetc(f);
 		if ((p & 0xc0) == 0xc0)
 		{
 			i += (p & 0x3f);
-			memset(s, fgetc(f), (p & 0x3f));
+			memset(s, efgetc(f), (p & 0x3f));
 			s += (p & 0x3f);
 		} else {
 			i++;
@@ -68,7 +62,6 @@ void JE_loadPCX( const char *file ) // this is only meant to load tshp2.pcx
 		}
 	}
 	
-	fclose(f);
-	SDL_UnlockDisplay();
+	efclose(f);
 }
 

@@ -20,6 +20,7 @@
 #define HELPTEXT_H
 
 #include "opentyr.h"
+#include "file.h"
 
 #include <stdio.h>
 

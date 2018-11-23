@@ -30,6 +30,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "file.h"
 
 #ifndef COMPILE_TIME_ASSERT
 /*!
