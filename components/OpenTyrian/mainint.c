@@ -1830,7 +1830,9 @@ bool load_next_demo( void )
 	for (uint i = 0; i < 2; ++i)
 		player[0].items.weapon[i].power = fgetc(demo_file);
 
+	SDL_LockDisplay();
 	fseek(demo_file, 3, SEEK_CUR);
+	SDL_UnlockDisplay();
 
 	levelSong = fgetc(demo_file);
 

@@ -1,4 +1,4 @@
-#include "SDL_TFT.h"
+#include "SDL_video.h"
 
 
 
@@ -6,31 +6,42 @@
 
 SDL_Surface* primary_surface;
 
-JE_byte *** allocateTwoDimenArrayOnHeapUsingMalloc(int row, int col)
+int SDL_LockSurface(SDL_Surface *surface)
 {
-	JE_byte ***ptr = malloc(row * sizeof(*ptr) + row * (col * sizeof **ptr) );
+    return 0;
+}
 
-	int * const data = ptr + row;
-	for(int i = 0; i < row; i++)
-		ptr[i] = data + i * col;
+void SDL_UnlockSurface(SDL_Surface* surface)
+{
 
-	return ptr;
+}
+
+void SDL_UpdateRect(SDL_Surface *screen, Sint32 x, Sint32 y, Sint32 w, Sint32 h)
+{
+    SDL_Flip(screen);
+}
+
+SDL_VideoInfo *SDL_GetVideoInfo(void)
+{
+    SDL_VideoInfo *info = malloc(sizeof(SDL_VideoInfo));
+    return info;
+}
+
+char *SDL_VideoDriverName(char *namebuf, int maxlen)
+{
+    return "Gadget Workbench - Awesome SPI TFT Driver";
+}
+
+
+SDL_Rect **SDL_ListModes(SDL_PixelFormat *format, Uint32 flags)
+{
+    SDL_Rect mode[1] = {{0,0,320,200}};
+    return &mode;
 }
 
 void SDL_WM_SetCaption(const char *title, const char *icon)
 {
 
-}
-
-void SDL_Delay(Uint32 ms)
-{
-    const TickType_t xDelay = ms / portTICK_PERIOD_MS;
-    vTaskDelay( xDelay );
-}
-
-char *SDL_GetError(void)
-{
-    return (char *)"";
 }
 
 char *SDL_GetKeyName(SDLKey key)
@@ -43,19 +54,9 @@ SDL_Keymod SDL_GetModState(void)
     return (SDL_Keymod)0;
 }
 
-Uint32 SDL_GetTicks(void)
+IRAM_ATTR Uint32 SDL_GetTicks(void)
 {
     return esp_timer_get_time() / 1000;    
-}
-
-int SDL_Init(Uint32 flags)
-{
-    return 0;
-}
-
-void SDL_Quit(void)
-{
-
 }
 
 Uint32 SDL_WasInit(Uint32 flags)
@@ -69,6 +70,7 @@ int SDL_InitSubSystem(Uint32 flags)
     if(flags == SDL_INIT_VIDEO)
     {
     	spi_lcd_init();
+        SDL_CreateRGBSurface(0, 320, 200, 8, 0,0,0,0);
     }
     return 0; // 0 = OK, -1 = Error
 }
@@ -97,6 +99,7 @@ SDL_Surface *SDL_CreateRGBSurface(Uint32 flags, int width, int height, int depth
     surface->clip_rect = rect;
     surface->refcount = 1;
     surface->pixels = heap_caps_malloc(width*height*1, MALLOC_CAP_SPIRAM);
+    memset(surface->pixels,0,(width*height/sizeof(surface->pixels)));
     if(primary_surface == NULL)
     	primary_surface = surface;
     return surface;
@@ -179,4 +182,37 @@ int SDL_VideoModeOK(int width, int height, int bpp, Uint32 flags)
 	if(bpp == 8)
 		return 1;
 	return 0;
+}
+
+SemaphoreHandle_t display_mutex = NULL;
+
+void SDL_LockDisplay()
+{
+    if (display_mutex == NULL)
+    {
+        printf("Creating display mutex.\n");
+        display_mutex = xSemaphoreCreateMutex();
+        if (!display_mutex) 
+            abort();
+        //xSemaphoreGive(display_mutex);
+    }
+
+    if (!xSemaphoreTake(display_mutex, 60000 / portTICK_RATE_MS))
+    {
+        printf("Timeout waiting for display lock.\n");
+        abort();
+    }
+    //printf("L");   
+    //taskYIELD(); 
+}
+
+void SDL_UnlockDisplay()
+{
+    if (!display_mutex) 
+        abort();
+    if (!xSemaphoreGive(display_mutex))
+        abort();
+
+    //printf("U ");
+    //taskYIELD();
 }

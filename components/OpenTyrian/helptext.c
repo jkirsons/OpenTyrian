@@ -101,7 +101,9 @@ void read_encrypted_pascal_string( char *s, int size, FILE *f )
 		efread(s, 1, len, f);
 		if (size > 0)
 			s[len] = '\0';
+		SDL_LockDisplay();	
 		fseek(f, skip, SEEK_CUR);
+		SDL_UnlockDisplay();
 
 		decrypt_pascal_string(s, len);
 	}
@@ -109,8 +111,10 @@ void read_encrypted_pascal_string( char *s, int size, FILE *f )
 
 void skip_pascal_string( FILE *f )
 {
+	SDL_LockDisplay();
 	int len = getc(f);
 	fseek(f, len, SEEK_CUR);
+	SDL_UnlockDisplay();
 }
 
 void JE_helpBox( SDL_Surface *screen,  int x, int y, const char *message, unsigned int boxwidth )

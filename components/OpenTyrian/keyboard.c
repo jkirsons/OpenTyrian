@@ -50,83 +50,6 @@ bool input_grab_enabled = true;
 bool input_grab_enabled = false;
 #endif
 
-typedef struct {
-	int gpio;
-	SDL_Keycode key;
-} GPIOKeyMap;
-
-//Mappings from PS2 buttons to keys
-static const GPIOKeyMap keymap[]={
-	{36, SDLK_UP},
-	{34, SDLK_DOWN},
-	{32, SDLK_LEFT},
-	{39, SDLK_RIGHT},
-
-	{33, SDLK_ESCAPE},				//cross
-	{35, SDLK_SPACE},			//circle
-	{0, NULL},
-};
-
-static xQueueHandle gpio_evt_queue = NULL;
-
-static void IRAM_ATTR gpio_isr_handler(void* arg)
-{
-    uint32_t gpio_num = (uint32_t) arg;
-    xQueueSendFromISR(gpio_evt_queue, &gpio_num, NULL);
-}
-
-
-void gpioTask(void *arg) {
-    uint32_t io_num;
-	int level;
-    for(;;) {
-        if(xQueueReceive(gpio_evt_queue, &io_num, portMAX_DELAY)) {
-			for (int i=0; keymap[i].key!=NULL; i++)
-				if(keymap[i].gpio == io_num)
-				{
-					level = gpio_get_level(io_num);
-					keysactive[keymap[i].key] = level?false:true;
-					if(level == 0)
-						newkey = true;
-					lastkey_sym = keymap[i].key;
-					//lastkey_mod = ev.key.keysym.mod;
-					//lastkey_char = ev.key.keysym.unicode;
-					keydown = level?false:true;
-				}
-        }
-    }
-}
-
-void inputInit()
-{
-	gpio_config_t io_conf;
-    io_conf.pull_down_en = 0;
-    //interrupt of rising edge
-    io_conf.intr_type = GPIO_INTR_ANYEDGE;
-    //bit mask of the pins, use GPIO... here
-	for (int i=0; keymap[i].key!=NULL; i++)
-    	if(i==0)
-			io_conf.pin_bit_mask = (1ULL<<keymap[i].gpio);
-		else
-			io_conf.pin_bit_mask |= (1ULL<<keymap[i].gpio);
-
-	io_conf.mode = GPIO_MODE_INPUT;
-    io_conf.pull_up_en = 1;
-    gpio_config(&io_conf);
-
-    //create a queue to handle gpio event from isr
-    gpio_evt_queue = xQueueCreate(10, sizeof(uint32_t));
-    //start gpio task
-	//xTaskCreatePinnedToCore(&gpioTask, "GPIO", 1500, NULL, 7, NULL, 0);
-
-    //install gpio isr service
-    gpio_install_isr_service(ESP_INTR_FLAG_SHARED);
-    //hook isr handler for specific gpio pin
-	for (int i=0; keymap[i].key!=NULL; i++)
-    	gpio_isr_handler_add(keymap[i].gpio, gpio_isr_handler, (void*) keymap[i].gpio);
-
-	//printf("keyboard: GPIO task created.\n");
-}
 
 void flush_events_buffer( void )
 {
@@ -170,24 +93,19 @@ void set_mouse_position( int x, int y )
 
 void service_SDL_events( JE_boolean clear_new )
 {
-
+	
 	if (clear_new)
 		newkey = newmouse = false;
-	uint32_t io_num;
-	if(xQueueReceive(gpio_evt_queue, &io_num, 0)) {
-		for (int i=0; keymap[i].key!=NULL; i++)
-			if(keymap[i].gpio == io_num)
-			{
-				int level = gpio_get_level(io_num);
-				keysactive[keymap[i].key] = level?false:true;
-				if(level == 0)
-					newkey = true;
-				lastkey_sym = keymap[i].key;
-				//lastkey_mod = ev.key.keysym.mod;
-				//lastkey_char = ev.key.keysym.unicode;
-				keydown = level?false:true;
-			}
+	
+	SDL_Event event;
+	while(SDL_PollEvent(&event))
+	{
+		keysactive[event.key.keysym.sym] = event.key.state;
+		newkey = true;
+		lastkey_sym = event.key.keysym.sym;
+		keydown = event.key.state;
 	}
+
 	/*
 	case SDL_QUIT:
 		exit(0);

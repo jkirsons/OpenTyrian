@@ -42,7 +42,7 @@ int SDL_OpenAudio(SDL_AudioSpec *desired, SDL_AudioSpec *obtained)
 	i2s_driver_install(I2S_NUM_0, &i2s_config, 0, NULL);   //install and start i2s driver
 	i2s_pin_config_t pc =
 	{
-		.data_out_num = 25
+		.data_out_num = 26
 	};
 	i2s_set_pin(I2S_NUM_0, &pc); //for internal DAC, this will enable both of the internal channels
 	i2s_set_clk(I2S_NUM_0, SAMPLERATE, I2S_BITS_PER_SAMPLE_16BIT, I2S_CHANNEL_MONO);

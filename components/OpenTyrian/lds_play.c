@@ -85,8 +85,9 @@ bool playing, songlooped;
 bool lds_load( FILE *f, unsigned int music_offset, unsigned int music_size )
 {
 	SoundBank *sb;
-	
+	SDL_LockDisplay();
 	fseek(f, music_offset, SEEK_SET);
+	SDL_UnlockDisplay();
 
 	/* load header */
 	mode = fgetc(f);
@@ -169,7 +170,9 @@ bool lds_load( FILE *f, unsigned int music_offset, unsigned int music_size )
 	}
 	
 	/* load patterns */
+	SDL_LockDisplay();
 	fseek(f, 2, SEEK_CUR); /* ignore # of digital sounds (dunno what this is for) */
+	SDL_UnlockDisplay();
 	
 	unsigned int remaining = music_size - (ftell(f) - music_offset);
 	

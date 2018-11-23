@@ -95,12 +95,16 @@ int JE_loadPage( unsigned int pagenumber )
 	 * Pages repeat their headers for some reason.  They then have two bytes of
 	 * padding folowed by a word for every record.  THEN the data starts.
 	 */
+	SDL_LockDisplay();
 	fseek(InFile, ANIM_OFFSET + (pagenumber * ANI_PAGE_SIZE), SEEK_SET);
+	SDL_UnlockDisplay();
 	efread(&CurrentPageHeader.baseRecord, 2, 1, InFile);
 	efread(&CurrentPageHeader.nRecords,   2, 1, InFile);
 	efread(&CurrentPageHeader.nBytes,     2, 1, InFile);
 
+	SDL_LockDisplay();
 	fseek(InFile, 2, SEEK_CUR);
+	SDL_UnlockDisplay();
 	for (i = 0; i < CurrentPageHeader.nRecords; i++)
 	{
 		efread(&CurrentPageRecordSizes[i], 2, 1, InFile);
@@ -244,7 +248,9 @@ int JE_loadAnim( const char *filename )
 	{
 		/* We don't know the exact size our file should be yet,
 		 * but we do know it should be way more than this */
+		SDL_LockDisplay();
 		fclose(InFile);
+		SDL_UnlockDisplay();
 		return(-1);
 	}
 
@@ -256,7 +262,9 @@ int JE_loadAnim( const char *filename )
 	 */
 
 	efread(&temp, 1, 4, InFile); /* The ID, should equal "LPF " */
+	SDL_LockDisplay();
 	fseek(InFile, 2, SEEK_CUR); /* skip over this word */
+	SDL_UnlockDisplay();
 	efread(&FileHeader.nlps, 2, 1, InFile); /* Number of pages */
 	efread(&FileHeader.nRecords, 4, 1, InFile); /* Number of records */
 
@@ -269,7 +277,9 @@ int JE_loadAnim( const char *filename )
 	}
 
 	/* Read in headers */
+	SDL_LockDisplay();
 	fseek(InFile, PAGEHEADER_OFFSET, SEEK_SET);
+	SDL_UnlockDisplay();
 	for (i = 0; i < FileHeader.nlps; i++)
 	{
 		efread(&PageHeader[i].baseRecord, 2, 1, InFile);
@@ -285,13 +295,17 @@ int JE_loadAnim( const char *filename )
 	  + PageHeader[FileHeader.nlps-1].nBytes
 	  + PageHeader[FileHeader.nlps-1].nRecords * 2 + 8)
 	{
+		SDL_LockDisplay();
 		fclose(InFile);
+		SDL_UnlockDisplay();
 		return(-1);
 	}
 
 
 	/* Now read in the palette. */
+	SDL_LockDisplay();
 	fseek(InFile, PALETTE_OFFSET, SEEK_SET);
+	SDL_UnlockDisplay();
 	for (i = 0; i < 256; i++)
 	{
 		efread(&colors[i].b,      1, 1, InFile);

@@ -3059,9 +3059,11 @@ new_game:
 
 	printf("Next Section. /n");
 	FILE *level_f = dir_fopen_die(data_dir(), levelFile, "rb");
+	SDL_LockDisplay();
 	fseek(level_f, lvlPos[(lvlFileNum-1) * 2], SEEK_SET);
 
 	fgetc(level_f); // char_mapFile
+	SDL_UnlockDisplay();
 	JE_char char_shapeFile = fgetc(level_f);
 	efread(&mapX,  sizeof(JE_word), 1, level_f);
 	efread(&mapX2, sizeof(JE_word), 1, level_f);

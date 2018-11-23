@@ -41,41 +41,7 @@ static bool init_SD = false;
 
 void Init_SD()
 {
-#if MODE_SPI == 1
-	sdmmc_host_t host = SDSPI_HOST_DEFAULT();
-	//host.command_timeout_ms=200;
-	//host.max_freq_khz = SDMMC_FREQ_PROBING;
-    sdspi_slot_config_t slot_config = SDSPI_SLOT_CONFIG_DEFAULT();
-    slot_config.gpio_miso = PIN_NUM_MISO;
-    slot_config.gpio_mosi = PIN_NUM_MOSI;
-    slot_config.gpio_sck  = PIN_NUM_CLK;
-    slot_config.gpio_cs   = PIN_NUM_CS;
-	slot_config.dma_channel = 1; //2
-#else
-	sdmmc_host_t host = SDMMC_HOST_DEFAULT();
-	host.flags = SDMMC_HOST_FLAG_1BIT;
-	//host.max_freq_khz = SDMMC_FREQ_HIGHSPEED;
-	host.command_timeout_ms=500;
-	sdmmc_slot_config_t slot_config = SDMMC_SLOT_CONFIG_DEFAULT();
-	slot_config.width = 1;
-#endif
-    esp_vfs_fat_sdmmc_mount_config_t mount_config = {
-        .format_if_mount_failed = false,
-        .max_files = 10
-    };
-
-	sdmmc_card_t* card;
-    esp_err_t ret = esp_vfs_fat_sdmmc_mount("", &host, &slot_config, &mount_config, &card);
-
-    if (ret != ESP_OK) {
-        if (ret == ESP_FAIL) {
-        	fprintf(stderr, "Init_SD: Failed to mount filesystem.\n");
-        } else {
-        	fprintf(stderr, "Init_SD: Failed to initialize the card. %d\n", ret);
-        }
-        return;
-    }
-    fprintf(stderr, "Init_SD: SD card opened.\n");
+	SDL_InitSD();
 	//sdmmc_card_print_info(stdout, card);
 	init_SD = true;
 }
@@ -85,6 +51,7 @@ const char *data_dir( void )
 {
 	const char *dirs[] =
 	{
+		"/sd/tyrian",
 		custom_data_dir,
 		TYRIAN_DIR,
 		"data",
@@ -104,7 +71,9 @@ const char *data_dir( void )
 		FILE *f = dir_fopen(dirs[i], "tyrian1.lvl", "rb");
 		if (f)
 		{
+			SDL_LockDisplay();
 			fclose(f);
+			SDL_UnlockDisplay();
 			
 			dir = dirs[i];
 			break;
@@ -127,7 +96,9 @@ FILE *dir_fopen( const char *dir, const char *file, const char *mode )
 	char *path = (char *)malloc(strlen(dir) + 1 + strlen(file) + 1);
 	sprintf(path, "%s/%s", dir, file);
 	
+	SDL_LockDisplay();
 	FILE *f = fopen(path, mode);
+	SDL_UnlockDisplay();
 	
 	free(path);
 	
@@ -166,28 +137,35 @@ bool dir_file_exists( const char *dir, const char *file )
 {
 	FILE *f = dir_fopen(dir, file, "rb");
 	if (f != NULL)
+	{
+		SDL_LockDisplay();
 		fclose(f);
+		SDL_UnlockDisplay();
+	}
 	return (f != NULL);
 }
 
 // returns end-of-file position
 long ftell_eof( FILE *f )
 {
+	SDL_LockDisplay();
 	long pos = ftell(f);
 	
 	fseek(f, 0, SEEK_END);
 	long size = ftell(f);
 	
 	fseek(f, pos, SEEK_SET);
-	
+	SDL_UnlockDisplay();
 	return size;
 }
 
 // endian-swapping fread that dies if the expected amount cannot be read
 size_t efread( void *buffer, size_t size, size_t num, FILE *stream )
 {
+	SDL_LockDisplay();
 	size_t num_read = fread(buffer, size, num, stream);
-	
+	SDL_UnlockDisplay();
+
 	switch (size)
 	{
 #if SDL_BYTEORDER == SDL_BIG_ENDIAN
@@ -249,8 +227,10 @@ size_t efwrite( const void *buffer, size_t size, size_t num, FILE *stream )
 			break;
 	}
 	
+	SDL_LockDisplay();
 	size_t num_written = fwrite(buffer, size, num, stream);
-	
+	SDL_UnlockDisplay();
+
 	if (swap_buffer != NULL)
 		free(swap_buffer);
 	
