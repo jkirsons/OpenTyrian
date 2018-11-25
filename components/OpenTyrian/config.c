@@ -768,7 +768,7 @@ void JE_loadConfiguration( void )
 		soundEffects = 1;
 		memcpy(&keySettings, &defaultKeySettings, sizeof(keySettings));
 		background2 = true;
-		tyrMusicVolume = fxVolume = 32;
+		tyrMusicVolume = fxVolume = 128;
 		gammaCorrection = 0;
 		processorType = 4;
 		gameSpeed = 5;

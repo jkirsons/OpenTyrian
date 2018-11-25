@@ -55,38 +55,35 @@ bool init_audio( void )
 	if (audio_disabled)
 		return false;
 	
-	SDL_AudioSpec *ask = malloc(sizeof(SDL_AudioSpec)), *got = malloc(sizeof(SDL_AudioSpec));
+	SDL_AudioSpec ask, got;
 	
-	ask->freq = freq;
-	ask->format = (BYTES_PER_SAMPLE == 2) ? AUDIO_S16SYS : AUDIO_S8;
-	ask->channels = 1;
-	ask->samples = 2048;
-	ask->callback = audio_cb;
+	ask.freq = freq;
+	ask.format = (BYTES_PER_SAMPLE == 2) ? AUDIO_S16SYS : AUDIO_S8;
+	ask.channels = 1;
+	ask.samples = 2048;
+	ask.callback = audio_cb;
 	
-	printf("\trequested %d Hz, %d channels, %d samples\n", ask->freq, ask->channels, ask->samples);
+	printf("\trequested %d Hz, %d channels, %d samples\n", ask.freq, ask.channels, ask.samples);
 	
-	if (SDL_OpenAudio(ask, got) == -1)
+	if (SDL_OpenAudio(&ask, &got) == -1)
 	{
 		fprintf(stderr, "error: failed to initialize SDL audio: %s\n", SDL_GetError());
 		audio_disabled = true;
 		return false;
 	}
 	
-	printf("\tobtained  %d Hz, %d channels, %d samples\n", got->freq, got->channels, got->samples);
+	printf("\tobtained  %d Hz, %d channels, %d samples\n", got.freq, got.channels, got.samples);
 	
-	SDL_BuildAudioCVT(&audio_cvt, ask->format, ask->channels, ask->freq, got->format, got->channels, got->freq);
+	SDL_BuildAudioCVT(&audio_cvt, ask.format, ask.channels, ask.freq, got.format, got.channels, got.freq);
 	
 	opl_init();
 	
 	SDL_PauseAudio(0); // unpause
 	
-	free(ask);
-	free(got);
-	
 	return true;
 }
 
-void audio_cb( void *user_data, unsigned char *sdl_buffer, int howmuch )
+IRAM_ATTR void audio_cb( void *user_data, unsigned char *sdl_buffer, int howmuch )
 {
 	(void)user_data;
 	
@@ -135,7 +132,7 @@ void audio_cb( void *user_data, unsigned char *sdl_buffer, int howmuch )
 			feedme[smp] *= music_volume;
 		}
 	}
-	//samples_disabled = true;
+	samples_disabled = false;
 	if (!samples_disabled)
 	{
 		/* SYN: Mix sound channels and shove into audio buffer */
