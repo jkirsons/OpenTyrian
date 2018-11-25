@@ -41,16 +41,15 @@ int SDL_OpenAudio(SDL_AudioSpec *desired, SDL_AudioSpec *obtained)
 	static const int i2s_num = I2S_NUM_0; // i2s port number
 
 	i2s_driver_install(i2s_num, &i2s_config, 0, NULL);   //install and start i2s driver
-/*	static const i2s_pin_config_t pc =
-	{
-		.bck_io_num = -1,
-		.ws_io_num = -1,
-		.data_out_num = 26,
-		.data_in_num = -1
-	};
+	i2s_pin_config_t pc = {
+        .bck_io_num = 26,
+        .ws_io_num = 25,
+        .data_out_num = -1,
+        .data_in_num = -1                                                       //Not used
+    };
 	i2s_set_pin(i2s_num, &pc);
-*/	
-	i2s_set_pin(i2s_num, NULL);
+
+	//i2s_set_pin(i2s_num, NULL);
 	i2s_set_clk(i2s_num, SAMPLERATE, I2S_BITS_PER_SAMPLE_16BIT, I2S_CHANNEL_STEREO);
 	i2s_set_dac_mode(I2S_DAC_CHANNEL_BOTH_EN);
 	i2s_set_sample_rates(i2s_num, SAMPLERATE); 
@@ -67,6 +66,7 @@ int SDL_OpenAudio(SDL_AudioSpec *desired, SDL_AudioSpec *obtained)
 
 	//xSemaphoreAudio = xSemaphoreCreateBinary();
 	xTaskCreatePinnedToCore(&updateTask, "updateTask", 6000, NULL, 3, NULL, 1);
+	printf("audio task started\n");
 	return 0;
 }
 
