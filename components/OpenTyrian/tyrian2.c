@@ -956,27 +956,27 @@ start_level_first:
 		efwrite(levelName,   1, 10, demo_file);
 		efwrite(&lvlFileNum, 1,  1, demo_file);
 
-		fputc(player[0].items.weapon[FRONT_WEAPON].id,  demo_file);
-		fputc(player[0].items.weapon[REAR_WEAPON].id,   demo_file);
-		fputc(player[0].items.super_arcade_mode,        demo_file);
-		fputc(player[0].items.sidekick[LEFT_SIDEKICK],  demo_file);
-		fputc(player[0].items.sidekick[RIGHT_SIDEKICK], demo_file);
-		fputc(player[0].items.generator,                demo_file);
+		efputc(player[0].items.weapon[FRONT_WEAPON].id,  demo_file);
+		efputc(player[0].items.weapon[REAR_WEAPON].id,   demo_file);
+		efputc(player[0].items.super_arcade_mode,        demo_file);
+		efputc(player[0].items.sidekick[LEFT_SIDEKICK],  demo_file);
+		efputc(player[0].items.sidekick[RIGHT_SIDEKICK], demo_file);
+		efputc(player[0].items.generator,                demo_file);
 
-		fputc(player[0].items.sidekick_level,           demo_file);
-		fputc(player[0].items.sidekick_series,          demo_file);
+		efputc(player[0].items.sidekick_level,           demo_file);
+		efputc(player[0].items.sidekick_series,          demo_file);
 
-		fputc(initial_episode_num,                      demo_file);
+		efputc(initial_episode_num,                      demo_file);
 
-		fputc(player[0].items.shield,                   demo_file);
-		fputc(player[0].items.special,                  demo_file);
-		fputc(player[0].items.ship,                     demo_file);
+		efputc(player[0].items.shield,                   demo_file);
+		efputc(player[0].items.special,                  demo_file);
+		efputc(player[0].items.ship,                     demo_file);
 
 		for (uint i = 0; i < 2; ++i)
-			fputc(player[0].items.weapon[i].power, demo_file);
+			efputc(player[0].items.weapon[i].power, demo_file);
 
 		for (uint i = 0; i < 3; ++i)
-			fputc(0, demo_file);
+			efputc(0, demo_file);
 
 		efwrite(&levelSong,  1,  1, demo_file);
 
@@ -2428,7 +2428,7 @@ void JE_loadMap( void )
 	JE_byte *ref[3][128]; /* [1..3, 0..127] */
 	char s[256];
 
-	JE_byte *mapBuf = malloc(15*600);//[15 * 600]; /* [1..15 * 600] */
+	JE_byte mapBuf[15 * 600]; /* [1..15 * 600] */
 	JE_word bufLoc;
 
 	char buffer[256];
@@ -3212,7 +3212,7 @@ new_game:
 
 	efclose(level_f);
 	free(pic_buffer);
-	free(mapBuf);
+	//free(mapBuf);
 	/* Note: The map data is automatically calculated with the correct mapsh
 	value and then the pointer is calculated using the formula (MAPSH-1)*168.
 	Then, we'll automatically add S2Ofs to get the exact offset location into
@@ -3249,7 +3249,7 @@ bool JE_titleScreen( JE_boolean animate )
 
 	gameLoaded = false;
 	jumpSection = false;
-heap_caps_check_integrity_all(true);
+//heap_caps_check_integrity_all(true);
 #ifdef WITH_NETWORK
 	if (isNetworkGame)
 	{
@@ -3337,7 +3337,7 @@ heap_caps_check_integrity_all(true);
 			if (redraw)
 			{
 				play_song(SONG_TITLE);
-heap_caps_check_integrity_all(true);
+//heap_caps_check_integrity_all(true);
 				menu = 0;
 				redraw = false;
 				if (animate)
@@ -3347,8 +3347,8 @@ heap_caps_check_integrity_all(true);
 						fade_black(10);
 						fadeIn = false;
 					}
-heap_caps_check_integrity_all(true);					
-heap_caps_print_heap_info(MALLOC_CAP_SPIRAM);					
+//heap_caps_check_integrity_all(true);					
+				
 printf("JE_loadPic\n");
 					JE_loadPic(VGAScreen, 4, false);
 printf("draw_font_hv_shadow");

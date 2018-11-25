@@ -32,13 +32,13 @@ static Uint32 rgb_to_yuv( int r, int g, int b );
 #define PALETTE_COUNT 23
 #endif
 
-Palette *palettes;//[PALETTE_COUNT];
+EXT_RAM_ATTR Palette palettes[PALETTE_COUNT];
 int palette_count;
 
-static Palette palette;
-Uint32 rgb_palette[256], yuv_palette[256];
+EXT_RAM_ATTR static Palette palette;
+EXT_RAM_ATTR Uint32 rgb_palette[256], yuv_palette[256];
 
-Palette colors;
+EXT_RAM_ATTR Palette colors;
 
 void JE_loadPals( void )
 {
@@ -46,7 +46,7 @@ void JE_loadPals( void )
 	
 	palette_count = ftell_eof(f) / (256 * 3);
 	assert(palette_count == PALETTE_COUNT);
-	palettes = (Palette *)malloc(sizeof(Palette) * PALETTE_COUNT);
+	//palettes = (Palette *)malloc(sizeof(Palette) * PALETTE_COUNT);
 	for (int p = 0; p < palette_count; ++p)
 	{
 		for (int i = 0; i < 256; ++i)

@@ -1,5 +1,6 @@
 #ifndef SDL_h_
 #define SDL_h_
+
 #include <stdint.h>
 #include <stdio.h>
 #include "SDL_input.h"

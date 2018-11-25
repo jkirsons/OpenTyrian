@@ -922,7 +922,7 @@ bool config_parse( Config *config, FILE *file )
 
 static void write_field( const ConfigString *field, FILE *file )
 {
-	fputc('\'', file);
+	efputc('\'', file);
 	
 	char buffer[128];
 	size_t o = 0;
@@ -993,7 +993,7 @@ static void write_field( const ConfigString *field, FILE *file )
 	if (o > 0)
 		eefwrite(buffer, sizeof(*buffer), o, file);
 	
-	fputc('\'', file);
+	efputc('\'', file);
 }
 
 void config_write( const Config *config, FILE *file )
@@ -1009,10 +1009,10 @@ void config_write( const Config *config, FILE *file )
 		write_field(&section->type, file);
 		if (config_string_to_cstr(&section->name) != NULL)
 		{
-			fputc(' ', file);
+			efputc(' ', file);
 			write_field(&section->name, file);
 		}
-		fputc('\n', file);
+		efputc('\n', file);
 		
 		for (unsigned int o = 0; o < section->options_count; ++o)
 		{
@@ -1022,9 +1022,9 @@ void config_write( const Config *config, FILE *file )
 			{
 				fputs("\titem ", file);
 				write_field(&option->key, file);
-				fputc(' ', file);
+				efputc(' ', file);
 				write_field(&option->v.value, file);
-				fputc('\n', file);
+				efputc('\n', file);
 			}
 			else
 			{
@@ -1033,13 +1033,13 @@ void config_write( const Config *config, FILE *file )
 				{
 					fputs("\tlist ", file);
 					write_field(&option->key, file);
-					fputc(' ', file);
+					efputc(' ', file);
 					write_field(value, file);
-					fputc('\n', file);
+					efputc('\n', file);
 				}
 			}
 		}
 		
-		fputc('\n', file);
+		efputc('\n', file);
 	}
 }

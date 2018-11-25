@@ -355,7 +355,7 @@ void IRAM_ATTR displayTask(void *arg) {
 
     SDL_LockDisplay();
     //Initialize the SPI bus
-    ret=spi_bus_initialize(CONFIG_HW_LCD_MISO_GPIO == 19 ? VSPI_HOST : HSPI_HOST, &buscfg, 2);  // DMA Channel
+    //ret=spi_bus_initialize(CONFIG_HW_LCD_MISO_GPIO == 19 ? VSPI_HOST : HSPI_HOST, &buscfg, 2);  // DMA Channel
     //assert(ret==ESP_OK);
     //Attach the LCD to the SPI bus
     ret=spi_bus_add_device(CONFIG_HW_LCD_MISO_GPIO == 19 ? VSPI_HOST : HSPI_HOST, &devcfg, &spi);
@@ -481,6 +481,6 @@ void spi_lcd_init() {
 #if CONFIG_FREERTOS_UNICORE
 	xTaskCreatePinnedToCore(&displayTask, "display", 6000, NULL, 6, NULL, 0);
 #else
-	xTaskCreatePinnedToCore(&displayTask, "display", 6000, NULL, 6, NULL, 1);
+	xTaskCreatePinnedToCore(&displayTask, "display", 10000, NULL, 6, NULL, 1);
 #endif
 }

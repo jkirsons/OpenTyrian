@@ -70,7 +70,7 @@ int SDL_InitSubSystem(Uint32 flags)
     if(flags == SDL_INIT_VIDEO)
     {
     	spi_lcd_init();
-        SDL_CreateRGBSurface(0, 320, 200, 8, 0,0,0,0);
+        //SDL_CreateRGBSurface(0, 320, 200, 8, 0,0,0,0);
     }
     return 0; // 0 = OK, -1 = Error
 }
@@ -188,13 +188,15 @@ SemaphoreHandle_t display_mutex = NULL;
 
 void SDL_LockDisplay()
 {
-    if (display_mutex == NULL)
+  if (display_mutex == NULL)
     {
         printf("Creating display mutex.\n");
         display_mutex = xSemaphoreCreateMutex();
         if (!display_mutex) 
+        {
+            printf("Couldn't create mutex.\n");        
             abort();
-        //xSemaphoreGive(display_mutex);
+        }
     }
 
     if (!xSemaphoreTake(display_mutex, 60000 / portTICK_RATE_MS))
@@ -202,8 +204,6 @@ void SDL_LockDisplay()
         printf("Timeout waiting for display lock.\n");
         abort();
     }
-    //printf("L");   
-    //taskYIELD(); 
 }
 
 void SDL_UnlockDisplay()
@@ -212,7 +212,5 @@ void SDL_UnlockDisplay()
         abort();
     if (!xSemaphoreGive(display_mutex))
         abort();
-
-    //printf("U ");
     //taskYIELD();
 }

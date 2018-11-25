@@ -50,7 +50,6 @@ void JE_loadPic(SDL_Surface *screen, JE_byte PCXnumber, JE_boolean storepal )
 	printf("size: %d\n", size);
 
 	Uint8 *buffer = (Uint8 *)malloc(size);
-	printf("malloc done\n");
 	efseek(f, pcxpos[PCXnumber], SEEK_SET);
 	efread(buffer, sizeof(Uint8), size, f);
 	efclose(f);

@@ -25,12 +25,12 @@
 
 typedef SDL_Color Palette[256];
 
-extern Palette *palettes;//[];
+EXT_RAM_ATTR extern Palette palettes[];
 extern int palette_count;
 
-extern Uint32 rgb_palette[256], yuv_palette[256];
+EXT_RAM_ATTR extern Uint32 rgb_palette[256], yuv_palette[256];
 
-extern Palette colors; // TODO: get rid of this
+EXT_RAM_ATTR extern Palette colors; // TODO: get rid of this
 
 void JE_loadPals( void );
 

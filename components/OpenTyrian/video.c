@@ -46,13 +46,14 @@ void init_video( void )
 	}
 
 	SDL_WM_SetCaption("OpenTyrian", NULL);
-
+//heap_caps_check_integrity_all(true);
 	VGAScreen = VGAScreenSeg = SDL_CreateRGBSurface(SDL_SWSURFACE, vga_width, vga_height, 8, 0, 0, 0, 0);
 	VGAScreen2 = SDL_CreateRGBSurface(SDL_SWSURFACE, vga_width, vga_height, 8, 0, 0, 0, 0);
 	game_screen = SDL_CreateRGBSurface(SDL_SWSURFACE, vga_width, vga_height, 8, 0, 0, 0, 0);
-//printf("BPP: %d\n", VGAScreen->format->BitsPerPixel);
+printf("BPP: %d\n", VGAScreen->format->BitsPerPixel);
 	spi_lcd_clear();
 	SDL_FillRect(VGAScreen, NULL, 0);
+//heap_caps_check_integrity_all(true);	
 /*
 	if (!init_scaler(scaler, fullscreen_enabled) &&  // try desired scaler and desired fullscreen state
 	    !init_any_scaler(fullscreen_enabled) &&      // try any scaler in desired fullscreen state

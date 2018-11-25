@@ -57,18 +57,18 @@ Bit32u tremtab_add;
 static Bit32u generator_add;	// should be a chip parameter
 
 static fltype recipsamp;	// inverse of sampling rate
-static Bit16s *wavtable;//[WAVEPREC*3];	// wave form table
+EXT_RAM_ATTR Bit16s wavtable[WAVEPREC*3];	// wave form table
 
 // vibrato/tremolo tables
 static Bit32s vib_table[VIBTAB_SIZE];
 static Bit32s trem_table[TREMTAB_SIZE*2];
 
-static Bit32s *vibval_const;//[BLOCKBUF_SIZE];
-static Bit32s *tremval_const;//[BLOCKBUF_SIZE];
+EXT_RAM_ATTR Bit32s vibval_const[BLOCKBUF_SIZE];
+EXT_RAM_ATTR Bit32s tremval_const[BLOCKBUF_SIZE];
 
 // vibrato value tables (used per-operator)
-static Bit32s *vibval_var1;//[BLOCKBUF_SIZE];
-static Bit32s *vibval_var2;//[BLOCKBUF_SIZE];
+EXT_RAM_ATTR Bit32s vibval_var1[BLOCKBUF_SIZE];
+EXT_RAM_ATTR Bit32s vibval_var2[BLOCKBUF_SIZE];
 //static Bit32s vibval_var3[BLOCKBUF_SIZE];
 //static Bit32s vibval_var4[BLOCKBUF_SIZE];
 
@@ -504,7 +504,7 @@ void adlib_init(Bit32u samplerate) {
 
 	int_samplerate = samplerate;
 	generator_add = (Bit32u)(INTFREQU*FIXEDPT/int_samplerate);
-
+/*
 	if(wavtable == NULL)
 	{
 		wavtable = heap_caps_malloc(WAVEPREC*3*sizeof(Bit16s), MALLOC_CAP_SPIRAM);
@@ -514,7 +514,7 @@ void adlib_init(Bit32u samplerate) {
 		memset(vibval_var2,0,BLOCKBUF_SIZE*sizeof(Bit32s));
 		memset(wavtable,0,WAVEPREC*3*sizeof(Bit16s));
 	}
-
+*/
 	memset((void *)adlibreg,0,sizeof(adlibreg));
 	memset((void *)op,0,sizeof(op_type)*MAXOPERATORS);
 	memset((void *)wave_sel,0,sizeof(wave_sel));
@@ -568,8 +568,8 @@ void adlib_init(Bit32u samplerate) {
 	vibtab_add = (Bit32u)(VIBTAB_SIZE*FIXEDPT_LFO/8192*INTFREQU/int_samplerate);
 	vibtab_pos = 0;
 
-	if(vibval_const == NULL)
-		vibval_const = (Bit32s*)heap_caps_malloc(BLOCKBUF_SIZE*sizeof(Bit32s), MALLOC_CAP_SPIRAM);
+	//if(vibval_const == NULL)
+	//	vibval_const = (Bit32s*)heap_caps_malloc(BLOCKBUF_SIZE*sizeof(Bit32s), MALLOC_CAP_SPIRAM);
 	for (i=0; i<BLOCKBUF_SIZE; i++) vibval_const[i] = 0;
 
 
@@ -592,8 +592,8 @@ void adlib_init(Bit32u samplerate) {
 	tremtab_add = (Bit32u)((fltype)TREMTAB_SIZE * TREM_FREQ * FIXEDPT_LFO / (fltype)int_samplerate);
 	tremtab_pos = 0;
 
-	if(tremval_const == NULL)
-		tremval_const = (Bit32s*)heap_caps_malloc(BLOCKBUF_SIZE*sizeof(Bit32s), MALLOC_CAP_SPIRAM);
+//	if(tremval_const == NULL)
+//		tremval_const = (Bit32s*)heap_caps_malloc(BLOCKBUF_SIZE*sizeof(Bit32s), MALLOC_CAP_SPIRAM);
 	for (i=0; i<BLOCKBUF_SIZE; i++) tremval_const[i] = FIXEDPT;
 
 
@@ -988,30 +988,20 @@ OPL_INLINE static void clipit16(Bit32s ival, Bit16s* outval) {
 	outbufl[i] += chanval;
 #endif
 
-Bit32s *vib_lut;
-Bit32s *trem_lut;
-Bit32s *outbufl;
-
 void adlib_getsample(Bit16s* sndptr, Bits numsamples) {
 	Bits i, endsamples;
 	op_type* cptr;
 
 
+	Bit32s outbufl[BLOCKBUF_SIZE];
 #if defined(OPLTYPE_IS_OPL3)
 	// second output buffer (right channel for opl3 stereo)
 	Bit32s outbufr[BLOCKBUF_SIZE];
 #endif
 
 	// vibrato/tremolo lookup tables (global, to possibly be used by all operators)
-	if(outbufl == NULL)
-	{
-		outbufl = malloc(BLOCKBUF_SIZE * sizeof(Bit32s));//[BLOCKBUF_SIZE];
-		vib_lut = malloc(BLOCKBUF_SIZE * sizeof(Bit32s));//[BLOCKBUF_SIZE];
-		trem_lut = malloc(BLOCKBUF_SIZE * sizeof(Bit32s));//[BLOCKBUF_SIZE];
-	}
-	//memset(outbufl, 0, BLOCKBUF_SIZE * sizeof(Bit32s));
-	//memset(vib_lut, 0, BLOCKBUF_SIZE * sizeof(Bit32s));
-	//memset(trem_lut, 0, BLOCKBUF_SIZE * sizeof(Bit32s));
+	Bit32s vib_lut[BLOCKBUF_SIZE];
+	Bit32s trem_lut[BLOCKBUF_SIZE];
 
 	Bits samples_to_process = numsamples;
 
@@ -1508,7 +1498,4 @@ void adlib_getsample(Bit16s* sndptr, Bits numsamples) {
 #endif
 
 	}
-	//free(outbufl);
-	//free(vib_lut);
-	//free(trem_lut);
 }

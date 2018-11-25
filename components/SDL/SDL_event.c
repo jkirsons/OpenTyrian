@@ -49,6 +49,14 @@ static const GPIOKeyMap keymap[2][6]={{
 	{CONFIG_HW_BUTTON_PIN_NUM_BUTTON2, SDL_SCANCODE_ESCAPE, SDLK_ESCAPE},			
 	{CONFIG_HW_BUTTON_PIN_NUM_BUTTON1, SDL_SCANCODE_SPACE, SDLK_SPACE},   	
 }};
+
+static xQueueHandle gpio_evt_queue = NULL;
+
+typedef struct {
+    Uint32 type;        /**< ::SDL_KEYDOWN or ::SDL_KEYUP */
+    SDL_Scancode scancode;
+    SDL_Scancode keycode;
+} GPIOEvent;
 #endif
 
 #define ODROID_GAMEPAD_IO_X ADC1_CHANNEL_6
@@ -65,15 +73,7 @@ typedef struct
 
 JoystickState lastState = {0,0,0,0,{0,0,0,0,0,0}};
 
-typedef struct {
-    Uint32 type;        /**< ::SDL_KEYDOWN or ::SDL_KEYUP */
-    SDL_Scancode scancode;
-    SDL_Scancode keycode;
-} GPIOEvent;
-
 bool initInput = false;
-
-static xQueueHandle gpio_evt_queue = NULL;
 
 int checkPin(int state, uint8_t *lastState, SDL_Scancode sc, SDL_Keycode kc, SDL_Event *event)
 {
@@ -180,6 +180,7 @@ int SDL_PollEvent(SDL_Event * event)
     return 0;
 }
 
+#ifndef CONFIG_HW_ODROID_GO
 static void IRAM_ATTR gpio_isr_handler(void* arg)
 {
     uint32_t gpio_num = (uint32_t) arg;
@@ -193,6 +194,7 @@ static void IRAM_ATTR gpio_isr_handler(void* arg)
             xQueueSendFromISR(gpio_evt_queue, &event, NULL);
         }
 }
+#endif
 /*
 void gpioTask(void *arg) {
     uint32_t io_num;

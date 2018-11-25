@@ -253,7 +253,7 @@ JE_boolean moveTyrianLogoUp;
 JE_boolean skipStarShowVGA;
 
 /*EnemyData*/
-JE_MultiEnemyType enemy;
+EXT_RAM_ATTR JE_MultiEnemyType enemy;
 JE_EnemyAvailType enemyAvail;  /* values: 0: used, 1: free, 2: secret pick-up */
 JE_word enemyOffset;
 JE_word enemyOnScreen;
@@ -263,7 +263,7 @@ JE_word superEnemy254Jump;
 /*EnemyShotData*/
 JE_boolean fireButtonHeld;
 JE_boolean enemyShotAvail[ENEMY_SHOT_MAX]; /* [1..Enemyshotmax] */
-EnemyShotType enemyShot[ENEMY_SHOT_MAX]; /* [1..Enemyshotmax]  */
+EXT_RAM_ATTR EnemyShotType enemyShot[ENEMY_SHOT_MAX]; /* [1..Enemyshotmax]  */
 
 /* Player Shot Data */
 JE_byte     zinglonDuration;
@@ -294,7 +294,7 @@ JE_word neat;
 
 
 /*ExplosionData*/
-explosion_type explosions[MAX_EXPLOSIONS]; /* [1..ExplosionMax] */
+EXT_RAM_ATTR explosion_type explosions[MAX_EXPLOSIONS]; /* [1..ExplosionMax] */
 JE_integer explosionFollowAmountX, explosionFollowAmountY;
 
 /*Repeating Explosions*/

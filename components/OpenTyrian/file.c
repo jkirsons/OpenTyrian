@@ -49,9 +49,10 @@ void Init_SD()
 // finds the Tyrian data directory
 const char *data_dir( void )
 {
+	return "/sd/tyrian/data";
 	const char *dirs[] =
 	{
-		"/sd/tyrian",
+		"/sd/tyrian/data",
 		custom_data_dir,
 		TYRIAN_DIR,
 		"data",
@@ -87,18 +88,19 @@ const char *data_dir( void )
 // prepend directory and fopen
 FILE *dir_fopen( const char *dir, const char *file, const char *mode )
 {
-	fprintf(stderr, "Opening File: %s\n", file);
+	char path[512]; 
+	fprintf(stderr, "Opening File: %s/%s\n", dir, file);
 	if(init_SD == false)
 		Init_SD();
 
-	char *path = (char *)malloc(strlen(dir) + 1 + strlen(file) + 1);
+	//char *path = (char *)malloc(strlen(dir) + 1 + strlen(file) + 1);
 	sprintf(path, "%s/%s", dir, file);
 	
 	SDL_LockDisplay();
 	FILE *f = fopen(path, mode);
 	SDL_UnlockDisplay();
 	
-	free(path);
+	//free(path);
 	
 	return f;
 }

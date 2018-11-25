@@ -223,7 +223,7 @@ bool load_opentyrian_config( void )
 {
 	// defaults
 	fullscreen_enabled = false;
-	set_scaler_by_name("Scale2x");
+	//set_scaler_by_name("Scale2x");
 	
 	Config *config = &opentyrian_config;
 	
@@ -687,7 +687,9 @@ const char *get_user_directory( void )
 {
 	return "/sd/tyrian";
 	static char user_dir[500] = "";
+	//strcpy(user_dir, "/sd/tyrian");
 	
+
 	if (strlen(user_dir) == 0)
 	{
 #ifndef TARGET_WIN32
@@ -728,6 +730,7 @@ void JE_loadConfiguration( void )
 	int y;
 	
 	fi = dir_fopen_warn(get_user_directory(), "tyrian.cfg", "rb");
+	printf("file opened\n");
 	if (fi && ftell_eof(fi) == 20 + sizeof(keySettings))
 	{
 		/* SYN: I've hardcoded the sizes here because the .CFG file format is fixed

@@ -101,9 +101,10 @@ void service_SDL_events( JE_boolean clear_new )
 	while(SDL_PollEvent(&event))
 	{
 		keysactive[event.key.keysym.sym] = event.key.state;
-		newkey = true;
-		lastkey_sym = event.key.keysym.sym;
+		if(event.key.state)
+			lastkey_sym = event.key.keysym.sym;
 		keydown = event.key.state;
+		newkey = event.key.state;
 	}
 
 	/*

@@ -3219,7 +3219,7 @@ redo:
 							for (unsigned int i = 0; i < 8; i++)
 								demo_keys |= keysactive[keySettings[i]] ? (1 << i) : 0;
 
-							fputc(demo_keys, demo_file);
+							efputc(demo_keys, demo_file);
 
 							demo_keys_wait = 0;
 						}

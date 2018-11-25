@@ -17,7 +17,7 @@ void updateTask(void *arg)
 		  //xSemaphoreTake( xSemaphoreAudio, portMAX_DELAY );
 		  memset(sdl_buffer, 0, SAMPLECOUNT*SAMPLESIZE);
 		  (*as.callback)(NULL, sdl_buffer, SAMPLECOUNT*SAMPLESIZE );
-		  i2s_write(I2S_NUM_0, sdl_buffer, SAMPLECOUNT*SAMPLESIZE, &bytesWritten, 50 / portTICK_PERIOD_MS);
+		  //i2s_write(I2S_NUM_0, sdl_buffer, SAMPLECOUNT*SAMPLESIZE, &bytesWritten, 50 / portTICK_PERIOD_MS);
 		  //xSemaphoreGive( xSemaphoreAudio );
 		  //vTaskDelay( 1 );
 	  } else
@@ -38,25 +38,31 @@ int SDL_OpenAudio(SDL_AudioSpec *desired, SDL_AudioSpec *obtained)
 	.dma_buf_len = 1024,
 	.use_apll = false
 	};
+	static const int i2s_num = 0; // i2s port number
 
-	i2s_driver_install(I2S_NUM_0, &i2s_config, 0, NULL);   //install and start i2s driver
-	i2s_pin_config_t pc =
+	i2s_driver_install(i2s_num, &i2s_config, 0, NULL);   //install and start i2s driver
+	static const i2s_pin_config_t pc =
 	{
-		.data_out_num = 26
+		.bck_io_num = -1,
+		.ws_io_num = -1,
+		.data_out_num = 26,
+		.data_in_num = -1
 	};
-	i2s_set_pin(I2S_NUM_0, &pc); //for internal DAC, this will enable both of the internal channels
-	i2s_set_clk(I2S_NUM_0, SAMPLERATE, I2S_BITS_PER_SAMPLE_16BIT, I2S_CHANNEL_MONO);
-	i2s_set_dac_mode(I2S_DAC_CHANNEL_RIGHT_EN);
+	i2s_set_pin(i2s_num, &pc);
+	//i2s_set_pin(i2s_num, NULL);
+	i2s_set_clk(i2s_num, SAMPLERATE, I2S_BITS_PER_SAMPLE_16BIT, I2S_CHANNEL_MONO);
+	i2s_set_dac_mode(I2S_DAC_CHANNEL_LEFT_EN);
 
 	sdl_buffer = malloc(SAMPLECOUNT * SAMPLESIZE);
-
-	memset(obtained, 0, sizeof(SDL_AudioSpec)); /* or SDL_zero(want) */
+/*
+	memset(obtained, 0, sizeof(SDL_AudioSpec)); 
 	obtained->freq = SAMPLERATE;
 	obtained->format = 16;
 	obtained->channels = 1;
 	obtained->samples = SAMPLECOUNT;
 	obtained->callback = desired->callback;
 	memcpy(&as,obtained,sizeof(SDL_AudioSpec));
+*/
 	//xSemaphoreAudio = xSemaphoreCreateBinary();
 	xTaskCreatePinnedToCore(&updateTask, "updateTask", 3000, NULL, 3, NULL, 1);
 	return 0;

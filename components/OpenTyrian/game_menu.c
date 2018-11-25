@@ -82,7 +82,7 @@ static JE_byte planetDots[5]; /* [1..5] */
 static JE_integer planetDotX[5][10], planetDotY[5][10]; /* [1..5, 1..10] */
 static PlayerItems old_items[2];  // TODO: should not be global if possible
 
-static struct cube_struct cube[4];
+EXT_RAM_ATTR struct cube_struct cube[4];
 
 static const JE_MenuChoiceType menuChoicesDefault = { 7, 9, 8, 0, 0, 11, (SAVE_FILES_NUM / 2) + 2, 0, 0, 6, 4, 6, 7, 5 };
 static const JE_byte menuEsc[MENU_MAX] = { 0, 1, 1, 1, 2, 3, 3, 1, 8, 0, 0, 11, 3, 0 };

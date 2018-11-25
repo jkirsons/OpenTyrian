@@ -30,6 +30,8 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "esp_heap_caps.h"
+#include "esp_attr.h"
 /*
 typedef uintptr_t	Bitu;
 typedef intptr_t	Bits;

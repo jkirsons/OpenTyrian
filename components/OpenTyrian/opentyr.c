@@ -273,10 +273,15 @@ void opentyrian_menu( void )
 	} while (!quit);
 }
 
+#include "esp_heap_trace.h"
+
+#define NUM_RECORDS 100
+static heap_trace_record_t trace_record[NUM_RECORDS]; // This buffer must be in internal RAM
+
 int main( int argc, char *argv[] )
 {
 	mt_srand(time(NULL));
-
+//ESP_ERROR_CHECK( heap_trace_init_standalone(trace_record, NUM_RECORDS) );
 	printf("\nWelcome to... >> %s %s <<\n\n", opentyrian_str, opentyrian_version);
 
 	printf("Copyright (C) 2007-2013 The OpenTyrian Development Team\n\n");
@@ -317,7 +322,6 @@ int main( int argc, char *argv[] )
 	if (xmas && !xmas_prompt())
 	{
 		xmas = false;
-
 		free_main_shape_tables();
 		JE_loadMainShapeTables("tyrian.shp");
 	}
@@ -331,12 +335,16 @@ int main( int argc, char *argv[] )
 	if (!audio_disabled)
 	{
 		printf("initializing SDL audio...\n");
-
+//ESP_ERROR_CHECK( heap_trace_start(HEAP_TRACE_LEAKS) );		
+//Leaking!
 		init_audio();
+//ESP_ERROR_CHECK( heap_trace_stop() );
+//heap_trace_dump();
 
 		load_music();
 
 		JE_loadSndFile("tyrian.snd", xmas ? "voicesc.snd" : "voices.snd");
+		printf("audio loaded\n");
 	}
 	else
 	{
@@ -349,7 +357,6 @@ int main( int argc, char *argv[] )
 	JE_loadExtraShapes();  /*Editship*/
 
 	JE_loadHelpText();
-	/*debuginfo("Help text complete");*/
 
 	if (isNetworkGame)
 	{

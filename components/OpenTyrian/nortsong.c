@@ -106,18 +106,22 @@ void JE_loadSndFile( const char *effects_sndfile, const char *voices_sndfile )
 	JE_longint sndPos[2][SAMPLE_COUNT + 1];
 	JE_word sndNum;
 
-	FILE *fi;
-	
+	FILE *fi;	
 	/* SYN: Loading offsets into TYRIAN.SND */
 	fi = dir_fopen_die(data_dir(), effects_sndfile, "rb");
+	printf("JE_loadSndFile: opened: %s\n", effects_sndfile);
 	efread(&sndNum, sizeof(sndNum), 1, fi);
-
+	printf("JE_loadSndFile: sounds: %d\n", sndNum);
+	
 	for (x = 0; x < sndNum; x++)
 	{
 		efread(&sndPos[0][x], sizeof(sndPos[0][x]), 1, fi);
+		printf("  JE_loadSndFile: sound: %d size: %ld\n", x, sndPos[0][x]);
 	}
 	efseek(fi, 0, SEEK_END);
 	sndPos[0][sndNum] = eftell(fi); /* Store file size */
+	printf("JE_loadSndFile: store size: %ld\n", sndPos[0][sndNum]);
+
 	for (z = 0; z < sndNum; z++)
 	{
 		efseek(fi, sndPos[0][z], SEEK_SET);
