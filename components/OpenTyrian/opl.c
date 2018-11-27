@@ -57,18 +57,18 @@ Bit32u tremtab_add;
 static Bit32u generator_add;	// should be a chip parameter
 
 static fltype recipsamp;	// inverse of sampling rate
-EXT_RAM_ATTR Bit16s wavtable[WAVEPREC*3];	// wave form table
+static Bit16s wavtable[WAVEPREC*3];	// wave form table
 
 // vibrato/tremolo tables
 static Bit32s vib_table[VIBTAB_SIZE];
 static Bit32s trem_table[TREMTAB_SIZE*2];
 
-EXT_RAM_ATTR Bit32s vibval_const[BLOCKBUF_SIZE];
-EXT_RAM_ATTR Bit32s tremval_const[BLOCKBUF_SIZE];
+static Bit32s vibval_const[BLOCKBUF_SIZE];
+static Bit32s tremval_const[BLOCKBUF_SIZE];
 
 // vibrato value tables (used per-operator)
-EXT_RAM_ATTR Bit32s vibval_var1[BLOCKBUF_SIZE];
-EXT_RAM_ATTR Bit32s vibval_var2[BLOCKBUF_SIZE];
+static Bit32s vibval_var1[BLOCKBUF_SIZE];
+static Bit32s vibval_var2[BLOCKBUF_SIZE];
 //static Bit32s vibval_var3[BLOCKBUF_SIZE];
 //static Bit32s vibval_var4[BLOCKBUF_SIZE];
 
@@ -1009,7 +1009,7 @@ void adlib_getsample(Bit16s* sndptr, Bits numsamples) {
 		endsamples = samples_to_process-cursmp;
 		if (endsamples>BLOCKBUF_SIZE) endsamples = BLOCKBUF_SIZE;
 
-		memset(outbufl,0,endsamples*sizeof(Bit32s));
+		memset((void*)&outbufl,0,endsamples*sizeof(Bit32s));
 #if defined(OPLTYPE_IS_OPL3)
 		// clear second output buffer (opl3 stereo)
 		if (adlibreg[0x105]&1) memset((void*)&outbufr,0,endsamples*sizeof(Bit32s));

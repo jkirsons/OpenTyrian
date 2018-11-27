@@ -106,7 +106,7 @@ bool lds_load( FILE *f, unsigned int music_offset, unsigned int music_size )
 	efread(&numpatch, 2, 1, f);
 
 	free(soundbank);
-	soundbank = (SoundBank *)malloc(sizeof(SoundBank) * numpatch);
+	soundbank = malloc(sizeof(SoundBank) * numpatch);
 
 	for (unsigned int i = 0; i < numpatch; i++)
 	{
@@ -150,7 +150,7 @@ bool lds_load( FILE *f, unsigned int music_offset, unsigned int music_size )
 	efread(&numposi, 2, 1, f);
 	
 	free(positions);
-	positions = (Position *)malloc(sizeof(Position) * 9 * numposi);
+	positions = malloc(sizeof(Position) * 9 * numposi);
 	
 	for (unsigned int i = 0; i < numposi; i++)
 	{
@@ -174,7 +174,7 @@ bool lds_load( FILE *f, unsigned int music_offset, unsigned int music_size )
 	unsigned int remaining = music_size - (eftell(f) - music_offset);
 	
 	free(patterns);
-	patterns = (Uint16 *)malloc(sizeof(Uint16) * (remaining / 2));
+	patterns = malloc(sizeof(Uint16) * (remaining / 2));
 	
 	for (unsigned int i = 0; i < remaining / 2; i++)
 		efread(&patterns[i], 2, 1, f);

@@ -25,14 +25,14 @@
  * Ken Silverman's official web site: "http://www.advsys.net/ken"
  */
 
-
+#define OPLTYPE_IS_OPL3 1
 #define fltype double
 
 #include <stdbool.h>
 #include <stdint.h>
 #include "esp_heap_caps.h"
 #include "esp_attr.h"
-/*
+
 typedef uintptr_t	Bitu;
 typedef intptr_t	Bits;
 typedef uint32_t	Bit32u;
@@ -41,7 +41,8 @@ typedef uint16_t	Bit16u;
 typedef int16_t		Bit16s;
 typedef uint8_t		Bit8u;
 typedef int8_t		Bit8s;
-*/
+
+/*
 typedef uintptr_t	Bitu;
 typedef intptr_t	Bits;
 typedef unsigned long	Bit32u;
@@ -50,7 +51,7 @@ typedef unsigned short	Bit16u;
 typedef short		Bit16s;
 typedef unsigned char		Bit8u;
 typedef signed char		Bit8s;
-
+*/
 /*
 	define attribution that inlines/forces inlining of a function (optional)
 */

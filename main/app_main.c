@@ -10,6 +10,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
+
 void tyrianTask(void *pvParameters)
 {
 //    heap_caps_print_heap_info(MALLOC_CAP_SPIRAM);

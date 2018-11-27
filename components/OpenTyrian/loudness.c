@@ -95,7 +95,7 @@ IRAM_ATTR void audio_cb( void *user_data, unsigned char *sdl_buffer, int howmuch
 	static long ct = 0;
 	
 	SAMPLE_TYPE *feedme = (SAMPLE_TYPE *)sdl_buffer;
-	music_disabled = true;
+	//music_disabled = true;
 	if (!music_disabled && !music_stopped)
 	{
 		/* SYN: Simulate the fm synth chip */
@@ -145,7 +145,7 @@ IRAM_ATTR void audio_cb( void *user_data, unsigned char *sdl_buffer, int howmuch
 			for (unsigned int smp = 0; smp < qu; smp++)
 			{
 #if (BYTES_PER_SAMPLE == 2)
-				Sint32 clip = (Sint32)feedme[smp] + (Sint32)(channel_pos[ch][smp] * volume);
+				Sint64 clip = (Sint32)feedme[smp] + (Sint32)(channel_pos[ch][smp] * volume);
 				feedme[smp] = (clip > 0x7fff) ? 0x7fff : (clip <= -0x8000) ? -0x8000 : (Sint16)clip;
 #else  /* BYTES_PER_SAMPLE */
 				Sint16 clip = (Sint16)feedme[smp] + (Sint16)(channel_pos[ch][smp] * volume);
@@ -197,7 +197,7 @@ void load_music( void )
 		
 		efread(&song_count, sizeof(song_count), 1, music_file);
 		
-		song_offset = (Uint32 *)malloc((song_count + 1) * sizeof(*song_offset));
+		song_offset = malloc((song_count + 1) * sizeof(*song_offset));
 		
 		efread(song_offset, 4, song_count, music_file);
 		song_offset[song_count] = ftell_eof(music_file);
@@ -269,7 +269,7 @@ void JE_multiSamplePlay(JE_byte *buffer, JE_word size, JE_byte chan, JE_byte vol
 	free(channel_buffer[chan]);
 	
 	channel_len[chan] = size * BYTES_PER_SAMPLE * SAMPLE_SCALING;
-	channel_buffer[chan] = (Bit16s *)malloc(channel_len[chan]);
+	channel_buffer[chan] = malloc(channel_len[chan]);
 	channel_pos[chan] = channel_buffer[chan];
 	channel_vol[chan] = vol + 1;
 
