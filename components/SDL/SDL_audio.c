@@ -1,23 +1,24 @@
 #include "SDL_audio.h"
 
 SDL_AudioSpec as;
-unsigned char *sdl_buffer;
+//unsigned char *sdl_buffer;
+unsigned char sdl_buffer[SAMPLECOUNT * SAMPLESIZE * 2];
 void *user_data;
 bool paused = true;
 bool locked = false;
 xSemaphoreHandle xSemaphoreAudio = NULL;
 
-IRAM_ATTR void updateTask(void *arg)
+void updateTask(void *arg)
 {
   size_t bytesWritten;
   while(1)
   {
-	  if(!paused && /*xSemaphoreAudio != NULL*/ !locked && sdl_buffer){
+	  if(!paused && /*xSemaphoreAudio != NULL*/ !locked ){
 			// clear buffer
 		  //xSemaphoreTake( xSemaphoreAudio, portMAX_DELAY );
 		  memset(sdl_buffer, 0, SAMPLECOUNT*SAMPLESIZE);
-		  (*as.callback)(NULL, sdl_buffer, SAMPLECOUNT*SAMPLESIZE );
-		  ESP_ERROR_CHECK(i2s_write(I2S_NUM_0, sdl_buffer, SAMPLECOUNT*SAMPLESIZE*2, &bytesWritten, 500 / portTICK_PERIOD_MS));
+		  (*as.callback)(NULL, &sdl_buffer, SAMPLECOUNT*SAMPLESIZE );
+		  ESP_ERROR_CHECK(i2s_write(I2S_NUM_0, &sdl_buffer, SAMPLECOUNT*SAMPLESIZE*2, &bytesWritten, 500 / portTICK_PERIOD_MS));
 		  //xSemaphoreGive( xSemaphoreAudio );
 		  //vTaskDelay( 1 );
 	  } else
@@ -25,7 +26,7 @@ IRAM_ATTR void updateTask(void *arg)
   }
 }
 
-int SDL_OpenAudio(SDL_AudioSpec *desired, SDL_AudioSpec *obtained)
+void SDL_AudioInit()
 {
 	static const i2s_config_t i2s_config = {
 	.mode = I2S_MODE_MASTER | I2S_MODE_TX | I2S_MODE_DAC_BUILT_IN,
@@ -34,27 +35,29 @@ int SDL_OpenAudio(SDL_AudioSpec *desired, SDL_AudioSpec *obtained)
 	.channel_format = I2S_CHANNEL_FMT_RIGHT_LEFT,
 	.communication_format = I2S_COMM_FORMAT_I2S_MSB,
 	.intr_alloc_flags = 0,
-	.dma_buf_count = 4,
-	.dma_buf_len = 512,
-	.use_apll = true
+	.dma_buf_count = 6,
+	.dma_buf_len = 512
 	};
 	static const int i2s_num = I2S_NUM_0; // i2s port number
 
 	ESP_ERROR_CHECK(i2s_driver_install(i2s_num, &i2s_config, 0, NULL));   //install and start i2s driver
 	i2s_pin_config_t pc = {
         .bck_io_num = 26,
-        .ws_io_num = 25,
-        .data_out_num = I2S_PIN_NO_CHANGE,
-        .data_in_num = I2S_PIN_NO_CHANGE                                                       //Not used
+        .ws_io_num = 25                                               //Not used
     };
 	//i2s_set_pin(i2s_num, &pc);
 
 	ESP_ERROR_CHECK(i2s_set_pin(i2s_num, NULL));
 	ESP_ERROR_CHECK(i2s_set_clk(i2s_num, SAMPLERATE, I2S_BITS_PER_SAMPLE_16BIT, I2S_CHANNEL_STEREO));
-	ESP_ERROR_CHECK(i2s_set_dac_mode(I2S_DAC_CHANNEL_BOTH_EN));
-	ESP_ERROR_CHECK(i2s_set_sample_rates(i2s_num, SAMPLERATE)); 
+	//ESP_ERROR_CHECK(i2s_set_dac_mode(I2S_DAC_CHANNEL_BOTH_EN));
+	ESP_ERROR_CHECK(i2s_set_sample_rates(i2s_num, SAMPLERATE)); 	
+}
 
-	sdl_buffer = malloc(SAMPLECOUNT * SAMPLESIZE * 2);
+int SDL_OpenAudio(SDL_AudioSpec *desired, SDL_AudioSpec *obtained)
+{
+
+
+	//sdl_buffer = malloc(SAMPLECOUNT * SAMPLESIZE * 2);
 
 	memset(obtained, 0, sizeof(SDL_AudioSpec)); 
 	obtained->freq = SAMPLERATE;
@@ -65,7 +68,7 @@ int SDL_OpenAudio(SDL_AudioSpec *desired, SDL_AudioSpec *obtained)
 	memcpy(&as,obtained,sizeof(SDL_AudioSpec));
 
 	//xSemaphoreAudio = xSemaphoreCreateBinary();
-	xTaskCreatePinnedToCore(&updateTask, "updateTask", 6000, NULL, 3, NULL, 1);
+	xTaskCreatePinnedToCore(&updateTask, "updateTask", 10000, NULL, 3, NULL, 1);
 	printf("audio task started\n");
 	return 0;
 }
@@ -78,7 +81,7 @@ void SDL_PauseAudio(int pause_on)
 void SDL_CloseAudio(void)
 {
 	  i2s_driver_uninstall(I2S_NUM_0); //stop & destroy i2s driver
-	  free(sdl_buffer);
+	  //free(sdl_buffer);
 }
 
 int SDL_BuildAudioCVT(SDL_AudioCVT *cvt, Uint16 src_format, Uint8 src_channels, int src_rate, Uint16 dst_format, Uint8 dst_channels, int dst_rate)
@@ -92,23 +95,27 @@ int SDL_ConvertAudio(SDL_AudioCVT *cvt)
 	Sint16 *sbuf = (Sint16 *)cvt->buf;
 	Uint8 *ubuf = (Uint8 *)cvt->buf;
 
-	for(int i = cvt->len/2-2; i >= 0; i--)
+	for(int i = cvt->len/4-1; i >= 0; i--)
 	{
-/*
+
 		ubuf[i*4+1] =   sbuf[i]>0 ? ((Sint32)sbuf[i] + (Sint32)0x8000) >> 8 : 0;
 		ubuf[i*4] = ubuf[i*4+1];
 
 		ubuf[i*4+3] = sbuf[i]<0 ? ((Sint32)sbuf[i] + (Sint32)0x8000) >> 8 : 0;
 		ubuf[i*4+2] = ubuf[i*4+3];
-*/
+
 //		sbuf[i*2] = sbuf[i] > 0 ? sbuf[i*2] : 0;
 //		sbuf[i*2+1] = sbuf[i] < 0 ? sbuf[i*2]*-1 : 0;
 	}
-		for(int i = 0; i < cvt->len/2; i++)
+/*	
+	for(int i = 0; i < cvt->len/4; i++)
 	{
-		sbuf[i*2] = (i <  cvt->len/4) * 0x8000;
-		sbuf[i*2+1] = 0;
+		ubuf[i*2] = (i <  cvt->len/8) * 0xFF;
+		ubuf[i*4+1] = (i <  cvt->len/8) * 0xFF;
+		ubuf[i*4+2] = 0;
+		ubuf[i*4+3] = 0;
 	}
+*/	
 	return 0;
 }
 
