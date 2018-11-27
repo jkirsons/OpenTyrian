@@ -10,7 +10,7 @@
 
 // Needed for calling the actual sound output.
 #define SAMPLECOUNT		512
-#define SAMPLERATE		11025 * 4	// Hz
+#define SAMPLERATE		11025 * 4 // Hz
 #define SAMPLESIZE		2   	// 16bit
 
 typedef struct{
@@ -45,5 +45,6 @@ int SDL_BuildAudioCVT(SDL_AudioCVT *cvt, Uint16 src_format, Uint8 src_channels, 
 int SDL_ConvertAudio(SDL_AudioCVT *cvt);
 void SDL_LockAudio(void);
 void SDL_UnlockAudio(void);
+void SDL_AudioInit(void);
 
 #endif

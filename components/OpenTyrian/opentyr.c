@@ -295,7 +295,7 @@ int main( int argc, char *argv[] )
 		printf("Failed to initialize SDL: %s\n", SDL_GetError());
 		return -1;
 	}
-
+	SDL_AudioInit();
 	JE_loadConfiguration();
 
 	xmas = xmas_time();  // arg handler may override
