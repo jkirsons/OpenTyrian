@@ -24,6 +24,7 @@
 #include "params.h"
 
 float music_volume = 0, sample_volume = 0;
+float volume = 0;
 
 bool music_stopped = true;
 unsigned int song_playing = 0;
@@ -40,6 +41,7 @@ SAMPLE_TYPE *channel_buffer[SFX_CHANNELS] = { NULL };
 SAMPLE_TYPE *channel_pos[SFX_CHANNELS] = { NULL };
 Uint32 channel_len[SFX_CHANNELS] = { 0 };
 Uint8 channel_vol[SFX_CHANNELS];
+
 
 int sound_init_state = false;
 int freq = 11025 * OUTPUT_QUALITY;
@@ -93,7 +95,7 @@ IRAM_ATTR void audio_cb( void *user_data, unsigned char *sdl_buffer, int howmuch
 	audio_cvt.len = howmuch;
 	
 	static long ct = 0;
-	
+
 	SAMPLE_TYPE *feedme = (SAMPLE_TYPE *)sdl_buffer;
 	music_disabled = true;
 	if (!music_disabled && !music_stopped)
@@ -138,7 +140,8 @@ IRAM_ATTR void audio_cb( void *user_data, unsigned char *sdl_buffer, int howmuch
 		/* SYN: Mix sound channels and shove into audio buffer */
 		for (int ch = 0; ch < SFX_CHANNELS; ch++)
 		{
-			float volume = sample_volume * (channel_vol[ch] / (float)SFX_CHANNELS);
+
+			volume = sample_volume * (channel_vol[ch] / (float)SFX_CHANNELS);
 			
 			/* SYN: Don't copy more data than is in the channel! */
 			unsigned int qu = ((unsigned)howmuch > channel_len[ch] ? channel_len[ch] : (unsigned)howmuch) / BYTES_PER_SAMPLE;
