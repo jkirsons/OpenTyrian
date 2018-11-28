@@ -2387,8 +2387,9 @@ void JE_operation( JE_byte slot )
 	{
 		strcpy(stemp, "              ");
 		memcpy(stemp, saveFiles[slot-1].name, strlen(saveFiles[slot-1].name));
+		sprintf(stemp, "Slot: %d", slot);
 		temp = strlen(stemp);
-		while (stemp[temp-1] == ' ' && --temp);
+		//while (stemp[temp-1] == ' ' && --temp);
 
 		flash = 8 * 16 + 10;
 
@@ -2453,10 +2454,10 @@ void JE_operation( JE_byte slot )
 			else if (newkey)
 			{
 				bool validkey = false;
-				lastkey_char = toupper(lastkey_char);
+				//lastkey_char = toupper(lastkey_char);
 				switch (lastkey_char)
 				{
-					case ' ':
+					//case ' ':
 					case '-':
 					case '.':
 					case ',':
@@ -2479,14 +2480,6 @@ void JE_operation( JE_byte slot )
 					case '"':
 					case '\'':
 						validkey = true;
-					default:
-						if (temp < 14 && (validkey || (lastkey_char >= 'A' && lastkey_char <= 'Z') || (lastkey_char >= '0' && lastkey_char <= '9')))
-						{
-							JE_playSampleNum(S_CURSOR);
-							stemp[temp] = lastkey_char;
-							temp++;
-						}
-						break;
 					case SDLK_BACKSPACE:
 					case SDLK_DELETE:
 						if (temp)
@@ -2501,9 +2494,18 @@ void JE_operation( JE_byte slot )
 						JE_playSampleNum(S_SPRING);
 						break;
 					case SDLK_RETURN:
+					case SDLK_SPACE:
 						quit = true;
 						JE_saveGame(slot, stemp);
 						JE_playSampleNum(S_SELECT);
+						break;
+					default:
+						if (temp < 14 && (validkey || (lastkey_char >= 'A' && lastkey_char <= 'Z') || (lastkey_char >= '0' && lastkey_char <= '9')))
+						{
+							JE_playSampleNum(S_CURSOR);
+							stemp[temp] = lastkey_char;
+							temp++;
+						}
 						break;
 				}
 

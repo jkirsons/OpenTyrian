@@ -269,13 +269,15 @@ bool save_opentyrian_config( void )
 
 	config_set_string_option(section, "scaler", scalers[scaler].name);
 	
+	SDL_LockDisplay();
 #ifndef TARGET_WIN32
 	mkdir(get_user_directory(), 0700);
 #else
 	mkdir(get_user_directory());
 #endif
+	SDL_UnlockDisplay();
 	
-	FILE *file = dir_fopen(get_user_directory(), "opentyrian.cfg", "w");
+	FILE *file = dir_fopen(get_user_directory(), "opentyrian.cfg", "w+");
 	if (file == NULL)
 		return false;
 	
@@ -960,13 +962,15 @@ void JE_saveConfiguration( void )
 	
 	JE_encryptSaveTemp();
 	
+	SDL_LockDisplay();
 #ifndef TARGET_WIN32
 	mkdir(get_user_directory(), 0700);
 #else
 	mkdir(get_user_directory());
 #endif
+	SDL_UnlockDisplay();
 	
-	f = dir_fopen_warn(get_user_directory(), "tyrian.sav", "wb");
+	f = dir_fopen_warn(get_user_directory(), "tyrian.sav", "wb+");
 	if (f != NULL)
 	{
 		efwrite(saveTemp, 1, sizeof(saveTemp), f);
@@ -979,7 +983,7 @@ void JE_saveConfiguration( void )
 	
 	JE_decryptSaveTemp();
 	
-	f = dir_fopen_warn(get_user_directory(), "tyrian.cfg", "wb");
+	f = dir_fopen_warn(get_user_directory(), "tyrian.cfg", "wb+");
 	if (f != NULL)
 	{
 		efwrite(&background2, 1, 1, f);

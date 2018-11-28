@@ -105,6 +105,7 @@ void service_SDL_events( JE_boolean clear_new )
 			lastkey_sym = event.key.keysym.sym;
 		keydown = event.key.state;
 		newkey = event.key.state;
+		lastkey_char = event.key.keysym.sym;
 	}
 
 	/*

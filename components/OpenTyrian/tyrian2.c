@@ -1042,7 +1042,7 @@ start_level_first:
 	soundQueue[3] = V_GOOD_LUCK;
 
 	memset(enemyShapeTables, 0, sizeof(enemyShapeTables));
-	memset(enemy,            0, sizeof(&enemy));
+	memset(enemy,            0, sizeof(enemy));
 
 	memset(SFCurrentCode,    0, sizeof(SFCurrentCode));
 	memset(SFExecuted,       0, sizeof(SFExecuted));

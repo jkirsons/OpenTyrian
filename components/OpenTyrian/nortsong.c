@@ -82,7 +82,8 @@ void service_wait_delay( void )
 {
 	while (SDL_GetTicks() < target)
 	{
-		SDL_Delay(SDL_GetTicks() - target > SDL_POLL_INTERVAL ? SDL_POLL_INTERVAL : SDL_GetTicks() - target);
+		//SDL_Delay(SDL_GetTicks() - target > SDL_POLL_INTERVAL ? SDL_POLL_INTERVAL : SDL_GetTicks() - target);
+		SDL_Delay(5);
 		service_SDL_events(false);
 	}
 }
