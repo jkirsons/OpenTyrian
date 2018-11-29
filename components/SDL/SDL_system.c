@@ -68,6 +68,7 @@ void SDL_InitSD(void)
 
 	sdmmc_card_t* card;
     SDL_LockDisplay();
+    SDL_Delay(300);
     ESP_ERROR_CHECK(esp_vfs_fat_sdmmc_mount("/sd", &host, &slot_config, &mount_config, &card));
     SDL_UnlockDisplay();
 
