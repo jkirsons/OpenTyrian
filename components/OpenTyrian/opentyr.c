@@ -280,6 +280,7 @@ static heap_trace_record_t trace_record[NUM_RECORDS]; // This buffer must be in 
 
 int main( int argc, char *argv[] )
 {
+
 	mt_srand(time(NULL));
 //ESP_ERROR_CHECK( heap_trace_init_standalone(trace_record, NUM_RECORDS) );
 	printf("\nWelcome to... >> %s %s <<\n\n", opentyrian_str, opentyrian_version);
@@ -295,7 +296,7 @@ int main( int argc, char *argv[] )
 		printf("Failed to initialize SDL: %s\n", SDL_GetError());
 		return -1;
 	}
-
+	init_video();
 	JE_loadConfiguration();
 
 	xmas = xmas_time();  // arg handler may override
@@ -304,7 +305,7 @@ int main( int argc, char *argv[] )
 
 	JE_scanForEpisodes();
 
-	init_video();
+//	init_video();
 	init_keyboard();
 	init_joysticks();
 	printf("assuming mouse detected\n"); // SDL can't tell us if there isn't one

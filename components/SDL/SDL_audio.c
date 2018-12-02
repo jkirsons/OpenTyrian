@@ -2,7 +2,7 @@
 
 SDL_AudioSpec as;
 //unsigned char *sdl_buffer;
-unsigned char sdl_buffer[SAMPLECOUNT * SAMPLESIZE * 2];
+unsigned char *sdl_buffer; //[SAMPLECOUNT * SAMPLESIZE * 2];
 void *user_data;
 bool paused = true;
 bool locked = false;
@@ -16,8 +16,8 @@ IRAM_ATTR void updateTask(void *arg)
 	  if(!paused && /*xSemaphoreAudio != NULL*/ !locked ){
 		  //xSemaphoreTake( xSemaphoreAudio, portMAX_DELAY );
 		  memset(sdl_buffer, 0, SAMPLECOUNT*SAMPLESIZE*2);
-		  (*as.callback)(NULL, &sdl_buffer, SAMPLECOUNT*SAMPLESIZE );
-		  ESP_ERROR_CHECK(i2s_write(I2S_NUM_0, &sdl_buffer, SAMPLECOUNT*SAMPLESIZE*2, &bytesWritten, 500 / portTICK_PERIOD_MS));
+		  (*as.callback)(NULL, sdl_buffer, SAMPLECOUNT*SAMPLESIZE );
+		  ESP_ERROR_CHECK(i2s_write(I2S_NUM_0, sdl_buffer, SAMPLECOUNT*SAMPLESIZE*2, &bytesWritten, 500 / portTICK_PERIOD_MS));
 		  //xSemaphoreGive( xSemaphoreAudio );
 	  } else
 		  vTaskDelay( 5 );
@@ -26,6 +26,8 @@ IRAM_ATTR void updateTask(void *arg)
 
 void SDL_AudioInit()
 {
+	sdl_buffer = heap_caps_malloc(SAMPLECOUNT * SAMPLESIZE * 2, MALLOC_CAP_8BIT | MALLOC_CAP_DMA);
+
 	static const i2s_config_t i2s_config = {
 	.mode = I2S_MODE_MASTER | I2S_MODE_TX | I2S_MODE_DAC_BUILT_IN,
 	.sample_rate = SAMPLERATE,
@@ -33,15 +35,16 @@ void SDL_AudioInit()
 	.channel_format = I2S_CHANNEL_FMT_RIGHT_LEFT,
 	.communication_format = I2S_COMM_FORMAT_I2S_MSB,
 	.dma_buf_count = 6,
-	.dma_buf_len = 512,
-	.intr_alloc_flags = ESP_INTR_FLAG_LEVEL1,
+	.dma_buf_len = 1024,
+	.intr_alloc_flags = ESP_INTR_FLAG_LEVEL1,                                //Interrupt level 1
+    .use_apll = 0
 	};
 	static const int i2s_num = I2S_NUM_0; // i2s port number
 
 	ESP_ERROR_CHECK(i2s_driver_install(i2s_num, &i2s_config, 0, NULL));   //install and start i2s driver
 
 	ESP_ERROR_CHECK(i2s_set_pin(i2s_num, NULL));
-	ESP_ERROR_CHECK(i2s_set_clk(i2s_num, SAMPLERATE, I2S_BITS_PER_SAMPLE_16BIT, I2S_CHANNEL_STEREO));
+	//ESP_ERROR_CHECK(i2s_set_clk(i2s_num, SAMPLERATE, I2S_BITS_PER_SAMPLE_16BIT, I2S_CHANNEL_STEREO));
 	ESP_ERROR_CHECK(i2s_set_dac_mode(I2S_DAC_CHANNEL_BOTH_EN));	
 }
 
@@ -70,6 +73,7 @@ void SDL_PauseAudio(int pause_on)
 void SDL_CloseAudio(void)
 {
 	  i2s_driver_uninstall(I2S_NUM_0); //stop & destroy i2s driver
+	  free(sdl_buffer);
 }
 
 int SDL_BuildAudioCVT(SDL_AudioCVT *cvt, Uint16 src_format, Uint8 src_channels, int src_rate, Uint16 dst_format, Uint8 dst_channels, int dst_rate)

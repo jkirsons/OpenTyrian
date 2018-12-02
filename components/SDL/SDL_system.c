@@ -51,7 +51,7 @@ void SDL_InitSD(void)
     slot_config.gpio_mosi = CONFIG_HW_SD_PIN_NUM_MOSI;
     slot_config.gpio_sck  = CONFIG_HW_SD_PIN_NUM_CLK;
     slot_config.gpio_cs   = CONFIG_HW_SD_PIN_NUM_CS;
-	slot_config.dma_channel = 1; //2
+	//slot_config.dma_channel = 1; //2
 
 #else
 	sdmmc_host_t host = SDMMC_HOST_DEFAULT();
@@ -61,14 +61,13 @@ void SDL_InitSD(void)
 	sdmmc_slot_config_t slot_config = SDMMC_SLOT_CONFIG_DEFAULT();
 	slot_config.width = 1;
 #endif
-    esp_vfs_fat_sdmmc_mount_config_t mount_config = {
-        .format_if_mount_failed = false,
-        .max_files = 10
-    };
+    esp_vfs_fat_sdmmc_mount_config_t mount_config;
+    memset(&mount_config, 0, sizeof(mount_config));
+    mount_config.format_if_mount_failed = false;
+    mount_config.max_files = 5;
 
 	sdmmc_card_t* card;
     SDL_LockDisplay();
-    SDL_Delay(300);
     ESP_ERROR_CHECK(esp_vfs_fat_sdmmc_mount("/sd", &host, &slot_config, &mount_config, &card));
     SDL_UnlockDisplay();
 

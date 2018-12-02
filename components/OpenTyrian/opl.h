@@ -25,7 +25,7 @@
  * Ken Silverman's official web site: "http://www.advsys.net/ken"
  */
 
-#define OPLTYPE_IS_OPL3 1
+//#define OPLTYPE_IS_OPL3 1
 #define fltype double
 
 #include <stdbool.h>

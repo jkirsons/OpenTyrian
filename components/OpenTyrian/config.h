@@ -73,7 +73,7 @@ typedef JE_SaveFileType JE_SaveFilesType[SAVE_FILES_NUM]; /* [1..savefilesnum] *
 typedef JE_byte JE_SaveGameTemp[SAVE_FILES_SIZE + 4 + 100]; /* [1..sizeof(savefilestype) + 4 + 100] */
 
 extern const JE_byte cryptKey[10];
-extern const JE_KeySettingType defaultKeySettings;
+extern JE_KeySettingType defaultKeySettings;
 extern const char defaultHighScoreNames[34][23];
 extern const char defaultTeamNames[22][25];
 extern const JE_EditorItemAvailType initialItemAvail;

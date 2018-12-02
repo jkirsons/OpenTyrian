@@ -319,7 +319,7 @@ SemaphoreHandle_t dispSem = NULL;
 SemaphoreHandle_t dispDoneSem = NULL;
 
 #define NO_SIM_TRANS 5 //Amount of SPI transfers to queue in parallel
-#define MEM_PER_TRANS 320*1 //in 16-bit words
+#define MEM_PER_TRANS 320*2 //in 16-bit words
 
 int16_t lcdpal[256];
 
@@ -332,22 +332,23 @@ void IRAM_ATTR displayTask(void *arg) {
 	spi_transaction_t *rtrans;
 
     esp_err_t ret;
-    spi_bus_config_t buscfg={
-        .miso_io_num=PIN_NUM_MISO,
-        .mosi_io_num=PIN_NUM_MOSI,
-        .sclk_io_num=PIN_NUM_CLK,
-        .quadwp_io_num=-1,
-        .quadhd_io_num=-1,
-        .max_transfer_sz=(MEM_PER_TRANS*2)+16
-    };
-    spi_device_interface_config_t devcfg={
-        .clock_speed_hz=40000000,               //Clock out at 26 MHz. Yes, that's heavily overclocked.
-        .mode=0,                                //SPI mode 0
-        .spics_io_num=PIN_NUM_CS,               //CS pin
-        .queue_size=NO_SIM_TRANS,               //We want to be able to queue this many transfers
-        .pre_cb=ili_spi_pre_transfer_callback,  //Specify pre-transfer callback to handle D/C line
-        .flags = SPI_DEVICE_NO_DUMMY,
-    };
+    spi_bus_config_t buscfg;
+    memset(&buscfg, 0, sizeof(buscfg));
+    buscfg.miso_io_num=PIN_NUM_MISO;
+    buscfg.mosi_io_num=PIN_NUM_MOSI;
+    buscfg.sclk_io_num=PIN_NUM_CLK;
+    buscfg.quadwp_io_num=-1;
+    buscfg.quadhd_io_num=-1;
+//        .max_transfer_sz=(MEM_PER_TRANS*2)+16
+
+    spi_device_interface_config_t devcfg;
+    memset(&devcfg, 0, sizeof(devcfg));
+    devcfg.clock_speed_hz=40000000;               //Clock out at 26 MHz. Yes, that's heavily overclocked.
+    devcfg.mode=0;                                //SPI mode 0
+    devcfg.spics_io_num=PIN_NUM_CS;               //CS pin
+    devcfg.queue_size=NO_SIM_TRANS;               //We want to be able to queue this many transfers
+    devcfg.pre_cb=ili_spi_pre_transfer_callback;  //Specify pre-transfer callback to handle D/C line
+    devcfg.flags = SPI_DEVICE_NO_DUMMY;
 
 	printf("*** Display task starting.\n");
 
@@ -355,7 +356,7 @@ void IRAM_ATTR displayTask(void *arg) {
 
     SDL_LockDisplay();
     //Initialize the SPI bus
-    //ret=spi_bus_initialize(CONFIG_HW_LCD_MISO_GPIO == 19 ? VSPI_HOST : HSPI_HOST, &buscfg, 2);  // DMA Channel
+    ret=spi_bus_initialize(CONFIG_HW_LCD_MISO_GPIO == 19 ? VSPI_HOST : HSPI_HOST, &buscfg, 1);  // DMA Channel
     //assert(ret==ESP_OK);
     //Attach the LCD to the SPI bus
     ret=spi_bus_add_device(CONFIG_HW_LCD_MISO_GPIO == 19 ? VSPI_HOST : HSPI_HOST, &devcfg, &spi);

@@ -45,7 +45,7 @@ const JE_byte cryptKey[10] = /* [1..10] */
 	15, 50, 89, 240, 147, 34, 86, 9, 32, 208
 };
 
-const JE_KeySettingType defaultKeySettings =
+JE_KeySettingType defaultKeySettings =
 {
 	SDLK_UP, SDLK_DOWN, SDLK_LEFT, SDLK_RIGHT, SDLK_SPACE, SDLK_RETURN, SDLK_LCTRL, SDLK_LALT
 /*	72, 80, 75, 77, 57, 28, 29, 56*/
@@ -732,9 +732,10 @@ void JE_loadConfiguration( void )
 	int y;
 	
 	fi = dir_fopen_warn(get_user_directory(), "tyrian.cfg", "rb");
-	printf("file opened\n");
+	
 	if (fi && ftell_eof(fi) == 20 + sizeof(keySettings))
 	{
+		printf("file opened\n");
 		/* SYN: I've hardcoded the sizes here because the .CFG file format is fixed
 		   anyways, so it's not like they'll change. */
 		background2 = 0;

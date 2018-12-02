@@ -9,7 +9,7 @@
 #include "driver/dac.h"
 
 // Needed for calling the actual sound output.
-#define SAMPLECOUNT		512
+#define SAMPLECOUNT		2048
 #define SAMPLERATE		11025 * 4 // Hz
 #define SAMPLESIZE		2   	// 16bit
 
