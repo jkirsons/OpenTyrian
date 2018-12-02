@@ -45,7 +45,7 @@ void SDL_InitSD(void)
     host.command_timeout_ms = 3000;
     host.max_freq_khz = SDMMC_FREQ_DEFAULT;
     // https://docs.espressif.com/projects/esp-idf/en/latest/api-reference/peripherals/spi_master.html
-    host.slot = CONFIG_HW_SD_PIN_NUM_MISO == 19 ? VSPI_HOST : HSPI_HOST;
+    host.slot = CONFIG_HW_SD_PIN_NUM_MISO == 0 ? VSPI_HOST : HSPI_HOST;
     sdspi_slot_config_t slot_config = SDSPI_SLOT_CONFIG_DEFAULT();
     slot_config.gpio_miso = CONFIG_HW_SD_PIN_NUM_MISO;
     slot_config.gpio_mosi = CONFIG_HW_SD_PIN_NUM_MOSI;
@@ -68,7 +68,16 @@ void SDL_InitSD(void)
 
 	sdmmc_card_t* card;
     SDL_LockDisplay();
-    ESP_ERROR_CHECK(esp_vfs_fat_sdmmc_mount("/sd", &host, &slot_config, &mount_config, &card));
+    SDL_Delay(200);
+    esp_err_t err = esp_vfs_fat_sdmmc_mount("/sd", &host, &slot_config, &mount_config, &card);
+    if(err != ESP_OK)  // Wait and try again
+        for(int i = 0; i < 10; i++)
+        {
+            SDL_Delay(500);
+            err = esp_vfs_fat_sdmmc_mount("/sd", &host, &slot_config, &mount_config, &card);
+            if(err == ESP_OK) 
+                break;
+        }
     SDL_UnlockDisplay();
 
     printf("Init_SD: SD card opened.\n");
