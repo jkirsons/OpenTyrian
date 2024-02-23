@@ -25,7 +25,7 @@
 typedef JE_longint JE_LvlPosType[43]; /* [1..42 + 1] */
 
 extern JE_LvlPosType lvlPos;
-extern char levelFile[13]; /* string [12] */
+extern char levelFile[22]; /* string [12] */
 extern JE_word lvlNum;
 
 void JE_analyzeLevel( void );

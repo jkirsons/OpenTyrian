@@ -44,8 +44,8 @@ bool ignore_joystick = false;
 int joysticks = 0;
 Joystick *joystick = NULL;
 
-static const char joystick_cfg_version = 1;
-static const int joystick_analog_max = 32767;
+// static const char joystick_cfg_version = 1;
+// static const int joystick_analog_max = 32767;
 
 // eliminates axis movement below the threshold
 int joystick_axis_threshold( int j, int value )
@@ -109,19 +109,19 @@ void reset_joystick_assignments( int j )
 {
 }
 
-static const char* const assignment_names[] =
-{
-	"up",
-	"right",
-	"down",
-	"left",
-	"fire",
-	"change fire",
-	"left sidekick",
-	"right sidekick",
-	"menu",
-	"pause",
-};
+// static const char* const assignment_names[] =
+// {
+// 	"up",
+// 	"right",
+// 	"down",
+// 	"left",
+// 	"fire",
+// 	"change fire",
+// 	"left sidekick",
+// 	"right sidekick",
+// 	"menu",
+// 	"pause",
+// };
 
 bool load_joystick_assignments( Config *config, int j )
 {

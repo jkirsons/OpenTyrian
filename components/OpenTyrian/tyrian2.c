@@ -70,7 +70,7 @@ JE_word levelEnemyMax;
 JE_word levelEnemyFrequency;
 JE_word levelEnemy[40]; /* [1..40] */
 
-char tempStr[31];
+char tempStr[50];
 
 /* Data used for ItemScreen procedure to indicate items available */
 JE_byte itemAvail[9][10]; /* [1..9, 1..10] */
@@ -2096,28 +2096,6 @@ draw_player_shot_loop_end:
 	tempX = mouse_x;
 	tempY = mouse_y;
 
-	if (debug)
-	{
-		strcpy(tempStr, "");
-		for (temp = 0; temp < 9; temp++)
-		{
-			sprintf(tempStr, "%s%c", tempStr,  smoothies[temp] + 48);
-		}
-		sprintf(buffer, "SM = %s", tempStr);
-		JE_outText(VGAScreen, 30, 70, buffer, 4, 0);
-
-		sprintf(buffer, "Memory left = %d", -1);
-		JE_outText(VGAScreen, 30, 80, buffer, 4, 0);
-		sprintf(buffer, "Enemies onscreen = %d", enemyOnScreen);
-		JE_outText(VGAScreen, 30, 90, buffer, 6, 0);
-
-		debugHist = debugHist + abs((JE_longint)debugTime - (JE_longint)lastDebugTime);
-		debugHistCount++;
-		sprintf(tempStr, "%2.3f", 1000.0f / roundf(debugHist / debugHistCount));
-		sprintf(buffer, "X:%d Y:%-5d  %s FPS  %d %d %d %d", (mapX - 1) * 12 + player[0].x, curLoc, tempStr, player[0].x_velocity, player[0].y_velocity, player[0].x, player[0].y);
-		JE_outText(VGAScreen, 45, 175, buffer, 15, 3);
-		lastDebugTime = debugTime;
-	}
 
 	if (displayTime > 0)
 	{

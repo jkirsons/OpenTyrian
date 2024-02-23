@@ -163,7 +163,7 @@ EXT_RAM_ATTR extern JE_EnemyDatType enemyDat;
 extern JE_byte initial_episode_num, episodeNum;
 extern JE_boolean episodeAvail[EPISODE_MAX];
 
-extern char episode_file[13], cube_file[13];
+extern char episode_file[22], cube_file[22];
 
 extern JE_longint episode1DataLoc;
 extern JE_boolean bonusLevel;
