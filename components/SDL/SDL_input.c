@@ -450,7 +450,7 @@ SDL_bool SDL_ShouldIgnoreJoystick(const char *name, SDL_JoystickGUID guid)
 /* return the guid for this index */
 SDL_JoystickGUID SDL_JoystickGetDeviceGUID(int device_index)
 {
-    SDL_JoystickGUID guid;
+    SDL_JoystickGUID guid = {{0}};
     return guid;
 }
 
@@ -492,7 +492,7 @@ int SDL_JoystickGetDeviceIndexFromInstanceID(SDL_JoystickID instance_id)
 
 SDL_JoystickGUID SDL_JoystickGetGUID(SDL_Joystick * joystick)
 {
-    SDL_JoystickGUID guid;
+    SDL_JoystickGUID guid = {{0}};
     return guid;
 }
 
@@ -552,7 +552,7 @@ static unsigned char nibble(char c)
 /* convert the string version of a joystick guid to the struct */
 SDL_JoystickGUID SDL_JoystickGetGUIDFromString(const char *pchGUID)
 {
-    SDL_JoystickGUID guid;
+    SDL_JoystickGUID guid = {{0}};
     return guid;
 }
 

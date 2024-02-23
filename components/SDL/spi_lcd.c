@@ -24,8 +24,8 @@
 #include "esp_heap_caps.h"
 #include "SDL.h"
 
-#if 0
-#define PIN_NUM_MISO 25
+#if 1
+#define PIN_NUM_MISO -1
 #define PIN_NUM_MOSI 23
 #define PIN_NUM_CLK  19
 #define PIN_NUM_CS   22
@@ -46,7 +46,7 @@
 #define DOUBLE_BUFFER
 const int DUTY_MAX = 0x1fff;
 bool isBackLightIntialized = false;
-const int LCD_BACKLIGHT_ON_VALUE = 1;
+const int LCD_BACKLIGHT_ON_VALUE = 0;
 
 /*
  The LCD needs a bunch of command/argument values to be initialized. They are stored in this struct.
@@ -131,6 +131,7 @@ void ili_cmd(spi_device_handle_t spi, const uint8_t cmd)
     t.length=8;                     //Command is 8 bits
     t.tx_buffer=&cmd;               //The data is the cmd itself
     t.user=(void*)0;                //D/C needs to be set to 0
+    printf("ili_cmd: 0x%x\n", cmd);
     ret=spi_device_transmit(spi, &t);  //Transmit!
     assert(ret==ESP_OK);            //Should have had no issues.
 }
@@ -145,6 +146,7 @@ void ili_data(spi_device_handle_t spi, const uint8_t *data, int len)
     t.length=len*8;                 //Len is in bytes, transaction length is in bits.
     t.tx_buffer=data;               //Data
     t.user=(void*)1;                //D/C needs to be set to 1
+    printf("ili_data: 0x%x\n", *data);
     ret=spi_device_transmit(spi, &t);  //Transmit!
     assert(ret==ESP_OK);            //Should have had no issues.
 }
@@ -218,16 +220,16 @@ void ili_init(spi_device_handle_t spi)
     int cmd=0;
     //Initialize non-SPI GPIOs
     gpio_set_direction(PIN_NUM_DC, GPIO_MODE_OUTPUT);
-    //gpio_set_direction(PIN_NUM_RST, GPIO_MODE_OUTPUT);
+    gpio_set_direction(PIN_NUM_RST, GPIO_MODE_OUTPUT);
     if(PIN_NUM_BCKL != -1)
         gpio_set_direction(PIN_NUM_BCKL, GPIO_MODE_OUTPUT);
 
     backlight_init();
     //Reset the display
-    //gpio_set_level(PIN_NUM_RST, 0);
-    //vTaskDelay(100 / portTICK_RATE_MS);
-    //gpio_set_level(PIN_NUM_RST, 1);
+    gpio_set_level(PIN_NUM_RST, 0);
     vTaskDelay(100 / portTICK_RATE_MS);
+    gpio_set_level(PIN_NUM_RST, 1);
+    vTaskDelay(120);
 
     //Send all the commands
     while (ili_init_cmds[cmd].databytes!=0xff) {
@@ -237,7 +239,8 @@ void ili_init(spi_device_handle_t spi)
         memcpy(dmdata, ili_init_cmds[cmd].data, 16);
         ili_data(spi, dmdata, ili_init_cmds[cmd].databytes&0x1F);
         if (ili_init_cmds[cmd].databytes&0x80) {
-            vTaskDelay(100 / portTICK_RATE_MS);
+            vTaskDelay(140);
+            printf("ili_init_cmds: delay\n");
         }
         cmd++;
     }
@@ -246,6 +249,8 @@ void ili_init(spi_device_handle_t spi)
     if(PIN_NUM_BCKL != -1)
         gpio_set_level(PIN_NUM_BCKL, 1);
 
+
+    vTaskDelay(140);
 }
 
 static void IRAM_ATTR send_header_start(spi_device_handle_t spi, int xpos, int ypos, int w, int h)
@@ -379,14 +384,14 @@ void IRAM_ATTR displayTask(void *arg) {
 
 	while(1) {
 		xSemaphoreTake(dispSem, portMAX_DELAY);
-//		printf("Display task: frame.\n");
+
 #ifndef DOUBLE_BUFFER
 		uint8_t *myData=(uint8_t*)currFbPtr;
 #endif
         SDL_LockDisplay();
 		send_header_start(spi, 0, screen_boarder, 320, 240-screen_boarder*2);
 		send_header_cleanup(spi);
-        
+
 		for (x=0; x<320*(240-screen_boarder*2); x+=MEM_PER_TRANS) {
 #ifdef DOUBLE_BUFFER
 			for (i=0; i<MEM_PER_TRANS; i+=4) {

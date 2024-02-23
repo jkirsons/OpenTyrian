@@ -36,7 +36,7 @@ boss_bar_t;
 
 extern boss_bar_t boss_bar[2];
 
-extern char tempStr[31];
+extern char tempStr[50];
 extern JE_byte itemAvail[9][10], itemAvailMax[9];
 
 void JE_createNewEventEnemy( JE_byte enemytypeofs, JE_word enemyoffset, Sint16 uniqueShapeTableI );

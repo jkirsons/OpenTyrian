@@ -40,7 +40,7 @@ void SDL_Quit(void)
 void SDL_InitSD(void)
 {
     printf("Initialising SD Card\n");
-#if 1
+#if 0
 	sdmmc_host_t host = SDSPI_HOST_DEFAULT();
     host.command_timeout_ms = 3000;
     host.max_freq_khz = SDMMC_FREQ_DEFAULT;

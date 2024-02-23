@@ -41,7 +41,7 @@ EXT_RAM_ATTR JE_EnemyDatType enemyDat;
 /* EPISODE variables */
 JE_byte    initial_episode_num, episodeNum = 0;
 JE_boolean episodeAvail[EPISODE_MAX]; /* [1..episodemax] */
-char       episode_file[13], cube_file[13];
+char       episode_file[22], cube_file[22];
 
 JE_longint episode1DataLoc;
 
@@ -270,7 +270,7 @@ void JE_scanForEpisodes( void )
 {
 	for (int i = 0; i < EPISODE_MAX; ++i)
 	{
-		char ep_file[20];
+		char ep_file[22];
 		snprintf(ep_file, sizeof(ep_file), "tyrian%d.lvl", i + 1);
 		episodeAvail[i] = dir_file_exists(data_dir(), ep_file);
 	}
